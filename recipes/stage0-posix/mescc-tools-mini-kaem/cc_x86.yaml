@@ -1,0 +1,16 @@
+latest:
+  source:
+    - url: https://github.com/oriansj/stage0-posix-x86/archive/e86bf7d304bae5ce5ccc88454bb60cf0837e941f.zip
+      sha: 630acd742f02d8442a7f739a6bc58d3eb9b37eb0087dd7e77afff911836d4d69
+      extract: /x86/
+  deps:
+    - stage0-posix/mescc-tools-mini-kaem/m0:latest
+    - stage0-posix/mescc-tools-mini-kaem/catm:latest
+    - stage0-posix/mescc-tools-mini-kaem/hex2:0
+  build:
+    compile:
+      - /x86/artifact/M0 /x86/cc_x86.M1 /x86/artifact/cc_x86-0.hex2
+      - /x86/artifact/catm /x86/artifact/cc_x86-1.hex2 /x86/ELF-i386.hex2 /x86/artifact/cc_x86-0.hex2
+      - /x86/artifact/hex2-0 /x86/artifact/cc_x86-1.hex2 /x86/artifact/cc_x86
+  artefacts:
+    - /x86/artifact/cc_x86

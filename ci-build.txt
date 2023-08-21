@@ -1,1 +1,1 @@
-stage0-posix/mescc-tools-seed-kaem/kaem:0
+stage0-posix/mescc-tools-mini-kaem/m2-planet:latest

@@ -1,0 +1,26 @@
+latest:
+  source:
+    - url: https://github.com/oriansj/M2-Planet/archive/754c5de7d9ba980b98f3213d1f446cf59166dc16.zip
+      sha: 1db8dc7dbc88d16029586099c9d544766f0cbf498776dbd0ff662e0dd8921df4
+      extract: /M2-Planet
+    - url: https://github.com/oriansj/M2libc/archive/1139b2bbf5f9c2618e52298917460ec75c345451.zip
+      sha: 3fe0964f95acf6fb65d5e1a4eb2a24de28b12772a25c1e701ac0c568160f45ca
+      extract: /M2libc
+    - url: https://github.com/oriansj/stage0-posix-x86/archive/e86bf7d304bae5ce5ccc88454bb60cf0837e941f.zip
+      sha: 630acd742f02d8442a7f739a6bc58d3eb9b37eb0087dd7e77afff911836d4d69
+      extract: /x86/
+  deps:
+    - stage0-posix/mescc-tools-mini-kaem/catm:latest
+    - stage0-posix/mescc-tools-mini-kaem/cc_x86:latest
+    - stage0-posix/mescc-tools-mini-kaem/m0:latest
+    - stage0-posix/mescc-tools-mini-kaem/hex2:0
+  build:
+    compile:
+      - /x86/artifact/catm /x86/artifact/M2-0.c /M2libc/x86/linux/bootstrap.c /M2-Planet/cc.h /M2libc/bootstrappable.c /M2-Planet/cc_globals.c /M2-Planet/cc_reader.c /M2-Planet/cc_strings.c /M2-Planet/cc_types.c /M2-Planet/cc_core.c /M2-Planet/cc_macro.c /M2-Planet/cc.c
+      - /x86/artifact/cc_x86 /x86/artifact/M2-0.c /x86/artifact/M2-0.M1
+      - /x86/artifact/catm /x86/artifact/M2-0-0.M1 /x86/x86_defs.M1 /x86/libc-core.M1 /x86/artifact/M2-0.M1
+      - /x86/artifact/M0 /x86/artifact/M2-0-0.M1 /x86/artifact/M2-0.hex2
+      - /x86/artifact/catm /x86/artifact/M2-0-0.hex2 /x86/ELF-i386.hex2 /x86/artifact/M2-0.hex2
+      - /x86/artifact/hex2-0 /x86/artifact/M2-0-0.hex2 /x86/artifact/M2
+  artefacts:
+    - /x86/artifact/M2
