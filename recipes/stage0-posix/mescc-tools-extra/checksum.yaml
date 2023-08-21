@@ -1,0 +1,20 @@
+latest:
+  source: 
+    - url: https://github.com/oriansj/stage0-posix/archive/5805beef1754945e280a07f193346710ba2b4d32.zip
+      sha: b56baa11eabf74fb706c5e618e60242a178d0b5a8b4437f4e39cd6be5981b32c
+      extract: /stage0-posix
+  mkdirs:
+    - /out
+  deps:
+    - stage0-posix/mescc-tools-extra/mescc-tools-extra:latest
+    - stage0-posix/mescc-tools-full-kaem/blood-elf:latest
+    - stage0-posix/mescc-tools-full-kaem/get_machine:latest
+    - stage0-posix/mescc-tools-full-kaem/m2-mesoplanet:latest
+    - stage0-posix/mescc-tools-full-kaem/m2-planet:latest
+    - stage0-posix/mescc-tools-mini-kaem/hex2:latest
+    - stage0-posix/mescc-tools-mini-kaem/kaem:latest
+    - stage0-posix/mescc-tools-mini-kaem/m1:latest
+  build:
+    compile:
+      - /x86/bin/sha256sum -c /stage0-posix/x86.answers
+  artefacts: []
