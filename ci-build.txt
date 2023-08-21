@@ -1,1 +1,1 @@
-stage0-posix/mescc-tools-extra/checksum:latest
+sysa/kaem/checksum-transcriber:latest

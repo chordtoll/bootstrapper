@@ -1,0 +1,16 @@
+latest:
+  source:
+    - url: https://github.com/fosslinux/live-bootstrap/archive/fd9e8d547fda47cde0a733f87457661b58813077.zip
+      sha: 503539f54904ab0d1c802479c099c4d46cd81bb95ac36231b251472972bd1199
+      extract: /live-bootstrap
+    - url: https://github.com/oriansj/M2libc/archive/1139b2bbf5f9c2618e52298917460ec75c345451.zip
+      sha: 3fe0964f95acf6fb65d5e1a4eb2a24de28b12772a25c1e701ac0c568160f45ca
+      extract: /M2libc
+  deps:
+    - sysa/kaem/setup:latest
+  build:
+    compile:
+      - M2-Mesoplanet --architecture ${ARCH} -f /live-bootstrap/sysa/checksum-transcriber.c -o ${bindir}/checksum-transcriber
+      - sha256sum -c /live-bootstrap/sysa/checksum-transcriber.${ARCH}.SHA256SUM
+  artefacts:
+    - /usr/bin/checksum-transcriber
