@@ -25,5 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: Docker Layer Caching
+        uses: satackey/action-docker-layer-caching@v0.0.11      
       - name: Run
         run: cargo run --bin=assemble -- `cat ci-build.txt`
