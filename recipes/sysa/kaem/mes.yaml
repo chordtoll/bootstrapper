@@ -1,0 +1,83 @@
+0.24.2:
+  source:
+    - url: https://mirrors.kernel.org/gnu/mes/mes-0.24.2.tar.gz
+      sha: 7ddae0854e46ebfa18c13ab37e64839a7b86ea88aeed366a8d017efd11dae86e
+      noextract: /sysa/distfiles/mes-0.24.2.tar.gz
+    - url: https://download.savannah.gnu.org/releases/nyacc/nyacc-1.00.2.tar.gz
+      sha: f36e4fb7dd524dc3f4b354d3d5313f69e7ce5a6ae93711e8cf6d51eaa8d2b318
+      noextract: /sysa/distfiles/nyacc-1.00.2.tar.gz
+    - url: https://github.com/fosslinux/live-bootstrap/archive/fd9e8d547fda47cde0a733f87457661b58813077.zip
+      sha: 503539f54904ab0d1c802479c099c4d46cd81bb95ac36231b251472972bd1199
+      extract: /live-bootstrap
+      copy:
+        - /sysa/:/sysa/
+    - url: https://github.com/oriansj/M2libc/archive/1139b2bbf5f9c2618e52298917460ec75c345451.zip
+      sha: 3fe0964f95acf6fb65d5e1a4eb2a24de28b12772a25c1e701ac0c568160f45ca
+      extract: /M2libc
+  mkdirs:
+    - /x86/bin/
+    - /tmp/
+  deps:
+    - sysa/kaem/setup:latest
+    - sysa/kaem/checksum-transcriber:latest
+  build:
+    compile:
+      - MES_ARENA=20000000
+      - MES_MAX_ARENA=20000000
+      - MES_STACK=6000000
+      - MES=${bindir}/mes-m2
+      - libdir=${MES_PREFIX}/lib
+      - MES_ARCH=x86
+      - ARCH_BITS=32
+      - pkg=${MES_PKG}
+      - cd /sysa/${pkg}
+      - kaem --file ${pkg}.kaem
+      - cp --help
+  artefacts:
+    - /usr/bin/mes
+    - /usr/bin/mes-m2
+    - /usr/bin/mescc.scm
+    - /usr/include/alloca.h
+    - /usr/include/ar.h
+    - /usr/include/arch
+    - /usr/include/argz.h
+    - /usr/include/assert.h
+    - /usr/include/ctype.h
+    - /usr/include/dirent.h
+    - /usr/include/dirstream.h
+    - /usr/include/dlfcn.h
+    - /usr/include/endian.h
+    - /usr/include/errno.h
+    - /usr/include/fcntl.h
+    - /usr/include/features.h
+    - /usr/include/float.h
+    - /usr/include/getopt.h
+    - /usr/include/grp.h
+    - /usr/include/inttypes.h
+    - /usr/include/libgen.h
+    - /usr/include/limits.h
+    - /usr/include/linux
+    - /usr/include/locale.h
+    - /usr/include/math.h
+    - /usr/include/memory.h
+    - /usr/include/mes
+    - /usr/include/pwd.h
+    - /usr/include/setjmp.h
+    - /usr/include/signal.h
+    - /usr/include/stdarg.h
+    - /usr/include/stdbool.h
+    - /usr/include/stddef.h
+    - /usr/include/stdint.h
+    - /usr/include/stdio.h
+    - /usr/include/stdlib.h
+    - /usr/include/stdnoreturn.h
+    - /usr/include/string.h
+    - /usr/include/strings.h
+    - /usr/include/sys
+    - /usr/include/termio.h
+    - /usr/include/time.h
+    - /usr/include/unistd.h
+    - /usr/lib/linux
+    - /usr/lib/x86-mes
+    - /sysa/mes-0.24.2/build/mes-0.24.2/
+    - /sysa/mes-0.24.2/build/nyacc-1.00.2/
