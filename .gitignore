@@ -1,1 +1,7 @@
-/target
+/*.py
+/target/
+/.venv/
+/build/
+/imex/
+/images/
+/known-good/
