@@ -1,0 +1,35 @@
+2.05b:
+  source:
+    - url: https://mirrors.kernel.org/gnu/bash/bash-2.05b.tar.gz
+      sha: ba03d412998cc54bd0b0f2d6c32100967d3137098affdc2d32e6e7c11b163fe4
+      noextract: /sysa/distfiles/bash-2.05b.tar.gz
+    - url: https://github.com/fosslinux/live-bootstrap/archive/fd9e8d547fda47cde0a733f87457661b58813077.zip
+      sha: 503539f54904ab0d1c802479c099c4d46cd81bb95ac36231b251472972bd1199
+      extract: /live-bootstrap
+      copy:
+        - /sysa/:/sysa/
+  mkdirs:
+    - /x86/bin/
+    - /tmp/
+  deps:
+    - sysa/kaem/setup:latest
+    - sysa/kaem/checksum-transcriber:latest
+    - sysa/kaem/mes:0.24.2
+    - sysa/kaem/tcc:0.9.26
+    - sysa/kaem/tcc:0.9.27
+    - sysa/kaem/gzip:1.2.4
+    - sysa/kaem/tar:1.12
+    - sysa/kaem/coreutils:5.0
+    - sysa/kaem/patch:2.5.9
+    - sysa/kaem/make:3.82
+    - sysa/kaem/heirloom-devtools:latest
+  build:
+    compile:
+      - pkg="bash-2.05b"
+      - cd /sysa/${pkg}
+      - kaem --file ${pkg}.kaem
+  artefacts:
+    - /usr/bin/bash
+    - /usr/bin/sh
+    - /bin/bash
+    - /bin/sh

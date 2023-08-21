@@ -1,1 +1,1 @@
-sysa/kaem/heirloom-devtools:latest
+sysa/kaem/bash:2.05b
