@@ -1,1 +1,1 @@
-sysa/kaem/bzip2:1.0.8
+sysa/kaem/coreutils:5.0
