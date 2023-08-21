@@ -1,0 +1,53 @@
+latest:
+  deps:
+    - stage0-posix/mescc-tools-extra/mescc-tools-extra:latest
+    - stage0-posix/mescc-tools-full-kaem/blood-elf:latest
+    - stage0-posix/mescc-tools-full-kaem/get_machine:latest
+    - stage0-posix/mescc-tools-full-kaem/m2-mesoplanet:latest
+    - stage0-posix/mescc-tools-full-kaem/m2-planet:latest
+    - stage0-posix/mescc-tools-mini-kaem/hex2:latest
+    - stage0-posix/mescc-tools-mini-kaem/kaem:latest
+    - stage0-posix/mescc-tools-mini-kaem/m1:latest
+  build:
+    compile:
+      - PATH=/${ARCH_DIR}/bin
+      - mkdir -p ${prefix} ${bindir} ${libdir} ${incdir} ${srcdir} ${TMPDIR}
+      - cp /${ARCH_DIR}/bin/cp ${bindir}/cp
+      - cp /${ARCH_DIR}/bin/blood-elf ${bindir}/blood-elf
+      - cp /${ARCH_DIR}/bin/catm ${bindir}/catm
+      - cp /${ARCH_DIR}/bin/chmod ${bindir}/chmod
+      - cp /${ARCH_DIR}/bin/get_machine ${bindir}/get_machine
+      - cp /${ARCH_DIR}/bin/hex2 ${bindir}/hex2
+      - cp /${ARCH_DIR}/bin/kaem ${bindir}/kaem
+      - cp /${ARCH_DIR}/bin/match ${bindir}/match
+      - cp /${ARCH_DIR}/bin/M1 ${bindir}/M1
+      - cp /${ARCH_DIR}/bin/M2-Mesoplanet ${bindir}/M2-Mesoplanet
+      - cp /${ARCH_DIR}/bin/M2-Planet ${bindir}/M2-Planet
+      - cp /${ARCH_DIR}/bin/mkdir ${bindir}/mkdir
+      - cp /${ARCH_DIR}/bin/sha256sum ${bindir}/sha256sum
+      - cp /${ARCH_DIR}/bin/unbz2 ${bindir}/unbz2
+      - cp /${ARCH_DIR}/bin/ungz ${bindir}/ungz
+      - cp /${ARCH_DIR}/bin/untar ${bindir}/untar
+      - cp /${ARCH_DIR}/bin/replace ${bindir}/replace
+      - cp /${ARCH_DIR}/bin/rm ${bindir}/rm
+      - chmod 755 ${bindir}/blood-elf
+      - chmod 755 ${bindir}/catm
+      - chmod 755 ${bindir}/chmod
+      - chmod 755 ${bindir}/cp
+      - chmod 755 ${bindir}/get_machine
+      - chmod 755 ${bindir}/hex2
+      - chmod 755 ${bindir}/kaem
+      - chmod 755 ${bindir}/match
+      - chmod 755 ${bindir}/M1
+      - chmod 755 ${bindir}/M2-Mesoplanet
+      - chmod 755 ${bindir}/M2-Planet
+      - chmod 755 ${bindir}/mkdir
+      - chmod 755 ${bindir}/sha256sum
+      - chmod 755 ${bindir}/unbz2
+      - chmod 755 ${bindir}/ungz
+      - chmod 755 ${bindir}/untar
+      - chmod 755 ${bindir}/replace
+      - chmod 755 ${bindir}/rm
+  artefacts:
+    - /tmp
+    - /usr
