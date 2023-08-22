@@ -1,0 +1,23 @@
+latest:
+  deps:
+    - sysa/kaem/coreutils:5.0
+    - sysa/kaem/bash:2.05b
+  build:
+    compile:
+      - mkdir -p "${DESTDIR}" "${SRCDIR}/repo" /dev "${SOURCES}" "${SOURCES}/distfiles"
+      - bash -c "echo FORCE_TIMESTAMPS=False >> ${SOURCES}/bootstrap.cfg"
+      - bash -c "echo CHROOT=True >> ${SOURCES}/bootstrap.cfg"
+      - bash -c "echo CHROOT_ONLY_SYSA=False >> ${SOURCES}/bootstrap.cfg"
+      - bash -c "echo UPDATE_CHECKSUMS=False >> ${SOURCES}/bootstrap.cfg"
+      - bash -c "echo JOBS=2 >> ${SOURCES}/bootstrap.cfg"
+      - bash -c "echo INTERNAL_CI=None >> ${SOURCES}/bootstrap.cfg"
+      - bash -c "echo BARE_METAL=False >> ${SOURCES}/bootstrap.cfg"
+      - bash -c "echo DISK=sda1 >> ${SOURCES}/bootstrap.cfg"
+      - bash -c "echo KERNEL_BOOTSTRAP=False >> ${SOURCES}/bootstrap.cfg"
+      - bash -c "echo BUILD_KERNELS=False >> ${SOURCES}/bootstrap.cfg"
+      - bash -c "echo ARCH=x86 >> ${SOURCES}/bootstrap.cfg"
+  artefacts:
+    - /sysa/
+    - /tmp/
+    - /tmp/destdir/
+    - /usr/src/repo/
