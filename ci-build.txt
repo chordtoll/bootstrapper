@@ -1,1 +1,1 @@
-sysa/bash/musl:1.1.24-2
+sysa/bash/tcc:0.9.27-musl2
