@@ -29,8 +29,10 @@
       - cd /sysa/${pkg}
       - bash -ex -c "source ../helpers.sh; build tcc-0.9.27 tcc-musl-pass2.sh"
   artefacts:
+    - /usr/bin/tcc
     - /usr/bin/tcc-musl
     - /usr/lib/i386-unknown-linux-musl/libtcc1.a
+    - /usr/lib/i386-unknown-linux-musl/tcc
     - /usr/src/repo/tcc-0.9.27_2.tar.bz2
 0.9.27-musl1:
   source:
