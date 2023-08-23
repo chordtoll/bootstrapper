@@ -1,1 +1,1 @@
-sysa/bash/tcc:0.9.27-musl2
+sysa/bash/sed:4.0.9
