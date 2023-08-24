@@ -1,0 +1,30 @@
+1.0.8:
+  source:
+    - url: https://sourceware.org/pub/bzip2/bzip2-1.0.8.tar.gz
+      sha: ab5a03176ee106d3f0fa90e381da478ddae405918153cca248e682cd0c4a2269
+      noextract: /sysa/distfiles/bzip2-1.0.8.tar.gz
+    - url: https://github.com/fosslinux/live-bootstrap/archive/fd9e8d547fda47cde0a733f87457661b58813077.zip
+      sha: 503539f54904ab0d1c802479c099c4d46cd81bb95ac36231b251472972bd1199
+      extract: /live-bootstrap
+      copy:
+        - /sysa/:/sysa/
+  deps:
+    - sysa/kaem/setup:latest
+    - sysa/bash/setup:latest
+    - sysa/kaem/bash:2.05b
+    - sysa/kaem/coreutils:5.0
+    - sysa/kaem/tar:1.12
+    - sysa/kaem/gzip:1.2.4
+    - sysa/kaem/bzip2:1.0.8
+    - sysa/kaem/make:3.82
+    - sysa/bash/tcc:0.9.27-musl2
+    - sysa/bash/musl:1.1.24-2
+    - sysa/bash/sed:4.0.9
+  build:
+    compile:
+      - LIBDIR="${PREFIX}/lib/i386-unknown-linux-musl"
+      - pkg="bzip2-1.0.8"
+      - cd /sysa/${pkg}
+      - bash -ex -c "source ../helpers.sh; build bzip2-1.0.8 bzip2-1.0.8.sh"
+  artefacts:
+    - /usr/src/repo/bzip2-1.0.8_0.tar.bz2
