@@ -11,17 +11,13 @@
   deps:
     - sysa/kaem/setup:latest
     - sysa/bash/setup:latest
-    - sysa/kaem/checksum-transcriber:latest
-    - sysa/kaem/mes:0.24.2
     - sysa/kaem/bash:2.05b
     - sysa/kaem/coreutils:5.0
     - sysa/kaem/tar:1.12
     - sysa/kaem/gzip:1.2.4
-    - sysa/kaem/patch:2.5.9
     - sysa/kaem/make:3.82
     - sysa/kaem/heirloom-devtools:latest
     - sysa/bash/flex:2.5.11
-    - sysa/bash/tcc:0.9.27-musl1
     - sysa/bash/tcc:0.9.27-musl2
     - sysa/bash/musl:1.1.24-2
     - sysa/bash/sed:4.0.9
@@ -34,8 +30,6 @@
       - cd /sysa/${pkg}
       - bash -ex -c "source ../helpers.sh; build flex-2.6.4"
   artefacts:
-    - /usr/bin/flex
-    - /usr/bin/lex
     - /usr/src/repo/flex-2.6.4_0.tar.bz2
 2.5.11:
   source:

@@ -1,1 +1,1 @@
-sysa/bash/m4:1.4.7
+sysa/bash/flex:2.6.4
