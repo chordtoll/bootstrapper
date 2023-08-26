@@ -1,3 +1,39 @@
+3.4.1-2:
+  source:
+    - url: https://mirrors.kernel.org/gnu/bison/bison-3.4.1.tar.gz
+      sha: 7007fc89c216fbfaff5525359b02a7e5b612694df5168c74673f67055f015095
+      noextract: /sysa/distfiles/bison-3.4.1.tar.gz
+    - url: https://github.com/fosslinux/live-bootstrap/archive/fd9e8d547fda47cde0a733f87457661b58813077.zip
+      sha: 503539f54904ab0d1c802479c099c4d46cd81bb95ac36231b251472972bd1199
+      extract: /live-bootstrap
+      copy:
+        - /sysa/:/sysa/
+  deps:
+    - sysa/kaem/setup:latest
+    - sysa/bash/setup:latest
+    - sysa/kaem/bash:2.05b
+    - sysa/kaem/coreutils:5.0
+    - sysa/kaem/tar:1.12
+    - sysa/kaem/gzip:1.2.4
+    - sysa/kaem/patch:2.5.9
+    - sysa/kaem/make:3.82
+    - sysa/bash/tcc:0.9.27-musl2
+    - sysa/bash/musl:1.1.24-2
+    - sysa/bash/sed:4.0.9
+    - sysa/bash/bzip2:1.0.8
+    - sysa/bash/m4:1.4.7
+    - sysa/bash/flex:2.6.4
+    - sysa/bash/bison:3.4.1-1
+  build:
+    compile:
+      - LIBDIR="${PREFIX}/lib/i386-unknown-linux-musl"
+      - pkg="bison-3.4.1"
+      - cd /sysa/${pkg}
+      - bash -ex -c "source ../helpers.sh; build bison-3.4.1 stage2.sh"
+  artefacts:
+    - /usr/bin/bison
+    - /usr/share/bison
+    - /usr/src/repo/bison-3.4.1_1.tar.bz2
 3.4.1-1:
   source:
     - url: https://mirrors.kernel.org/gnu/bison/bison-3.4.1.tar.gz
