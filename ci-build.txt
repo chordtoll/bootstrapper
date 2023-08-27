@@ -1,1 +1,1 @@
-sysa/bash/coreutils:5.0
+sysa/bash/coreutils:6.10
