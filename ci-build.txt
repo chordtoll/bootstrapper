@@ -1,1 +1,1 @@
-sysa/bash/diffutils:2.7
+sysa/bash/coreutils:5.0
