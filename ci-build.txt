@@ -1,1 +1,1 @@
-sysa/bash/coreutils:6.10
+sysa/bash/gawk:3.0.4
