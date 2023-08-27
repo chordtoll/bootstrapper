@@ -1,0 +1,30 @@
+2.7:
+  source:
+    - url: https://mirrors.kernel.org/gnu/diffutils/diffutils-2.7.tar.gz
+      sha: d5f2489c4056a31528e3ada4adacc23d498532b0af1a980f2f76158162b139d6
+      noextract: /sysa/distfiles/diffutils-2.7.tar.gz
+    - url: https://github.com/fosslinux/live-bootstrap/archive/fd9e8d547fda47cde0a733f87457661b58813077.zip
+      sha: 503539f54904ab0d1c802479c099c4d46cd81bb95ac36231b251472972bd1199
+      extract: /live-bootstrap
+      copy:
+        - /sysa/:/sysa/
+  deps:
+    - sysa/kaem/setup:latest
+    - sysa/bash/setup:latest
+    - sysa/kaem/bash:2.05b
+    - sysa/kaem/coreutils:5.0
+    - sysa/kaem/tar:1.12
+    - sysa/kaem/gzip:1.2.4
+    - sysa/kaem/make:3.82
+    - sysa/bash/tcc:0.9.27-musl2
+    - sysa/bash/musl:1.1.24-2
+    - sysa/bash/sed:4.0.9
+    - sysa/bash/bzip2:1.0.8
+  build:
+    compile:
+      - LIBDIR="${PREFIX}/lib/i386-unknown-linux-musl"
+      - pkg="diffutils-2.7"
+      - cd /sysa/${pkg}
+      - bash -ex -c "source ../helpers.sh; build diffutils-2.7"
+  artefacts:
+    - /usr/src/repo/diffutils-2.7_0.tar.bz2
