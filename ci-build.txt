@@ -1,1 +1,1 @@
-sysa/bash/automake:1.9.6
+sysa/bash/automake:1.10.3
