@@ -1,3 +1,42 @@
+1.7:
+  source:
+    - url: https://mirrors.kernel.org/gnu/automake/automake-1.7.tar.bz2
+      sha: 6633ee1202375e3c8798a92e1b7f46894f78d541aeea7f49654503fdc0b28835
+      noextract: /sysa/distfiles/automake-1.7.tar.bz2
+    - url: https://github.com/fosslinux/live-bootstrap/archive/fd9e8d547fda47cde0a733f87457661b58813077.zip
+      sha: 503539f54904ab0d1c802479c099c4d46cd81bb95ac36231b251472972bd1199
+      extract: /live-bootstrap
+      copy:
+        - /sysa/:/sysa/
+  deps:
+    - sysa/kaem/setup:latest
+    - sysa/bash/setup:latest
+    - sysa/kaem/bash:2.05b
+    - sysa/kaem/tar:1.12
+    - sysa/kaem/make:3.82
+    - sysa/bash/tcc:0.9.27-musl2
+    - sysa/bash/musl:1.1.24-2
+    - sysa/bash/sed:4.0.9
+    - sysa/bash/bzip2:1.0.8
+    - sysa/bash/m4:1.4.7
+    - sysa/bash/grep:2.4
+    - sysa/bash/coreutils:6.10
+    - sysa/bash/gawk:3.0.4
+    - sysa/bash/perl:5.6.2
+    - sysa/bash/automake:1.6.3-2
+    - sysa/bash/autoconf:2.53
+  build:
+    compile:
+      - LIBDIR="${PREFIX}/lib/i386-unknown-linux-musl"
+      - pkg="automake-1.7"
+      - cd /sysa/${pkg}
+      - bash -ex -c "source ../helpers.sh; build automake-1.7"
+  artefacts:
+    - /usr/bin/aclocal-1.7
+    - /usr/bin/automake-1.7
+    - /usr/share/aclocal-1.7/
+    - /usr/share/automake-1.7/
+    - /usr/src/repo/automake-1.7_0.tar.bz2
 1.6.3-2:
   source:
     - url: https://mirrors.kernel.org/gnu/automake/automake-1.6.3.tar.bz2
