@@ -1,1 +1,1 @@
-sysa/bash/automake:1.7.8
+sysa/bash/autoconf:2.57
