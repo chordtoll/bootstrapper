@@ -1,1 +1,1 @@
-sysa/bash/automake:1.8.5
+sysa/bash/help2man:1.36.4
