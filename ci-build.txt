@@ -1,1 +1,1 @@
-sysa/bash/perl:5.005-03
+sysa/bash/perl:5.6.2
