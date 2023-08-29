@@ -1,1 +1,1 @@
-sysa/bash/autoconf:2.54
+sysa/bash/autoconf:2.55
