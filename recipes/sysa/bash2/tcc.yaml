@@ -1,0 +1,39 @@
+0.9.27:
+  source:
+    - url: https://download.savannah.gnu.org/releases/tinycc/tcc-0.9.27.tar.bz2
+      sha: de23af78fca90ce32dff2dd45b3432b2334740bb9bb7b05bf60fdbfc396ceb9c
+      noextract: /sysa/distfiles/tcc-0.9.27.tar.bz2
+    - url: https://github.com/fosslinux/live-bootstrap/archive/fd9e8d547fda47cde0a733f87457661b58813077.zip
+      sha: 503539f54904ab0d1c802479c099c4d46cd81bb95ac36231b251472972bd1199
+      extract: /live-bootstrap
+      copy:
+        - /sysa/:/sysa/
+  deps:
+    - sysa/kaem/setup:latest
+    - sysa/bash/setup:latest
+    - sysa/kaem/bash:2.05b
+    - sysa/kaem/tar:1.12
+    - sysa/kaem/patch:2.5.9
+    - sysa/kaem/make:3.82
+    - sysa/bash/tcc:0.9.27-musl2
+    - sysa/bash/musl:1.1.24-2
+    - sysa/bash/sed:4.0.9
+    - sysa/bash/bzip2:1.0.8
+    - sysa/bash/coreutils:6.10
+    - sysa/bash2/binutils:2.30
+    - sysa/bash2/musl:1.1.24
+  build:
+    compile:
+      - pkg="tcc-0.9.27"
+      - cd /sysa/${pkg}
+      - cp patches/ignore-static-inside-array.patch patches-musl-pass3
+      - cp patches/static-link.patch patches-musl-pass3
+      - touch /usr/src/repo/tcc-0.9.27_0.tar.bz2
+      - touch /usr/src/repo/tcc-0.9.27_1.tar.bz2
+      - bash -ex -c "source ../helpers.sh; build tcc-0.9.27 tcc-musl-pass3.sh patches-musl-pass3"
+  artefacts:
+    - /usr/bin/tcc
+    - /usr/bin/tcc-musl
+    - /usr/lib/i386-unknown-linux-musl/libtcc1.a
+    - /usr/lib/i386-unknown-linux-musl/tcc
+    - /usr/src/repo/tcc-0.9.27_2.tar.bz2
