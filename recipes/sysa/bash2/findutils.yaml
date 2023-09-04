@@ -1,0 +1,54 @@
+4.2.33:
+  source:
+    - url: https://mirrors.kernel.org/gnu/findutils/findutils-4.2.33.tar.gz
+      sha: 813cd9405aceec5cfecbe96400d01e90ddad7b512d3034487176ce5258ab0f78
+      noextract: /sysa/distfiles/findutils-4.2.33.tar.gz
+    - url: https://git.savannah.gnu.org/cgit/gnulib.git/snapshot/gnulib-8e128e.tar.gz
+      sha: 0cfbf866bc39c31f25fa0e56af1e56c5e5c92fc1e5d51242ebafef7ea211f3d5
+      noextract: /sysa/distfiles/gnulib-8e128e.tar.gz
+    - url: https://github.com/fosslinux/live-bootstrap/archive/fd9e8d547fda47cde0a733f87457661b58813077.zip
+      sha: 503539f54904ab0d1c802479c099c4d46cd81bb95ac36231b251472972bd1199
+      extract: /live-bootstrap
+      copy:
+        - /sysa/:/sysa/
+  deps:
+    - sysa/kaem/setup:latest
+    - sysa/bash/setup:latest
+    - sysa/kaem/bash:2.05b
+    - sysa/kaem/tar:1.12
+    - sysa/kaem/gzip:1.2.4
+    - sysa/kaem/patch:2.5.9
+    - sysa/kaem/make:3.82
+    - sysa/bash/sed:4.0.9
+    - sysa/bash/bzip2:1.0.8
+    - sysa/bash/m4:1.4.7
+    - sysa/bash/grep:2.4
+    - sysa/bash/diffutils:2.7
+    - sysa/bash/coreutils:6.10
+    - sysa/bash/gawk:3.0.4
+    - sysa/bash/perl:5.6.2
+    - sysa/bash/automake:1.9.6
+    - sysa/bash/autoconf:2.61
+    - sysa/bash2/binutils:2.30
+    - sysa/bash2/musl:1.1.24
+    - sysa/bash2/tcc:0.9.27
+  build:
+    compile:
+      - pkg="findutils-4.2.33"
+      - cd /sysa/${pkg}
+      - bash -ex -c "source ../helpers.sh; build findutils-4.2.33"
+  artefacts:
+    - /usr/bin/find
+    - /usr/bin/locate
+    - /usr/bin/updatedb
+    - /usr/bin/xargs
+    - /usr/lib/charset.alias
+    - /usr/libexec/bigram
+    - /usr/libexec/code
+    - /usr/libexec/frcode
+    - /usr/share/man/man1/find.1
+    - /usr/share/man/man1/locate.1
+    - /usr/share/man/man1/updatedb.1
+    - /usr/share/man/man1/xargs.1
+    - /usr/share/man/man5/locatedb.5
+    - /usr/src/repo/findutils-4.2.33_0.tar.bz2
