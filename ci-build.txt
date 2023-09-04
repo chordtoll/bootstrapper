@@ -1,1 +1,1 @@
-sysa/bash2/linux-headers:5.10.41
+sysa/bash2/gcc:4.0.4-2
