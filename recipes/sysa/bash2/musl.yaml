@@ -1,3 +1,132 @@
+1.2.4-1:
+  source:
+    - url: https://musl.libc.org/releases/musl-1.2.4.tar.gz
+      sha: 7a35eae33d5372a7c0da1188de798726f68825513b7ae3ebe97aaaa52114f039
+      noextract: /sysa/distfiles/musl-1.2.4.tar.gz
+    - url: https://github.com/fosslinux/live-bootstrap/archive/fd9e8d547fda47cde0a733f87457661b58813077.zip
+      sha: 503539f54904ab0d1c802479c099c4d46cd81bb95ac36231b251472972bd1199
+      extract: /live-bootstrap
+      copy:
+        - /sysa/:/sysa/
+  deps:
+    - sysa/kaem/setup:latest
+    - sysa/bash/setup:latest
+    - sysa/kaem/bash:2.05b
+    - sysa/kaem/tar:1.12
+    - sysa/kaem/gzip:1.2.4
+    - sysa/kaem/patch:2.5.9
+    - sysa/kaem/make:3.82
+    - sysa/bash/sed:4.0.9
+    - sysa/bash/bzip2:1.0.8
+    - sysa/bash/coreutils:6.10
+    - sysa/bash2/binutils:2.30
+    - sysa/bash2/gcc:4.0.4-1
+  build:
+    compile:
+      - pkg="musl-1.2.4"
+      - cd /sysa/${pkg}
+      - bash -ex -c "source ../helpers.sh; build musl-1.2.4"
+  artefacts:
+    - /usr/include/aio.h
+    - /usr/include/alloca.h
+    - /usr/include/ar.h
+    - /usr/include/arpa/
+    - /usr/include/assert.h
+    - /usr/include/bits/
+    - /usr/include/byteswap.h
+    - /usr/include/complex.h
+    - /usr/include/cpio.h
+    - /usr/include/crypt.h
+    - /usr/include/ctype.h
+    - /usr/include/dirent.h
+    - /usr/include/dlfcn.h
+    - /usr/include/elf.h
+    - /usr/include/endian.h
+    - /usr/include/err.h
+    - /usr/include/errno.h
+    - /usr/include/fcntl.h
+    - /usr/include/features.h
+    - /usr/include/fenv.h
+    - /usr/include/float.h
+    - /usr/include/fmtmsg.h
+    - /usr/include/fnmatch.h
+    - /usr/include/ftw.h
+    - /usr/include/getopt.h
+    - /usr/include/glob.h
+    - /usr/include/grp.h
+    - /usr/include/iconv.h
+    - /usr/include/ifaddrs.h
+    - /usr/include/inttypes.h
+    - /usr/include/iso646.h
+    - /usr/include/langinfo.h
+    - /usr/include/lastlog.h
+    - /usr/include/libgen.h
+    - /usr/include/libintl.h
+    - /usr/include/limits.h
+    - /usr/include/link.h
+    - /usr/include/locale.h
+    - /usr/include/malloc.h
+    - /usr/include/math.h
+    - /usr/include/memory.h
+    - /usr/include/mntent.h
+    - /usr/include/monetary.h
+    - /usr/include/mqueue.h
+    - /usr/include/net/
+    - /usr/include/netdb.h
+    - /usr/include/netinet/
+    - /usr/include/netpacket/
+    - /usr/include/nl_types.h
+    - /usr/include/paths.h
+    - /usr/include/poll.h
+    - /usr/include/pthread.h
+    - /usr/include/pty.h
+    - /usr/include/pwd.h
+    - /usr/include/regex.h
+    - /usr/include/resolv.h
+    - /usr/include/sched.h
+    - /usr/include/scsi/
+    - /usr/include/search.h
+    - /usr/include/semaphore.h
+    - /usr/include/setjmp.h
+    - /usr/include/shadow.h
+    - /usr/include/signal.h
+    - /usr/include/spawn.h
+    - /usr/include/stdalign.h
+    - /usr/include/stdarg.h
+    - /usr/include/stdbool.h
+    - /usr/include/stdc-predef.h
+    - /usr/include/stddef.h
+    - /usr/include/stdint.h
+    - /usr/include/stdio.h
+    - /usr/include/stdio_ext.h
+    - /usr/include/stdlib.h
+    - /usr/include/stdnoreturn.h
+    - /usr/include/string.h
+    - /usr/include/strings.h
+    - /usr/include/stropts.h
+    - /usr/include/sys/
+    - /usr/include/syscall.h
+    - /usr/include/sysexits.h
+    - /usr/include/syslog.h
+    - /usr/include/tar.h
+    - /usr/include/termios.h
+    - /usr/include/tgmath.h
+    - /usr/include/threads.h
+    - /usr/include/time.h
+    - /usr/include/uchar.h
+    - /usr/include/ucontext.h
+    - /usr/include/ulimit.h
+    - /usr/include/unistd.h
+    - /usr/include/utime.h
+    - /usr/include/utmp.h
+    - /usr/include/utmpx.h
+    - /usr/include/values.h
+    - /usr/include/wait.h
+    - /usr/include/wchar.h
+    - /usr/include/wctype.h
+    - /usr/include/wordexp.h
+    - /usr/lib/i386-unknown-linux-musl/
+    - /usr/src/repo/musl-1.2.4_0.tar.bz2
 1.1.24:
   source:
     - url: https://musl.libc.org/releases/musl-1.1.24.tar.gz
