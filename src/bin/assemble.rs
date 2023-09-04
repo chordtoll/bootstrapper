@@ -1,64 +1,14 @@
 #![allow(clippy::iter_nth_zero)]
 
 use async_recursion::async_recursion;
-use bootstrapper::{Recipe, Source};
-use futures_util::stream::StreamExt;
+use bootstrapper::{Recipe, Source, helpers::{emit_run, download, envify, docker_export}};
 use indexmap::IndexMap;
-use indicatif::{ProgressBar, ProgressStyle};
 use std::{
-    cmp::min,
     collections::{btree_map::Entry, BTreeMap},
-    fs::File,
     io::Write,
     path::PathBuf,
 };
 
-fn emit_run(f: &mut File, cmd: Vec<String>, shell: bool) {
-    let cmd = if shell {
-        format!("RUN {}", cmd.join(" "))
-    } else {
-        format!("RUN [\"{}\"]", cmd.join("\",\""))
-    };
-    f.write_all(cmd.as_bytes()).unwrap();
-    f.write_all(b" \n").unwrap();
-}
-
-pub async fn download(client: &reqwest::Client, url: &str) -> Result<Vec<u8>, String> {
-    // Reqwest setup
-    let res = client
-        .get(url)
-        .send()
-        .await
-        .or(Err(format!("Failed to GET from '{}'", &url)))?;
-
-    // Indicatif setup
-    let (pb, ts) = if let Some(total_size) = res.content_length() {
-        (ProgressBar::new(total_size), total_size)
-    } else {
-        (ProgressBar::new_spinner(), u64::MAX)
-    };
-    pb.set_style(ProgressStyle::default_bar()
-        .template("{spinner:.green} [{elapsed_precise}] [{wide_bar:.cyan/blue}] {bytes}/{total_bytes} ({bytes_per_sec}, {eta})").unwrap()
-        .progress_chars("#>-"));
-
-    // download chunks
-    let mut downloaded: u64 = 0;
-    let mut stream = res.bytes_stream();
-
-    let mut res = Vec::new();
-
-    while let Some(item) = stream.next().await {
-        let chunk = item.or(Err("Error while downloading file"))?;
-        let mut cvec = chunk.to_vec();
-        res.append(&mut cvec);
-        let new = min(downloaded + (chunk.len() as u64), ts);
-        downloaded = new;
-        pb.set_position(new);
-    }
-
-    pb.finish();
-    Ok(res)
-}
 
 async fn build_source(source: &Source) {
     let o_push = std::env::args()
@@ -120,20 +70,6 @@ async fn build_source(source: &Source) {
             .unwrap()
             .success())
     }
-}
-
-fn envify(cmd: &str, env: &IndexMap<String, String>) -> String {
-    let mut cmd = cmd.to_owned();
-    loop {
-        let cmd_orig = cmd.clone();
-        for (k, v) in env.iter() {
-            cmd = cmd.replace(&format!("${{{}}}", k), v);
-        }
-        if cmd == cmd_orig {
-            break;
-        }
-    }
-    cmd
 }
 
 #[async_recursion]
@@ -572,27 +508,6 @@ async fn build_recipe(
     }
 
     tag_dist.to_owned()
-}
-
-fn docker_export(tag: &String, path: String) {
-    assert!(std::process::Command::new("docker")
-        .args(["create", "--name", "ex", tag, "sh"])
-        .output()
-        .unwrap()
-        .status
-        .success());
-    assert!(std::process::Command::new("docker")
-        .args(["export", "ex", "-o", &path])
-        .output()
-        .unwrap()
-        .status
-        .success());
-    assert!(std::process::Command::new("docker")
-        .args(["rm", "ex"])
-        .output()
-        .unwrap()
-        .status
-        .success());
 }
 
 #[tokio::main]
