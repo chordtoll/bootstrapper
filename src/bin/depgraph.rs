@@ -1,6 +1,9 @@
 #![allow(clippy::iter_nth_zero)]
 
-use std::{collections::BTreeMap, path::PathBuf};
+use std::{
+    collections::{BTreeMap, BTreeSet},
+    path::PathBuf,
+};
 
 use bootstrapper::Recipe;
 
@@ -8,6 +11,7 @@ fn build_depgraph(
     target: &str,
     version: &str,
     built: &mut BTreeMap<(String, String), String>,
+    depset: &mut BTreeMap<String, BTreeSet<String>>,
 ) -> String {
     // Don't retry builds we've already done
     if let Some(tag) = built.get(&(target.to_owned(), version.to_owned())) {
@@ -32,8 +36,8 @@ fn build_depgraph(
         let mut shell_it = shell.split(':');
         let shell_img = shell_it.next().unwrap();
         let shell_ver = shell_it.next().unwrap();
-        let tag = build_depgraph(shell_img, shell_ver, built);
-        println!("\"{}\" -> \"{}\";", tag_dist, tag);
+        let tag = build_depgraph(shell_img, shell_ver, built, depset);
+        depset.entry(tag_dist.to_owned()).or_default().insert(tag);
     }
 
     // Copy in our sources
@@ -53,8 +57,8 @@ fn build_depgraph(
                     dep, target, version
                 )
             });
-            let tag = build_depgraph(dep_img, dep_ver, built);
-            println!("\"{}\" -> \"{}\";", tag_dist, tag);
+            let tag = build_depgraph(dep_img, dep_ver, built, depset);
+            depset.entry(tag_dist.to_owned()).or_default().insert(tag);
         }
     }
 
@@ -66,7 +70,48 @@ fn main() {
     let target_name = target.split(':').nth(0).unwrap();
     let target_version = target.split(':').nth(1).unwrap();
     let mut built = BTreeMap::new();
+
+    let mut deps = BTreeMap::new();
+
+    build_depgraph(target_name, target_version, &mut built, &mut deps);
+
+    let mut transdeps = deps.clone();
+    let mut tdl = transdeps.iter().map(|(_,x)| x.len()).sum::<usize>();
+    loop {
+        let keys: Vec<String> = transdeps.keys().cloned().collect();
+        for k in keys {
+            let v = transdeps[&k].clone();
+            for d in v.iter() {
+                if transdeps.contains_key(d) {
+                    for dd in transdeps[d].clone() {
+                        //println!("{} -> {} -> {}",k,d,dd);
+                        transdeps.get_mut(&k).unwrap().insert(dd.to_owned());
+                    }
+                }
+            }
+        }
+        let tdln = transdeps.iter().map(|(_,x)| x.len()).sum::<usize>();
+        if tdln == tdl {
+            break;
+        }
+        tdl = tdln;
+    }
+
     println!("digraph graphname {{");
-    build_depgraph(target_name, target_version, &mut built);
+    for (k, v) in &transdeps {
+        for d in v {
+            let mut is_trans = false;
+            for dd in v {
+                if transdeps.contains_key(dd) {
+                    if transdeps[dd].contains(d) {
+                        is_trans = true;
+                    }
+                }
+            }
+            if !is_trans {
+                println!("\"{}\" -> \"{}\";", k, d);
+            }
+        }
+    }
     println!("}}");
 }

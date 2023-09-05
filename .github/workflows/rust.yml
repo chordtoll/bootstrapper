@@ -10,18 +10,7 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  build:
-
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v3
-    - name: Build
-      run: cargo build --verbose
-    - name: Run tests
-      run: cargo test --verbose
-
-  run:
+  assemble:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -34,3 +23,35 @@ jobs:
             docker-cache-v1-
       - name: Run
         run: cargo run --bin=assemble -- `cat ci-build.txt`
+  depgraph:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run
+        run: cargo run --bin=depgraph -- `cat ci-build.txt` > deps.dot
+      - name: Setup Graphviz
+        uses: ts-graphviz/setup-graphviz@v1
+      - name: Generate PNG
+        run: dot deps.dot -Tpng > deps.png
+      - name: Generate SVG
+        run: dot deps.dot -Tsvg > deps.svg
+      - uses: hkusu/s3-upload-action@v2
+        name: Upload PNG to S3
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: 'us-west-2'
+          aws-bucket: ${{ secrets.AWS_BUCKET }}
+          file-path: 'deps.png'
+          destination-dir: '/'
+          bucket-root: '/'
+      - uses: hkusu/s3-upload-action@v2
+        name: Upload SVG to S3
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: 'us-west-2'
+          aws-bucket: ${{ secrets.AWS_BUCKET }}
+          file-path: 'deps.svg'
+          destination-dir: '/'
+          bucket-root: '/'
