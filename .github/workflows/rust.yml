@@ -34,3 +34,25 @@ jobs:
             docker-cache-v1-
       - name: Run
         run: cargo run --bin=assemble -- `cat ci-build.txt`
+  depgraph:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run
+        run: cargo run --bin=depgraph -- `cat ci-build.txt` > deps.dot
+      - name: Setup Graphviz
+        uses: ts-graphviz/setup-graphviz@v1
+      - name: Generate PNG
+        run: dot deps.dot -Tpng > deps.png
+      - name: Generate SVG
+        run: dot deps.dot -Tsvg > deps.svg
+      - uses: actions/upload-artifact@v3
+        name: Upload PNG
+        with:
+          name: deps.png
+          path: deps.png
+      - uses: actions/upload-artifact@v3
+        name: Upload SVG
+        with:
+          name: deps.svg
+          path: deps.svg
