@@ -29,3 +29,8 @@ jobs:
       - store_artifacts:
           path: deps.dot
           destination: deps.dot
+workflows:
+  on_push:
+    jobs:
+      - assemble
+      - depgraph
