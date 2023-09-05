@@ -5,7 +5,7 @@ use std::{
     path::PathBuf,
 };
 
-use bootstrapper::Recipe;
+use bootstrapper::{Recipe, helpers::list_recipes};
 
 fn build_depgraph(
     target: &str,
@@ -66,14 +66,13 @@ fn build_depgraph(
 }
 
 fn main() {
-    let target = std::env::args().nth(1).unwrap();
-    let target_name = target.split(':').nth(0).unwrap();
-    let target_version = target.split(':').nth(1).unwrap();
     let mut built = BTreeMap::new();
 
     let mut deps = BTreeMap::new();
 
-    build_depgraph(target_name, target_version, &mut built, &mut deps);
+    for (name,version) in list_recipes() {
+        build_depgraph(&name, &version, &mut built, &mut deps);
+    }
 
     let mut transdeps = deps.clone();
     let mut tdl = transdeps.iter().map(|(_,x)| x.len()).sum::<usize>();
