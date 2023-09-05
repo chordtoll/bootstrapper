@@ -1,12 +1,31 @@
 version: 2.1
 
 jobs:
-  build:
+  assemble:
     docker:
       - image: cimg/rust:1.72.0
+    resource_class: small
     steps:
       - checkout
+      - setup_remote_docker:
+        docker_layer_caching: true
       - run: cargo --version
       - run:
-          name: Run Tests
-          command: "cargo test"
+          name: Assemble
+          command: "cargo run --bin=assemble -- `cat ci-build.txt`"
+
+  depgraph:
+    docker:
+      - image: cimg/rust:1.72.0
+    resource_class: small
+    steps:
+      - checkout
+      - setup_remote_docker:
+        docker_layer_caching: true
+      - run: cargo --version
+      - run:
+          name: Generate Depgraph
+          command: "cargo run --bin=depgraph -- `cat ci-build.txt` > deps.dot"
+      - store_artifacts:
+          path: deps.dot
+          destination: deps.dot
