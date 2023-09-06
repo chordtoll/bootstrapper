@@ -1,0 +1,32 @@
+1.4:
+  source:
+    - url: https://mirrors.kernel.org/gnu/ed/ed-1.4.tar.gz
+      sha: db36da85ee1a9d8bafb4b041bd4c8c11becba0c43ec446353b67045de1634fda
+      noextract: /sysa/distfiles/ed-1.4.tar.gz
+    - url: https://github.com/fosslinux/live-bootstrap/archive/fd9e8d547fda47cde0a733f87457661b58813077.zip
+      sha: 503539f54904ab0d1c802479c099c4d46cd81bb95ac36231b251472972bd1199
+      extract: /live-bootstrap
+      copy:
+        - /sysa/:/sysa/
+  deps:
+    - sysa/kaem/setup:latest
+    - sysa/bash/setup:latest
+    - sysa/kaem/bash:2.05b
+    - sysa/kaem/tar:1.12
+    - sysa/kaem/gzip:1.2.4
+    - sysa/bash/sed:4.0.9
+    - sysa/bash/bzip2:1.0.8
+    - sysa/bash/coreutils:6.10
+    - sysa/bash2/binutils:2.30
+    - sysa/bash2/musl:1.2.4-1
+    - sysa/bash2/linux-headers:5.10.41
+    - sysa/bash2/gcc:4.0.4-2
+    - sysa/bash2/make:3.82
+  build:
+    compile:
+      - pkg="ed-1.4"
+      - cd /sysa/${pkg}
+      - bash -ex -c "source ../helpers.sh; build ed-1.4"
+  artefacts:
+    - /usr/bin/ed
+    - /usr/src/repo/ed-1.4_0.tar.bz2
