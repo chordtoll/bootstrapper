@@ -1,0 +1,95 @@
+1.15:
+  source:
+    - url: https://mirrors.edge.kernel.org/pub/linux/utils/kbd/kbd-1.15.tar.gz
+      sha: 203c93e004ac7ad0e50423ff54d89e40fa99f45b207b2b892a4d70211feebe05
+      noextract: /sysa/distfiles/kbd-1.15.tar.gz
+    - url: https://github.com/fosslinux/live-bootstrap/archive/fd9e8d547fda47cde0a733f87457661b58813077.zip
+      sha: 503539f54904ab0d1c802479c099c4d46cd81bb95ac36231b251472972bd1199
+      extract: /live-bootstrap
+      copy:
+        - /sysa/:/sysa/
+  deps:
+    - sysa/kaem/setup:latest
+    - sysa/bash/setup:latest
+    - sysa/kaem/bash:2.05b
+    - sysa/kaem/tar:1.12
+    - sysa/kaem/gzip:1.2.4
+    - sysa/kaem/patch:2.5.9
+    - sysa/kaem/make:3.82
+    - sysa/bash/sed:4.0.9
+    - sysa/bash/bzip2:1.0.8
+    - sysa/bash/m4:1.4.7
+    - sysa/bash/flex:2.6.4
+    - sysa/bash/bison:3.4.1-3
+    - sysa/bash/grep:2.4
+    - sysa/bash/coreutils:6.10
+    - sysa/bash/gawk:3.0.4
+    - sysa/bash/perl:5.6.2
+    - sysa/bash/automake:1.10.3
+    - sysa/bash/autoconf:2.53
+    - sysa/bash/autoconf:2.64
+    - sysa/bash2/binutils:2.30
+    - sysa/bash2/gcc:4.0.4-1
+    - sysa/bash2/findutils:4.2.33
+    - sysa/bash2/musl:1.2.4-1
+    - sysa/bash2/linux-headers:5.10.41
+    - sysa/bash2/gcc:4.0.4-2
+  build:
+    compile:
+      - pkg="kbd-1.15"
+      - cd /sysa/${pkg}
+      - bash -ex -c "source ../helpers.sh; build kbd-1.15"
+  artefacts:
+    - /usr/bin/chvt
+    - /usr/bin/deallocvt
+    - /usr/bin/dumpkeys
+    - /usr/bin/fgconsole
+    - /usr/bin/getkeycodes
+    - /usr/bin/kbd_mode
+    - /usr/bin/kbdrate
+    - /usr/bin/loadkeys
+    - /usr/bin/loadunimap
+    - /usr/bin/mapscrn
+    - /usr/bin/openvt
+    - /usr/bin/psfaddtable
+    - /usr/bin/psfgettable
+    - /usr/bin/psfstriptable
+    - /usr/bin/psfxtable
+    - /usr/bin/setfont
+    - /usr/bin/setkeycodes
+    - /usr/bin/setleds
+    - /usr/bin/setmetamode
+    - /usr/bin/showconsolefont
+    - /usr/bin/showkey
+    - /usr/bin/unicode_start
+    - /usr/bin/unicode_stop
+    - /usr/share/consolefonts/
+    - /usr/share/consoletrans/
+    - /usr/share/keymaps/
+    - /usr/share/man/man1/chvt.1
+    - /usr/share/man/man1/deallocvt.1
+    - /usr/share/man/man1/dumpkeys.1
+    - /usr/share/man/man1/fgconsole.1
+    - /usr/share/man/man1/kbd_mode.1
+    - /usr/share/man/man1/loadkeys.1
+    - /usr/share/man/man1/openvt.1
+    - /usr/share/man/man1/psfaddtable.1
+    - /usr/share/man/man1/psfgettable.1
+    - /usr/share/man/man1/psfstriptable.1
+    - /usr/share/man/man1/psfxtable.1
+    - /usr/share/man/man1/setleds.1
+    - /usr/share/man/man1/setmetamode.1
+    - /usr/share/man/man1/showkey.1
+    - /usr/share/man/man1/unicode_start.1
+    - /usr/share/man/man1/unicode_stop.1
+    - /usr/share/man/man5/keymaps.5
+    - /usr/share/man/man8/getkeycodes.8
+    - /usr/share/man/man8/kbdrate.8
+    - /usr/share/man/man8/loadunimap.8
+    - /usr/share/man/man8/mapscrn.8
+    - /usr/share/man/man8/resizecons.8
+    - /usr/share/man/man8/setfont.8
+    - /usr/share/man/man8/setkeycodes.8
+    - /usr/share/man/man8/showconsolefont.8
+    - /usr/share/unimaps/
+    - /usr/src/repo/kbd-1.15_0.tar.bz2
