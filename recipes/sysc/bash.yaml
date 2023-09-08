@@ -1,0 +1,40 @@
+5.2.15:
+  source:
+    - url: http://mirrors.kernel.org/gnu/bash/bash-5.2.15.tar.gz
+      sha: 13720965b5f4fc3a0d4b61dd37e7565c741da9a5be24edc2ae00182fc1b3588c
+      noextract: /distfiles/bash-5.2.15.tar.gz
+    - url: https://github.com/fosslinux/live-bootstrap/archive/fd9e8d547fda47cde0a733f87457661b58813077.zip
+      sha: 503539f54904ab0d1c802479c099c4d46cd81bb95ac36231b251472972bd1199
+      extract: /live-bootstrap
+      copy:
+        - /sysa/:/sysa/
+        - /sysc/:/usr/src/
+  deps:
+    - sysa/kaem/setup:latest
+    - sysa/kaem/gzip:1.2.4
+    - sysa/bash/setup:latest
+    - sysa/bash/sed:4.0.9
+    - sysa/bash/bzip2:1.0.8
+    - sysa/bash/m4:1.4.7
+    - sysa/bash/bison:3.4.1-3
+    - sysa/bash/grep:2.4
+    - sysa/bash/coreutils:6.10
+    - sysa/bash/gawk:3.0.4
+    - sysa/bash/perl:5.6.2
+    - sysa/bash/autoconf:2.69
+    - sysa/bash2/binutils:2.30
+    - sysa/bash2/gcc:4.0.4-2
+    - sysa/bash2/make:3.82
+    - sysa/bash2/musl:1.2.4-2
+    - sysc/setup:latest
+  build:
+    compile:
+      - pkg="bash-5.2.15"
+      - cd /sysc/${pkg}
+      - bash -ex -c "source /sysa/helpers.sh; build bash-5.2.15"
+  artefacts:
+    - /bin/bash
+    - /bin/sh
+    - /usr/bin/bash
+    - /usr/bin/sh
+    - /usr/src/repo/bash-5.2.15_0.tar.bz2

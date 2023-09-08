@@ -1,1 +1,1 @@
-sysa/bash2/musl:1.2.4-2
+sysc/bash:5.2.15

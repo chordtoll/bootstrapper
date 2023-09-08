@@ -1,0 +1,27 @@
+latest:
+  source:
+    - url: https://github.com/fosslinux/live-bootstrap/archive/fd9e8d547fda47cde0a733f87457661b58813077.zip
+      sha: 503539f54904ab0d1c802479c099c4d46cd81bb95ac36231b251472972bd1199
+      extract: /live-bootstrap
+      copy:
+        - /sysa/:/sysa/
+  deps:
+    - sysa/bash/setup:latest
+    - sysa/bash/coreutils:6.10
+    - sysa/kaem/tar:1.12
+    - sysa/bash/bzip2:1.0.8
+    - sysa/kaem/bash:2.05b
+  build:
+    compile:
+      - mkdir -p "${DESTDIR}" "${SRCDIR}/repo" /dev "${SOURCES}" "${SOURCES}/distfiles"
+      - cp /sysa/bootstrap.cfg /sysa/SHA256SUMS.pkgs /sysa/helpers.sh /usr/src/
+  artefacts:
+    #- /sysa/bootstrap.cfg
+    - /bin/bash
+    - /bin/sh
+    - /usr/src/bootstrap.cfg
+    - /usr/src/SHA256SUMS.pkgs
+    - /usr/src/helpers.sh
+    - /usr/bin/bash
+    - /usr/bin/tar
+    - /usr/bin/bzip2
