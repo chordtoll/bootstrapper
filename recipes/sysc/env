@@ -4,3 +4,4 @@ SOURCES="${PREFIX}/src"
 DESTDIR=/tmp/destdir
 DISTFILES=/distfiles
 SRCDIR="${SOURCES}"
+MAKEJOBS=-j1

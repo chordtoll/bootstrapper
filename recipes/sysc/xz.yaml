@@ -1,0 +1,92 @@
+5.4.1:
+  source:
+    - url: http://ixpeering.dl.sourceforge.net/project/lzmautils/xz-5.4.1.tar.bz2
+      sha: dd172acb53867a68012f94c17389401b2f274a1aa5ae8f84cbfb8b7e383ea8d3
+      noextract: /distfiles/xz-5.4.1.tar.bz2
+    - url: https://github.com/fosslinux/live-bootstrap/archive/fd9e8d547fda47cde0a733f87457661b58813077.zip
+      sha: 503539f54904ab0d1c802479c099c4d46cd81bb95ac36231b251472972bd1199
+      extract: /live-bootstrap
+      copy:
+        - /sysa/:/sysa/
+        - /sysc/:/usr/src/
+  deps:
+    - sysa/kaem/setup:latest
+    - sysa/kaem/gzip:1.2.4
+    - sysa/bash/setup:latest
+    - sysa/bash/sed:4.0.9
+    - sysa/bash/bzip2:1.0.8
+    - sysa/bash/m4:1.4.7
+    - sysa/bash/bison:3.4.1-3
+    - sysa/bash/grep:2.4
+    - sysa/bash/coreutils:6.10
+    - sysa/bash/gawk:3.0.4
+    - sysa/bash/perl:5.6.2
+    - sysa/bash/autoconf:2.69
+    - sysa/bash2/automake:1.15.1
+    - sysa/bash2/binutils:2.30
+    - sysa/bash2/gcc:4.0.4-2
+    - sysa/bash2/make:3.82
+    - sysa/bash2/musl:1.2.4-2
+    - sysa/bash2/findutils:4.2.33
+    - sysc/setup:latest
+    - sysc/bash:5.2.15
+  build:
+    compile:
+      - pkg="xz-5.4.1"
+      - cd /sysc/${pkg}
+      - bash -ex -c "source /sysa/helpers.sh; build xz-5.4.1"
+  artefacts:
+    - /usr/bin/lzcat
+    - /usr/bin/lzcat
+    - /usr/bin/lzcmp
+    - /usr/bin/lzdiff
+    - /usr/bin/lzegrep
+    - /usr/bin/lzfgrep
+    - /usr/bin/lzgrep
+    - /usr/bin/lzless
+    - /usr/bin/lzma
+    - /usr/bin/lzmadec
+    - /usr/bin/lzmainfo
+    - /usr/bin/lzmore
+    - /usr/bin/unlzma
+    - /usr/bin/unxz
+    - /usr/bin/xz
+    - /usr/bin/xzcat
+    - /usr/bin/xzcmp
+    - /usr/bin/xzdec
+    - /usr/bin/xzdiff
+    - /usr/bin/xzegrep
+    - /usr/bin/xzfgrep
+    - /usr/bin/xzgrep
+    - /usr/bin/xzless
+    - /usr/bin/xzmore
+    - /usr/include/lzma.h
+    - /usr/include/lzma/
+    - /usr/lib/i386-unknown-linux-musl/liblzma.a
+    - /usr/lib/i386-unknown-linux-musl/liblzma.la
+    - /usr/lib/i386-unknown-linux-musl/pkgconfig/liblzma.pc
+    - /usr/share/doc/xz/
+    - /usr/share/man/man1/lzcat.1
+    - /usr/share/man/man1/lzcmp.1
+    - /usr/share/man/man1/lzdiff.1
+    - /usr/share/man/man1/lzegrep.1
+    - /usr/share/man/man1/lzfgrep.1
+    - /usr/share/man/man1/lzgrep.1
+    - /usr/share/man/man1/lzless.1
+    - /usr/share/man/man1/lzma.1
+    - /usr/share/man/man1/lzmadec.1
+    - /usr/share/man/man1/lzmainfo.1
+    - /usr/share/man/man1/lzmore.1
+    - /usr/share/man/man1/unlzma.1
+    - /usr/share/man/man1/unxz.1
+    - /usr/share/man/man1/xz.1
+    - /usr/share/man/man1/xzcat.1
+    - /usr/share/man/man1/xzcmp.1
+    - /usr/share/man/man1/xzdec.1
+    - /usr/share/man/man1/xzdiff.1
+    - /usr/share/man/man1/xzegrep.1
+    - /usr/share/man/man1/xzfgrep.1
+    - /usr/share/man/man1/xzgrep.1
+    - /usr/share/man/man1/xzless.1
+    - /usr/share/man/man1/xzmore.1
+    - /usr/src/repo/xz-5.4.1_0.tar.bz2

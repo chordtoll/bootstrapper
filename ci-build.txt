@@ -1,1 +1,1 @@
-sysc/bash:5.2.15
+sysc/xz:5.4.1
