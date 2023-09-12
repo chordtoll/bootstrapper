@@ -1,0 +1,48 @@
+5.44:
+  source:
+    - url: http://ftp.astron.com/pub/file/file-5.44.tar.gz
+      sha: 3751c7fba8dbc831cb8d7cc8aff21035459b8ce5155ef8b0880a27d028475f3b
+      noextract: /distfiles/file-5.44.tar.gz
+    - url: https://github.com/fosslinux/live-bootstrap/archive/fd9e8d547fda47cde0a733f87457661b58813077.zip
+      sha: 503539f54904ab0d1c802479c099c4d46cd81bb95ac36231b251472972bd1199
+      extract: /live-bootstrap
+      copy:
+        - /sysa/:/sysa/
+        - /sysc/:/usr/src/
+  deps:
+    - sysa/kaem/setup:latest
+    - sysa/kaem/gzip:1.2.4
+    - sysa/kaem/tar:1.12
+    - sysa/bash/sed:4.0.9
+    - sysa/bash/bzip2:1.0.8
+    - sysa/bash/m4:1.4.7
+    - sysa/bash/grep:2.4
+    - sysa/bash/coreutils:6.10
+    - sysa/bash/gawk:3.0.4
+    - sysa/bash/perl:5.6.2
+    - sysa/bash/autoconf:2.69
+    - sysa/bash/libtool:2.2.4
+    - sysa/bash2/automake:1.15.1
+    - sysa/bash2/binutils:2.30
+    - sysa/bash2/gcc:4.0.4-2
+    - sysa/bash2/make:3.82
+    - sysa/bash2/musl:1.2.4-2
+    - sysc/setup:latest
+    - sysc/bash:5.2.15
+    - sysc/xz:5.4.1
+  build:
+    compile:
+      - pkg="file-5.44"
+      - cd /sysc/${pkg}
+      - bash -ex -c "source /sysa/helpers.sh; build file-5.44"
+  artefacts:
+    - /usr/bin/file
+    - /usr/include/magic.h
+    - /usr/lib/i386-unknown-linux-musl/libmagic.a
+    - /usr/lib/i386-unknown-linux-musl/libmagic.la
+    - /usr/lib/i386-unknown-linux-musl/pkgconfig/libmagic.pc
+    - /usr/share/man/man1/file.1
+    - /usr/share/man/man3/libmagic.3
+    - /usr/share/man/man4/magic.4
+    - /usr/share/misc/magic.mgc
+    - /usr/src/repo/file-5.44_0.tar.bz2
