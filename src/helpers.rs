@@ -1,8 +1,9 @@
-use std::{fs::File, io::Write, cmp::min, collections::BTreeSet};
+use std::{fs::File, io::Write, cmp::min, collections::{BTreeSet, BTreeMap}, path::PathBuf};
 
 use futures_util::StreamExt;
 use indexmap::IndexMap;
 use indicatif::{ProgressStyle, ProgressBar};
+use petgraph::prelude::DiGraph;
 
 use crate::Recipe;
 
@@ -123,4 +124,39 @@ pub fn list_recipes() -> BTreeSet<Package> {
         }
     }
     res
+}
+
+pub fn get_deps(package: &Package) -> BTreeSet<Package> {
+    let mut res = BTreeSet::new();
+
+    let recipe_path = PathBuf::from(format!("recipes/{}.yaml", package.name));
+
+    let mut recipe: Recipe = serde_yaml::from_reader(std::fs::File::open(recipe_path.clone()).unwrap()).unwrap();
+
+    let recipe = recipe.remove(&package.version).unwrap();
+
+    if let Some(deps) = recipe.deps {
+        for i in deps {
+            res.insert(i.into());
+        }
+    }
+
+    res
+}
+
+pub fn gen_graph_all() -> DiGraph<Package,()>
+{
+    let mut g = DiGraph::new();
+    let mut indices = BTreeMap::new();
+
+    for package in list_recipes() {
+        let idx=g.add_node(package.clone());
+        indices.insert(package,idx);
+    }
+    for package in list_recipes() {
+        for dep in get_deps(&package) {
+            g.add_edge(*indices.get(&package).unwrap(),*indices.get(&dep).unwrap(),());
+        }
+    }
+    g
 }
