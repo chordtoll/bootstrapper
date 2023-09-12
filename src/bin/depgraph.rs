@@ -74,7 +74,9 @@ fn main() {
 
     let mut recipes_by_section: BTreeMap<String, BTreeSet<String>> = BTreeMap::new();
 
-    for (name, version) in recipes {
+    for package in recipes {
+        let name = package.name;
+        let version = package.version;
         let tag = build_depgraph(&name, &version, &mut built, &mut deps);
         recipes_by_section
             .entry(name.rsplit_once("/").unwrap().0.to_owned())

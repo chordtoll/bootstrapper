@@ -6,6 +6,30 @@ use indicatif::{ProgressStyle, ProgressBar};
 
 use crate::Recipe;
 
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
+pub struct Package {
+    pub name: String,
+    pub version: String,
+}
+
+impl From<String> for Package {
+    fn from(value: String) -> Self {
+        let name = value.split(':').nth(0).unwrap().to_owned();
+        let version = value.split(':').nth(1).unwrap_or_else(|| {
+            panic!(
+                "Failed to find version in dep {}",value
+            )
+        }).to_owned();
+        Self { name, version }
+    }
+}
+
+impl From<&Package> for String {
+    fn from(value: &Package) -> Self {
+        format!("{}:{}",value.name,value.version)
+    }
+}
+
 pub fn emit_run(f: &mut File, cmd: Vec<String>, shell: bool) {
     let cmd = if shell {
         format!("RUN {}", cmd.join(" "))
@@ -88,14 +112,14 @@ pub fn docker_export(tag: &String, path: String) {
         .success());
 }
 
-pub fn list_recipes() -> BTreeSet<(String,String)>{
+pub fn list_recipes() -> BTreeSet<Package> {
     let mut res = BTreeSet::new();
     for entry in glob::glob("recipes/**/*.yaml").expect("Failed to read glob pattern") {
         let entry = entry.unwrap();
         let name = entry.strip_prefix("recipes").unwrap().as_os_str().to_str().unwrap().trim_end_matches(".yaml");
         let recipe: Recipe = serde_yaml::from_reader(std::fs::File::open(entry.clone()).unwrap()).unwrap();
         for version in recipe.keys() {
-            res.insert((name.to_string(),version.to_string()));
+            res.insert(Package{name: name.to_string(), version: version.to_string()});
         }
     }
     res
