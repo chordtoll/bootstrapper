@@ -1,0 +1,64 @@
+2.4.7:
+  source:
+    - url: http://mirrors.kernel.org/gnu/libtool/libtool-2.4.7.tar.xz
+      sha: 4f7f217f057ce655ff22559ad221a0fd8ef84ad1fc5fcb6990cecc333aa1635d
+      noextract: /distfiles/libtool-2.4.7.tar.xz
+    - url: http://git.savannah.gnu.org/cgit/gnulib.git/snapshot/gnulib-a521820.tar.gz
+      sha: 719b399fe09a8f6ca14ba8c4a9a60ce9f93f4892effb50961ef3d8cd1a33ff65
+      noextract: /distfiles/gnulib-a521820.tar.gz
+    - url: https://github.com/fosslinux/live-bootstrap/archive/fd9e8d547fda47cde0a733f87457661b58813077.zip
+      sha: 503539f54904ab0d1c802479c099c4d46cd81bb95ac36231b251472972bd1199
+      extract: /live-bootstrap
+      copy:
+        - /sysa/:/sysa/
+        - /sysc/:/usr/src/
+  deps:
+    - sysa/kaem/setup:latest
+    - sysa/kaem/patch:2.5.9
+    - sysa/kaem/gzip:1.2.4
+    - sysa/kaem/tar:1.12
+    - sysa/bash/setup:latest
+    - sysa/bash/sed:4.0.9
+    - sysa/bash/bzip2:1.0.8
+    - sysa/bash/m4:1.4.7
+    - sysa/bash/grep:2.4
+    - sysa/bash/coreutils:6.10
+    - sysa/bash/gawk:3.0.4
+    - sysa/bash/perl:5.6.2
+    - sysa/bash/help2man:1.36.4
+    - sysa/bash/autoconf:2.69
+    - sysa/bash/diffutils:2.7
+    - sysa/bash2/automake:1.15.1
+    - sysa/bash2/binutils:2.30
+    - sysa/bash2/findutils:4.2.33
+    - sysa/bash2/gcc:4.0.4-2
+    - sysa/bash2/make:3.82
+    - sysa/bash2/musl:1.2.4-2
+    - sysc/setup:latest
+    - sysc/bash:5.2.15
+    - sysc/xz:5.4.1
+    - sysc/file:5.44
+  build:
+    compile:
+      - pkg="libtool-2.4.7"
+      - cd /usr/src/${pkg}
+      - ln -sv usr/lib /lib
+      - bash -ex -c "source /usr/src/helpers.sh; build libtool-2.4.7"
+  artefacts:
+    - /usr/bin/libtool
+    - /usr/bin/libtoolize
+    - /usr/include/libltdl/
+    - /usr/include/ltdl.h
+    - /usr/lib/i386-unknown-linux-musl/libltdl.a
+    - /usr/lib/i386-unknown-linux-musl/libltdl.la
+    - /usr/share/aclocal/libtool.m4
+    - /usr/share/aclocal/ltargz.m4
+    - /usr/share/aclocal/ltdl.m4
+    - /usr/share/aclocal/ltoptions.m4
+    - /usr/share/aclocal/ltsugar.m4
+    - /usr/share/aclocal/ltversion.m4
+    - /usr/share/aclocal/lt~obsolete.m4
+    - /usr/share/libtool/
+    - /usr/share/man/man1/libtool.1
+    - /usr/share/man/man1/libtoolize.1
+    - /usr/src/repo/libtool-2.4.7_0.tar.bz2
