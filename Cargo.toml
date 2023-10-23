@@ -22,5 +22,5 @@ serde_yaml = "0.9.25"
 sha256 = "1.4.0"
 shlex = "1.2.0"
 tar = "0.4.40"
-tokio = { version = "1.32.0", features = ["macros"] }
+tokio = { version = "1.33.0", features = ["macros"] }
 zip-extract = "0.1.2"
