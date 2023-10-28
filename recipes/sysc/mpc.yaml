@@ -1,0 +1,48 @@
+1.2.1:
+  source:
+    - url: http://mirrors.kernel.org/gnu/mpc/mpc-1.2.1.tar.gz
+      sha: 17503d2c395dfcf106b622dc142683c1199431d095367c6aacba6eec30340459
+      noextract: /distfiles/mpc-1.2.1.tar.gz
+    - url: https://github.com/fosslinux/live-bootstrap/archive/fd9e8d547fda47cde0a733f87457661b58813077.zip
+      sha: 503539f54904ab0d1c802479c099c4d46cd81bb95ac36231b251472972bd1199
+      extract: /live-bootstrap
+      copy:
+        - /sysa/:/sysa/
+        - /sysc/:/usr/src/
+  deps:
+    - sysa/kaem/setup:latest
+    - sysa/kaem/patch:2.5.9
+    - sysa/kaem/gzip:1.2.4
+    - sysa/bash/setup:latest
+    - sysa/bash/sed:4.0.9
+    - sysa/bash/bzip2:1.0.8
+    - sysa/bash/m4:1.4.7
+    - sysa/bash/grep:2.4
+    - sysa/bash/gawk:3.0.4
+    - sysa/bash/perl:5.6.2
+    - sysa/bash/autoconf:2.69
+    - sysa/bash/diffutils:2.7
+    - sysa/bash/libtool:2.2.4
+    - sysa/bash2/automake:1.15.1
+    - sysa/bash2/binutils:2.30
+    - sysa/bash2/findutils:4.2.33
+    - sysa/bash2/linux-headers:5.10.41
+    - sysa/bash2/gcc:4.0.4-2
+    - sysa/bash2/musl:1.2.4-2
+    - sysc/setup:latest
+    - sysc/bash:5.2.15
+    - sysc/file:5.44
+    - sysc/libtool:2.4.7
+    - sysc/tar:1.34
+    - sysc/pkg-config:0.29.2
+    - sysc/make:4.2.1
+    - sysc/coreutils:8.32
+    - sysc/gmp:6.2.1
+    - sysc/mpfr:4.1.0
+  build:
+    compile:
+      - pkg="mpc-1.2.1"
+      - cd /usr/src/${pkg}
+      - bash -ex -c "source /usr/src/helpers.sh; build mpc-1.2.1"
+  artefacts:
+    - /usr/src/repo/mpc-1.2.1_0.tar.bz2

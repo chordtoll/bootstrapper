@@ -1,1 +1,1 @@
-sysc/mpfr:4.1.0
+sysc/mpc:1.2.1
