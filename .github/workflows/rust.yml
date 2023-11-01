@@ -18,9 +18,9 @@ jobs:
         uses: satackey/action-docker-layer-caching@v0.0.11      
         continue-on-error: true
         with:
-          key: docker-cache-v2-{hash}
+          key: docker-cache-v3-{hash}
           restore-keys: |
-            docker-cache-v2-
+            docker-cache-v3-
       - name: Run
         run: cargo run --bin=assemble -- `cat ci-build.txt`
   depgraph:

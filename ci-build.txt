@@ -1,1 +1,1 @@
-sysc/bison:2.3
+sysc/bison:3.4.2

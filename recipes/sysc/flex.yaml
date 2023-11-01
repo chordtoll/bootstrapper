@@ -46,4 +46,11 @@
       - cd /usr/src/${pkg}
       - bash -ex -c "source /usr/src/helpers.sh; build flex-2.5.33"
   artefacts:
+    - /usr/bin/lex
+    - /usr/bin/flex
+    - /usr/bin/flex-2.5.33
+    - /usr/include/FlexLexer.h
+    - /usr/lib/i386-unknown-linux-musl/libfl.a
+    - /usr/share/man/man1/flex-2.5.33.1
+    - /usr/src/flex-2.5.33/
     - /usr/src/repo/flex-2.5.33_0.tar.bz2
