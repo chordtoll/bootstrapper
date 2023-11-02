@@ -1,0 +1,44 @@
+5.10.1:
+  source:
+    - url: http://www.cpan.org/src/5.0/perl-5.10.1.tar.bz2
+      sha: 9385f2c8c2ca8b1dc4a7c31903f1f8dc8f2ba867dc2a9e5c93012ed6b564e826
+      noextract: /distfiles/perl-5.10.1.tar.bz2
+    - url: https://github.com/fosslinux/live-bootstrap/archive/fd9e8d547fda47cde0a733f87457661b58813077.zip
+      sha: 503539f54904ab0d1c802479c099c4d46cd81bb95ac36231b251472972bd1199
+      extract: /live-bootstrap
+      copy:
+        - /sysa/:/sysa/
+        - /sysc/:/usr/src/
+  deps:
+    - sysa/kaem/setup:latest
+    - sysa/kaem/patch:2.5.9
+    - sysa/bash/setup:latest
+    - sysa/bash/sed:4.0.9
+    - sysa/bash/bzip2:1.0.8
+    - sysa/bash/m4:1.4.7
+    - sysa/bash/grep:2.4
+    - sysa/bash/perl:5.6.2
+    - sysa/bash/autoconf:2.69
+    - sysa/bash/diffutils:2.7
+    - sysa/bash/libtool:2.2.4
+    - sysa/bash2/automake:1.15.1
+    - sysa/bash2/binutils:2.30
+    - sysa/bash2/findutils:4.2.33
+    - sysa/bash2/linux-headers:5.10.41
+    - sysa/bash2/gcc:4.0.4-2
+    - sysa/bash2/musl:1.2.4-2
+    - sysc/setup:latest
+    - sysc/bash:5.2.15
+    - sysc/file:5.44
+    - sysc/tar:1.34
+    - sysc/make:4.2.1
+    - sysc/coreutils:8.32
+    - sysc/flex:2.5.33
+    - sysc/bison:2.3
+  build:
+    compile:
+      - pkg="perl-5.10.1"
+      - cd /usr/src/${pkg}
+      - bash -ex -c "source /usr/src/helpers.sh; build perl-5.10.1"
+  artefacts:
+    - /usr/src/repo/perl-5.10.1_0.tar.bz2

@@ -1,1 +1,1 @@
-sysc/bison:3.4.2
+sysc/perl:5.10.1
