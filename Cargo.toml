@@ -17,7 +17,7 @@ indicatif = { default-features = false, version = "0.17.7" }
 mktemp = "0.5.1"
 petgraph = { default-features = false, version = "0.6.4" }
 reqwest = { version = "0.11.20", features = ["blocking", "stream", "default-tls"], default-features = false }
-serde = { version = "1.0.189", features = ["serde_derive"], default-features = false }
+serde = { version = "1.0.192", features = ["serde_derive"], default-features = false }
 serde_yaml = "0.9.25"
 sha256 = { default-features = false, version = "1.4.0" }
 shlex = { default-features = false, version = "1.2.0" }
