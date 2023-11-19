@@ -1,3 +1,52 @@
+5.32.1:
+  source:
+    - url: http://www.cpan.org/src/5.0/perl-5.32.1.tar.xz
+      sha: 57cc47c735c8300a8ce2fa0643507b44c4ae59012bfdad0121313db639e02309
+      noextract: /distfiles/perl-5.32.1.tar.xz
+    - url: http://deb.debian.org/debian/pool/main/p/perl/perl_5.32.1.orig-regen-configure.tar.gz
+      sha: 1d179b41283f12ad83f9758430f6ddc49bdf20db5c396aeae7e51ebb4e4afd29
+      noextract: /distfiles/perl_5.32.1.orig-regen-configure.tar.gz
+    - url: https://github.com/fosslinux/live-bootstrap/archive/fd9e8d547fda47cde0a733f87457661b58813077.zip
+      sha: 503539f54904ab0d1c802479c099c4d46cd81bb95ac36231b251472972bd1199
+      extract: /live-bootstrap
+      copy:
+        - /sysa/:/sysa/
+        - /sysc/:/usr/src/
+  deps:
+    - sysa/kaem/setup:latest
+    - sysa/kaem/patch:2.5.9
+    - sysa/kaem/gzip:1.2.4
+    - sysa/bash/setup:latest
+    - sysa/bash/sed:4.0.9
+    - sysa/bash/bzip2:1.0.8
+    - sysa/bash/m4:1.4.7
+    - sysa/bash/grep:2.4
+    - sysa/bash/gawk:3.0.4
+    - sysa/bash/diffutils:2.7
+    - sysa/bash2/binutils:2.30
+    - sysa/bash2/findutils:4.2.33
+    - sysa/bash2/linux-headers:5.10.41
+    - sysa/bash2/gcc:4.0.4-2
+    - sysa/bash2/musl:1.2.4-2
+    - sysc/setup:latest
+    - sysc/bash:5.2.15
+    - sysc/xz:5.4.1
+    - sysc/file:5.44
+    - sysc/tar:1.34
+    - sysc/make:4.2.1
+    - sysc/coreutils:8.32
+    - sysc/bison:3.4.2
+    - sysc/perl:5.10.1
+    - sysc/dist:3.5-236
+  build:
+    compile:
+      - pkg="perl-5.32.1"
+      - cd /usr/src/${pkg}
+      - sed -i "60 i cp /tmp/Config.pm /tmp/destdir/usr/lib/perl5/5.32.1/i386-linux/Config.pm" perl-5.32.1.sh
+      - sed -i "61 i cp /tmp/Config_heavy.pl /tmp/destdir/usr/lib/perl5/5.32.1/i386-linux/Config_heavy.pl" perl-5.32.1.sh
+      - bash -ex -c "source /usr/src/helpers.sh; build perl-5.32.1"
+  artefacts:
+    - /usr/src/repo/perl-5.32.1_0.tar.bz2
 5.10.1:
   source:
     - url: http://www.cpan.org/src/5.0/perl-5.10.1.tar.bz2
