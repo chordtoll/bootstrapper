@@ -19,7 +19,7 @@ petgraph = { default-features = false, version = "0.6.4" }
 reqwest = { version = "0.11.23", features = ["blocking", "stream", "default-tls"], default-features = false }
 serde = { version = "1.0.189", features = ["serde_derive"], default-features = false }
 serde_yaml = "0.9.30"
-sha256 = { default-features = false, version = "1.4.0" }
+sha256 = { default-features = false, version = "1.5.0" }
 shlex = { default-features = false, version = "1.2.0" }
 tar = { default-features = false, version = "0.4.40" }
 tokio = { version = "1.35.1", features = ["macros"], default-features = false }
