@@ -1,1 +1,1 @@
-sysc/openssl:1.1.1l
+sysc/curl:7.88.1-1
