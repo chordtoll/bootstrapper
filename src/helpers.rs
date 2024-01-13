@@ -1,9 +1,5 @@
-use std::{fs::File, io::Write, cmp::min, collections::{BTreeSet, BTreeMap}, path::PathBuf};
+use std::{fs::File, io::Write, collections::BTreeSet, path::PathBuf};
 
-use futures_util::StreamExt;
-use indexmap::IndexMap;
-use indicatif::{ProgressStyle, ProgressBar};
-use petgraph::prelude::DiGraph;
 
 use crate::Recipe;
 
@@ -41,7 +37,9 @@ pub fn emit_run(f: &mut File, cmd: Vec<String>, shell: bool) {
     f.write_all(b" \n").unwrap();
 }
 
+#[cfg(feature="assemble")]
 pub async fn download(client: &reqwest::Client, url: &str) -> Result<Vec<u8>, String> {
+    use futures_util::stream::StreamExt;
     // Reqwest setup
     let res = client
         .get(url)
@@ -51,11 +49,11 @@ pub async fn download(client: &reqwest::Client, url: &str) -> Result<Vec<u8>, St
 
     // Indicatif setup
     let (pb, ts) = if let Some(total_size) = res.content_length() {
-        (ProgressBar::new(total_size), total_size)
+        (indicatif::ProgressBar::new(total_size), total_size)
     } else {
-        (ProgressBar::new_spinner(), u64::MAX)
+        (indicatif::ProgressBar::new_spinner(), u64::MAX)
     };
-    pb.set_style(ProgressStyle::default_bar()
+    pb.set_style(indicatif::ProgressStyle::default_bar()
         .template("{spinner:.green} [{elapsed_precise}] [{wide_bar:.cyan/blue}] {bytes}/{total_bytes} ({bytes_per_sec}, {eta})").unwrap()
         .progress_chars("#>-"));
 
@@ -69,7 +67,7 @@ pub async fn download(client: &reqwest::Client, url: &str) -> Result<Vec<u8>, St
         let chunk = item.or(Err("Error while downloading file"))?;
         let mut cvec = chunk.to_vec();
         res.append(&mut cvec);
-        let new = min(downloaded + (chunk.len() as u64), ts);
+        let new = std::cmp::min(downloaded + (chunk.len() as u64), ts);
         downloaded = new;
         pb.set_position(new);
     }
@@ -78,7 +76,8 @@ pub async fn download(client: &reqwest::Client, url: &str) -> Result<Vec<u8>, St
     Ok(res)
 }
 
-pub fn envify(cmd: &str, env: &IndexMap<String, String>) -> String {
+#[cfg(feature="assemble")]
+pub fn envify(cmd: &str, env: &indexmap::IndexMap<String, String>) -> String {
     let mut cmd = cmd.to_owned();
     loop {
         let cmd_orig = cmd.clone();
@@ -113,6 +112,7 @@ pub fn docker_export(tag: &String, path: String) {
         .success());
 }
 
+#[cfg(any(feature="depgraph",feature="deplist"))]
 pub fn list_recipes() -> BTreeSet<Package> {
     let mut res = BTreeSet::new();
     for entry in glob::glob("recipes/**/*.yaml").expect("Failed to read glob pattern") {
@@ -144,10 +144,11 @@ pub fn get_deps(package: &Package) -> BTreeSet<Package> {
     res
 }
 
-pub fn gen_graph_all() -> DiGraph<Package,()>
+#[cfg(feature="deplist")]
+pub fn gen_graph_all() -> petgraph::graph::DiGraph<Package,()>
 {
-    let mut g = DiGraph::new();
-    let mut indices = BTreeMap::new();
+    let mut g = petgraph::graph::DiGraph::new();
+    let mut indices = std::collections::BTreeMap::new();
 
     for package in list_recipes() {
         let idx=g.add_node(package.clone());

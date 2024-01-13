@@ -22,13 +22,13 @@ jobs:
           restore-keys: |
             docker-cache-v3-
       - name: Run
-        run: cargo run --bin=assemble -- `cat ci-build.txt`
+        run: cargo run --bin=assemble --features=assemble -- `cat ci-build.txt`
   depgraph:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - name: Run
-        run: cargo run --bin=depgraph -- `cat ci-build.txt` | tee deps.dot
+        run: cargo run --bin=depgraph --features=depgraph -- `cat ci-build.txt` | tee deps.dot
       - name: Setup Graphviz
         uses: ts-graphviz/setup-graphviz@v1
       - name: Generate PNG
