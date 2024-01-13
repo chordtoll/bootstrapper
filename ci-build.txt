@@ -1,1 +1,1 @@
-sysc/curl:7.88.1-1
+sysc/ca-certificates:3.88.1
