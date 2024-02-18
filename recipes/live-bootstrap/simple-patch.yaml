@@ -1,0 +1,16 @@
+1.0:
+  source:
+    live-bootstrap:
+      extract: /live-bootstrap
+    M2libc:
+      extract: /M2libc
+  deps:
+    - stage0-posix/final:latest
+  build:
+    compile:
+      - pkg=simple-patch-1.0
+      - cd /live-bootstrap/steps/${pkg}
+      - M2-Mesoplanet --architecture ${ARCH} -f src/simple-patch.c -o ${bindir}/simple-patch
+      - sha256sum -o ${pkg}.checksums /usr/bin/simple-patch
+  artefacts:
+    - /usr/bin/simple-patch

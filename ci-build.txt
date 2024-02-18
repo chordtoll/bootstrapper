@@ -1,1 +1,1 @@
-live-bootstrap/checksum-transcriber:1.0
+live-bootstrap/simple-patch:1.0
