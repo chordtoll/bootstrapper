@@ -1,10 +1,7 @@
 latest:
   source: 
-    - url: https://github.com/oriansj/stage0-posix/archive/5805beef1754945e280a07f193346710ba2b4d32.zip
-      sha: b56baa11eabf74fb706c5e618e60242a178d0b5a8b4437f4e39cd6be5981b32c
+    stage0-posix:
       extract: /stage0-posix
-  mkdirs:
-    - /out
   deps:
     - stage0-posix/mescc-tools-extra/mescc-tools-extra:latest
     - stage0-posix/mescc-tools-full-kaem/blood-elf:latest

@@ -12,23 +12,41 @@ env:
 jobs:
   assemble:
     runs-on: ubuntu-latest
+    env:
+      cache-key: build-cache
     steps:
       - uses: actions/checkout@v3
-      - name: Docker Layer Caching
-        uses: satackey/action-docker-layer-caching@v0.0.11      
-        continue-on-error: true
+      - name: Restore Cache
+        id: cache-restore
+        uses: actions/cache/restore@v3
         with:
-          key: docker-cache-v3-{hash}
-          restore-keys: |
-            docker-cache-v3-
+          key: ${{ env.cache-key }}
+          path: |
+            build-cache
+            target
       - name: Run
-        run: cargo run --bin=assemble --features=assemble -- `cat ci-build.txt`
+        run: cargo run --bin=assemble -- -- `cat ci-build.txt`
+      - name: Delete Previous Cache
+        if: ${{ steps.cache-restore.outputs.cache-hit }}
+        continue-on-error: true
+        run: |
+          gh extension install actions/gh-actions-cache
+          gh actions-cache delete "${{ env.cache-key }}" --confirm
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Save Cache
+        uses: actions/cache/save@v3
+        with:
+          key: build-cache
+          path: |
+            build-cache
+            target
   depgraph:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - name: Run
-        run: cargo run --bin=depgraph --features=depgraph -- `cat ci-build.txt` | tee deps.dot
+        run: cargo run --bin=depgraph | tee deps.dot
       - name: Setup Graphviz
         uses: ts-graphviz/setup-graphviz@v1
       - name: Generate PNG

@@ -1,10 +1,8 @@
 latest:
   source: 
-    - url: https://github.com/oriansj/M2libc/archive/1139b2bbf5f9c2618e52298917460ec75c345451.zip
-      sha: 3fe0964f95acf6fb65d5e1a4eb2a24de28b12772a25c1e701ac0c568160f45ca
+    M2libc:
       extract: /M2libc
-    - url: https://github.com/oriansj/mescc-tools/archive/8257e5d34faa8e96ba59f78d5855dc70e081eabf.zip
-      sha: a4ba5a208c1bda0e008eb4ea4c0e3a97fe31925e68e21e465fc9abe2e02ece1e
+    mescc-tools:
       extract: /mescc-tools
   deps:
     - stage0-posix/mescc-tools-mini-kaem/m2-planet:latest
@@ -13,9 +11,9 @@ latest:
     - stage0-posix/mescc-tools-mini-kaem/hex2:latest
   build:
     compile:
-      - /${ARCH}/artifact/M2 --architecture ${ARCH} -f /M2libc/sys/types.h -f /M2libc/stddef.h -f /M2libc/${ARCH}/linux/unistd.c -f /M2libc/${ARCH}/linux/fcntl.c -f /M2libc/fcntl.c -f /M2libc/stdlib.c -f /M2libc/stdio.h -f /M2libc/stdio.c -f /M2libc/bootstrappable.c -f /mescc-tools/get_machine.c --debug -o /x86/artifact/get_machine.M1
-      - /${ARCH}/bin/blood-elf ${BLOOD_FLAG} ${ENDIAN_FLAG} -f /x86/artifact/get_machine.M1 -o /x86/artifact/get_machine-footer.M1
-      - /${ARCH}/bin/M1 --architecture ${ARCH} ${ENDIAN_FLAG} -f /M2libc/${ARCH}/${ARCH}_defs.M1 -f /M2libc/${ARCH}/libc-full.M1 -f /x86/artifact/get_machine.M1 -f /x86/artifact/get_machine-footer.M1 -o /x86/artifact/get_machine.hex2
-      - /${ARCH}/bin/hex2 --architecture ${ARCH} ${ENDIAN_FLAG} --base-address ${BASE_ADDRESS} -f /M2libc/${ARCH}/ELF-${ARCH}-debug.hex2 -f /x86/artifact/get_machine.hex2 -o /${ARCH}/bin/get_machine
+      - /x86/artifact/M2 --architecture ${ARCH} -f /M2libc/sys/types.h -f /M2libc/stddef.h -f /M2libc/sys/utsname.h -f /M2libc/${ARCH}/linux/unistd.c -f /M2libc/${ARCH}/linux/fcntl.c -f /M2libc/fcntl.c -f /M2libc/stdlib.c -f /M2libc/stdio.h -f /M2libc/stdio.c -f /M2libc/bootstrappable.c -f /mescc-tools/get_machine.c --debug -o /x86/artifact/get_machine.M1
+      - /x86/bin/blood-elf ${BLOOD_FLAG} ${ENDIAN_FLAG} -f /x86/artifact/get_machine.M1 -o /x86/artifact/get_machine-footer.M1
+      - /x86/bin/M1 --architecture ${ARCH} ${ENDIAN_FLAG} -f /M2libc/${ARCH}/${ARCH}_defs.M1 -f /M2libc/${ARCH}/libc-full.M1 -f /x86/artifact/get_machine.M1 -f /x86/artifact/get_machine-footer.M1 -o /x86/artifact/get_machine.hex2
+      - /x86/bin/hex2 --architecture ${ARCH} ${ENDIAN_FLAG} --base-address ${BASE_ADDRESS} -f /M2libc/${ARCH}/ELF-${ARCH}-debug.hex2 -f /x86/artifact/get_machine.hex2 -o /x86/bin/get_machine
   artefacts:
     - /x86/bin/get_machine

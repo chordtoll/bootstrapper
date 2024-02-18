@@ -1,8 +1,0 @@
-PATH=/usr/bin
-PREFIX=/usr
-LIBDIR=/usr/lib/i386-unknown-linux-musl
-SOURCES=/sysa
-DESTDIR=/tmp/destdir
-DISTFILES=/sysa/distfiles
-SRCDIR=/usr/src
-MAKEJOBS=-j1

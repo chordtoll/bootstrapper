@@ -1,10 +1,8 @@
 latest:
   source: 
-    - url: https://github.com/oriansj/M2libc/archive/1139b2bbf5f9c2618e52298917460ec75c345451.zip
-      sha: 3fe0964f95acf6fb65d5e1a4eb2a24de28b12772a25c1e701ac0c568160f45ca
+    M2libc:
       extract: /M2libc
-    - url: https://github.com/oriansj/M2-Mesoplanet/archive/4bf3e2eded821cf9b69fd63a033272197a8703f7.zip
-      sha: a3c2e0c70cb43e45d020482477ece17602301e9f8a008ae6d6c847bd5a869dd1
+    M2-Mesoplanet:
       extract: /M2-Mesoplanet
   deps:
     - stage0-posix/mescc-tools-mini-kaem/m2-planet:latest
@@ -13,9 +11,9 @@ latest:
     - stage0-posix/mescc-tools-mini-kaem/hex2:latest
   build:
     compile:
-      - /${ARCH}/artifact/M2 --architecture ${ARCH} -f /M2libc/sys/types.h -f /M2libc/stddef.h -f /M2libc/${ARCH}/linux/fcntl.c -f /M2libc/fcntl.c -f /M2libc/${ARCH}/linux/unistd.c -f /M2libc/${ARCH}/linux/sys/stat.c -f /M2libc/stdlib.c -f /M2libc/stdio.h -f /M2libc/stdio.c -f /M2libc/string.c -f /M2libc/bootstrappable.c -f /M2-Mesoplanet/cc.h -f /M2-Mesoplanet/cc_globals.c -f /M2-Mesoplanet/cc_env.c -f /M2-Mesoplanet/cc_reader.c -f /M2-Mesoplanet/cc_spawn.c -f /M2-Mesoplanet/cc_core.c -f /M2-Mesoplanet/cc_macro.c -f /M2-Mesoplanet/cc.c --debug -o /x86/artifact/M2-Mesoplanet-1.M1
-      - /${ARCH}/artifact/blood-elf-0 ${ENDIAN_FLAG} ${BLOOD_FLAG} -f /x86/artifact/M2-Mesoplanet-1.M1 -o /x86/artifact/M2-Mesoplanet-1-footer.M1
-      - /${ARCH}/bin/M1 --architecture ${ARCH} ${ENDIAN_FLAG} -f /M2libc/${ARCH}/${ARCH}_defs.M1 -f /M2libc/${ARCH}/libc-full.M1 -f /x86/artifact/M2-Mesoplanet-1.M1 -f /x86/artifact/M2-Mesoplanet-1-footer.M1 -o /x86/artifact/M2-Mesoplanet-1.hex2
-      - /${ARCH}/bin/hex2 --architecture ${ARCH} ${ENDIAN_FLAG} --base-address ${BASE_ADDRESS} -f /M2libc/${ARCH}/ELF-${ARCH}-debug.hex2 -f /x86/artifact/M2-Mesoplanet-1.hex2 -o /${ARCH}/bin/M2-Mesoplanet
+      - /x86/artifact/M2 --architecture ${ARCH} -f /M2libc/sys/types.h -f /M2libc/stddef.h -f /M2libc/${ARCH}/linux/fcntl.c -f /M2libc/fcntl.c -f /M2libc/sys/utsname.h -f /M2libc/${ARCH}/linux/unistd.c -f /M2libc/${ARCH}/linux/sys/stat.c -f /M2libc/stdlib.c -f /M2libc/stdio.h -f /M2libc/stdio.c -f /M2libc/string.c -f /M2libc/bootstrappable.c -f /M2-Mesoplanet/cc.h -f /M2-Mesoplanet/cc_globals.c -f /M2-Mesoplanet/cc_env.c -f /M2-Mesoplanet/cc_reader.c -f /M2-Mesoplanet/cc_spawn.c -f /M2-Mesoplanet/cc_core.c -f /M2-Mesoplanet/cc_macro.c -f /M2-Mesoplanet/cc.c --debug -o /x86/artifact/M2-Mesoplanet-1.M1
+      - /x86/artifact/blood-elf-0 ${ENDIAN_FLAG} ${BLOOD_FLAG} -f /x86/artifact/M2-Mesoplanet-1.M1 -o /x86/artifact/M2-Mesoplanet-1-footer.M1
+      - /x86/bin/M1 --architecture ${ARCH} ${ENDIAN_FLAG} -f /M2libc/${ARCH}/${ARCH}_defs.M1 -f /M2libc/${ARCH}/libc-full.M1 -f /x86/artifact/M2-Mesoplanet-1.M1 -f /x86/artifact/M2-Mesoplanet-1-footer.M1 -o /x86/artifact/M2-Mesoplanet-1.hex2
+      - /x86/bin/hex2 --architecture ${ARCH} ${ENDIAN_FLAG} --base-address ${BASE_ADDRESS} -f /M2libc/${ARCH}/ELF-${ARCH}-debug.hex2 -f /x86/artifact/M2-Mesoplanet-1.hex2 -o /x86/bin/M2-Mesoplanet
   artefacts:
     - /x86/bin/M2-Mesoplanet

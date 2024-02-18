@@ -1,13 +1,10 @@
 latest:
   source: 
-    - url: https://github.com/oriansj/mescc-tools-extra/archive/ec53af69d6d2119b47b369cd0ec37ac806e7ad60.zip
-      sha: 9aaedd79e6c8b94f3a6a08755e84f4c81b5bb8c0dcae4397ef4c743cf53780bc
+    mescc-tools-extra:
       extract: /mescc-tools-extra
-    - url: https://github.com/oriansj/M2libc/archive/1139b2bbf5f9c2618e52298917460ec75c345451.zip
-      sha: 3fe0964f95acf6fb65d5e1a4eb2a24de28b12772a25c1e701ac0c568160f45ca
+    M2libc:
       extract: /M2libc
-    - url: https://github.com/oriansj/stage0-posix/archive/5805beef1754945e280a07f193346710ba2b4d32.zip
-      sha: b56baa11eabf74fb706c5e618e60242a178d0b5a8b4437f4e39cd6be5981b32c
+    stage0-posix:
       extract: /stage0-posix/
   mkdirs:
     - /tmp
@@ -19,17 +16,20 @@ latest:
     - stage0-posix/mescc-tools-full-kaem/m2-mesoplanet:latest
   build:
     compile:
-      - ${CC} /mescc-tools-extra/sha256sum.c -o ${BINDIR}/sha256sum${EXE_SUFFIX}
-      - ${CC} /mescc-tools-extra/match.c -o ${BINDIR}/match${EXE_SUFFIX}
-      - ${CC} /mescc-tools-extra/mkdir.c -o ${BINDIR}/mkdir${EXE_SUFFIX}
-      - ${CC} /mescc-tools-extra/untar.c -o ${BINDIR}/untar${EXE_SUFFIX}
-      - ${CC} /mescc-tools-extra/ungz.c -o ${BINDIR}/ungz${EXE_SUFFIX}
-      - ${CC} /mescc-tools-extra/unbz2.c -o ${BINDIR}/unbz2${EXE_SUFFIX}
-      - ${CC} /mescc-tools-extra/catm.c -o ${BINDIR}/catm${EXE_SUFFIX}
-      - ${CC} /mescc-tools-extra/cp.c -o ${BINDIR}/cp${EXE_SUFFIX}
-      - ${CC} /mescc-tools-extra/chmod.c -o ${BINDIR}/chmod${EXE_SUFFIX}
-      - ${CC} /mescc-tools-extra/rm.c -o ${BINDIR}/rm${EXE_SUFFIX}
-      - ${CC} /mescc-tools-extra/replace.c -o ${BINDIR}/replace${EXE_SUFFIX}
+      - cd /mescc-tools-extra
+      - ${CC} sha256sum.c -o ${BINDIR}/sha256sum${EXE_SUFFIX}
+      - ${CC} match.c -o ${BINDIR}/match${EXE_SUFFIX}
+      - ${CC} mkdir.c -o ${BINDIR}/mkdir${EXE_SUFFIX}
+      - ${CC} untar.c -o ${BINDIR}/untar${EXE_SUFFIX}
+      - ${CC} ungz.c -o ${BINDIR}/ungz${EXE_SUFFIX}
+      - ${CC} unbz2.c -o ${BINDIR}/unbz2${EXE_SUFFIX}
+      - ${CC} unxz.c -o ${BINDIR}/unxz${EXE_SUFFIX}
+      - ${CC} catm.c -o ${BINDIR}/catm${EXE_SUFFIX}
+      - ${CC} cp.c -o ${BINDIR}/cp${EXE_SUFFIX}
+      - ${CC} chmod.c -o ${BINDIR}/chmod${EXE_SUFFIX}
+      - ${CC} rm.c -o ${BINDIR}/rm${EXE_SUFFIX}
+      - ${CC} replace.c -o ${BINDIR}/replace${EXE_SUFFIX}
+      - ${CC} wrap.c -o ${BINDIR}/wrap${EXE_SUFFIX}
   artefacts:
     - /x86/bin/sha256sum
     - /x86/bin/match
@@ -37,8 +37,10 @@ latest:
     - /x86/bin/untar
     - /x86/bin/ungz
     - /x86/bin/unbz2
+    - /x86/bin/unxz
     - /x86/bin/catm
     - /x86/bin/cp
     - /x86/bin/chmod
     - /x86/bin/rm
     - /x86/bin/replace
+    - /x86/bin/wrap

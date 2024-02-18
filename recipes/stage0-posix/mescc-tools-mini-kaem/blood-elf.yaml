@@ -1,10 +1,8 @@
 0:
   source:
-    - url: https://github.com/oriansj/M2libc/archive/1139b2bbf5f9c2618e52298917460ec75c345451.zip
-      sha: 3fe0964f95acf6fb65d5e1a4eb2a24de28b12772a25c1e701ac0c568160f45ca
+    M2libc:
       extract: /M2libc
-    - url: https://github.com/oriansj/mescc-tools/archive/8257e5d34faa8e96ba59f78d5855dc70e081eabf.zip
-      sha: a4ba5a208c1bda0e008eb4ea4c0e3a97fe31925e68e21e465fc9abe2e02ece1e
+    mescc-tools:
       extract: /mescc-tools
   deps:
     - stage0-posix/mescc-tools-mini-kaem/m2-planet:latest
@@ -14,7 +12,7 @@
   build:
     compile:
       - /x86/artifact/M2 --architecture x86 -f /M2libc/x86/linux/bootstrap.c -f /M2libc/bootstrappable.c -f /mescc-tools/stringify.c -f /mescc-tools/blood-elf.c --bootstrap-mode -o /x86/artifact/blood-elf-0.M1
-      - /x86/artifact/catm /x86/artifact/blood-elf-0-0.M1 /M2libc/x86/x86_defs.M1  /M2libc/x86/libc-core.M1 /x86/artifact/blood-elf-0.M1
+      - /x86/artifact/catm /x86/artifact/blood-elf-0-0.M1 /M2libc/x86/x86_defs.M1 /M2libc/x86/libc-core.M1 /x86/artifact/blood-elf-0.M1
       - /x86/artifact/M0 /x86/artifact/blood-elf-0-0.M1 /x86/artifact/blood-elf-0.hex2
       - /x86/artifact/catm /x86/artifact/blood-elf-0-0.hex2 /M2libc/x86/ELF-x86.hex2 /x86/artifact/blood-elf-0.hex2
       - /x86/artifact/hex2-0 /x86/artifact/blood-elf-0-0.hex2 /x86/artifact/blood-elf-0

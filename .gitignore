@@ -5,3 +5,8 @@
 /imex/
 /images/
 /known-good/
+/knowngood/
+/curl/
+/patches
+/ctx
+build-cache/

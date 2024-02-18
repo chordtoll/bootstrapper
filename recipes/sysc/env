@@ -1,7 +1,0 @@
-PREFIX=/usr
-LIBDIR="${PREFIX}/lib/i386-unknown-linux-musl"
-SOURCES="${PREFIX}/src"
-DESTDIR=/tmp/destdir
-DISTFILES=/distfiles
-SRCDIR="${SOURCES}"
-MAKEJOBS=-j1

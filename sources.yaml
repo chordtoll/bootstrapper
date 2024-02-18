@@ -1,0 +1,24 @@
+bootstrap-seeds:
+  url: https://github.com/oriansj/bootstrap-seeds/archive/99a0ee1e544905d4aaace0de3867f13425e502f2.zip
+  sha: 7a43bd1fcd21b877b1bd84b9e31d4bcd099f727c10d6859b8cfbc6352aa6dd46
+M2libc:
+  url: https://github.com/oriansj/M2libc/archive/ddbb23567190e1e787305a545b81996be82b9cf9.zip
+  sha: b2feb89d064cdb609a70295eeaa0c8eb1c3a9a0544cfce8c13055705ce464730
+M2-Mesoplanet:
+  url: https://github.com/oriansj/M2-Mesoplanet/archive/2935751e3b74f468aa846fff844ce96f62d575ac.zip
+  sha: 635d8815df78e8cb6d6b29ffc6a0a54b32b35b4da0d1b543d5305dae0d6d7591
+M2-Planet:
+  url: https://github.com/oriansj/M2-Planet/archive/0479606ed5131a64cd1dd2dd3f257e73cd9dce68.zip
+  sha: 4e17ad4cb1d94586da09bc8cb0eef51357b413bda451f21bf5bf77cf70fb9e55
+mescc-tools:
+  url: https://github.com/oriansj/mescc-tools/archive/08d5a0679fa4dc00babe02306f1bc50703083389.zip
+  sha: ad0db50e9725713e83a9c7f3e7825858e413f8bab44bebcf96a1b08904226155
+mescc-tools-extra:
+  url: https://github.com/oriansj/mescc-tools-extra/archive/8b9c03765774ad67b9b24f28f72a239f28df76a6.zip
+  sha: c763307819b728151302c8d3372d286761d86d05b497306fba9e9e5290b7782b
+stage0-posix:
+  url: https://github.com/oriansj/stage0-posix/archive/b6342a88fbcbbf13fa11daf8890dd6ddd5a9011f.zip
+  sha: 9ec18cf0411148ee381eae434a0c9ce6eb4620781ebd932486a643ea3a3f7e2c
+stage0-posix-x86:
+  url: https://github.com/oriansj/stage0-posix-x86/archive/83508012c952e3aa3f70a89fd7d85d9a1af6f305.zip
+  sha: e20dfd39d331026dacf6754dee21dbf7b4b6d3ec41066efeff541516750442a8

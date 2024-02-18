@@ -1,22 +1,27 @@
-0:
+latest:
   source:
-    - url: https://github.com/oriansj/stage0-posix-x86/archive/e86bf7d304bae5ce5ccc88454bb60cf0837e941f.zip
-      sha: 630acd742f02d8442a7f739a6bc58d3eb9b37eb0087dd7e77afff911836d4d69
-      extract: /x86/
+    M2libc:
+      extract: /M2libc
+    mescc-tools:
+      extract: /mescc-tools
   deps:
-    - stage0-posix/mescc-tools-mini-kaem/hex1:latest
+    - stage0-posix/mescc-tools-mini-kaem/m2-planet:latest
+    - stage0-posix/mescc-tools-mini-kaem/blood-elf:0
+    - stage0-posix/mescc-tools-mini-kaem/m1:latest
+    - stage0-posix/mescc-tools-mini-kaem/hex2:1
   build:
     compile:
-      - /x86/artifact/hex1 /x86/hex2_x86.hex1 /x86/artifact/hex2-0
+      - /x86/artifact/M2 --architecture x86 -f /M2libc/sys/types.h -f /M2libc/stddef.h -f /M2libc/sys/utsname.h -f /M2libc/x86/linux/unistd.c -f /M2libc/x86/linux/fcntl.c -f /M2libc/fcntl.c -f /M2libc/x86/linux/sys/stat.c -f /M2libc/stdlib.c -f /M2libc/stdio.h -f /M2libc/stdio.c -f /M2libc/bootstrappable.c -f /mescc-tools/hex2.h -f /mescc-tools/hex2_linker.c -f /mescc-tools/hex2_word.c -f /mescc-tools/hex2.c --debug -o /x86/artifact/hex2_linker-2.M1
+      - /x86/artifact/blood-elf-0 -f /x86/artifact/hex2_linker-2.M1 --little-endian -o /x86/artifact/hex2_linker-2-footer.M1
+      - /x86/bin/M1 --architecture x86 --little-endian -f /M2libc/x86/x86_defs.M1 -f /M2libc/x86/libc-full.M1 -f /x86/artifact/hex2_linker-2.M1 -f /x86/artifact/hex2_linker-2-footer.M1 -o /x86/artifact/hex2_linker-2.hex2
+      - /x86/artifact/hex2-1 --architecture x86 --little-endian --base-address 0x8048000 -f /M2libc/x86/ELF-x86-debug.hex2 -f /x86/artifact/hex2_linker-2.hex2 -o /x86/bin/hex2
   artefacts:
-    - /x86/artifact/hex2-0
+    - /x86/bin/hex2
 1:
   source:
-    - url: https://github.com/oriansj/M2libc/archive/1139b2bbf5f9c2618e52298917460ec75c345451.zip
-      sha: 3fe0964f95acf6fb65d5e1a4eb2a24de28b12772a25c1e701ac0c568160f45ca
+    M2libc:
       extract: /M2libc
-    - url: https://github.com/oriansj/mescc-tools/archive/8257e5d34faa8e96ba59f78d5855dc70e081eabf.zip
-      sha: a4ba5a208c1bda0e008eb4ea4c0e3a97fe31925e68e21e465fc9abe2e02ece1e
+    mescc-tools:
       extract: /mescc-tools
   deps:
     - stage0-posix/mescc-tools-mini-kaem/m2-planet:latest
@@ -26,31 +31,21 @@
     - stage0-posix/mescc-tools-mini-kaem/hex2:0
   build:
     compile:
-      - /x86/artifact/M2 --architecture x86 -f /M2libc/sys/types.h -f /M2libc/stddef.h -f /M2libc/x86/linux/unistd.c -f /M2libc/x86/linux/fcntl.c -f /M2libc/fcntl.c -f /M2libc/x86/linux/sys/stat.c -f /M2libc/stdlib.c -f /M2libc/stdio.h -f /M2libc/stdio.c -f /M2libc/bootstrappable.c -f /mescc-tools/hex2.h -f /mescc-tools/hex2_linker.c -f /mescc-tools/hex2_word.c -f /mescc-tools/hex2.c --debug -o /x86/artifact/hex2_linker-0.M1
+      - /x86/artifact/M2 --architecture x86 -f /M2libc/sys/types.h -f /M2libc/stddef.h -f /M2libc/sys/utsname.h -f /M2libc/x86/linux/unistd.c -f /M2libc/x86/linux/fcntl.c -f /M2libc/fcntl.c -f /M2libc/x86/linux/sys/stat.c -f /M2libc/stdlib.c -f /M2libc/stdio.h -f /M2libc/stdio.c -f /M2libc/bootstrappable.c -f /mescc-tools/hex2.h -f /mescc-tools/hex2_linker.c -f /mescc-tools/hex2_word.c -f /mescc-tools/hex2.c --debug -o /x86/artifact/hex2_linker-0.M1
       - /x86/artifact/blood-elf-0 -f /x86/artifact/hex2_linker-0.M1 --little-endian -o /x86/artifact/hex2_linker-0-footer.M1
       - /x86/artifact/M1-0 --architecture x86 --little-endian -f /M2libc/x86/x86_defs.M1 -f /M2libc/x86/libc-full.M1 -f /x86/artifact/hex2_linker-0.M1 -f /x86/artifact/hex2_linker-0-footer.M1 -o /x86/artifact/hex2_linker-0.hex2
       - /x86/artifact/catm /x86/artifact/hex2_linker-0-0.hex2 /M2libc/x86/ELF-x86-debug.hex2 /x86/artifact/hex2_linker-0.hex2
       - /x86/artifact/hex2-0 /x86/artifact/hex2_linker-0-0.hex2 /x86/artifact/hex2-1
   artefacts:
     - /x86/artifact/hex2-1
-latest:
+0:
   source:
-    - url: https://github.com/oriansj/M2libc/archive/1139b2bbf5f9c2618e52298917460ec75c345451.zip
-      sha: 3fe0964f95acf6fb65d5e1a4eb2a24de28b12772a25c1e701ac0c568160f45ca
-      extract: /M2libc
-    - url: https://github.com/oriansj/mescc-tools/archive/8257e5d34faa8e96ba59f78d5855dc70e081eabf.zip
-      sha: a4ba5a208c1bda0e008eb4ea4c0e3a97fe31925e68e21e465fc9abe2e02ece1e
-      extract: /mescc-tools
+    stage0-posix-x86:
+      extract: /x86/
   deps:
-    - stage0-posix/mescc-tools-mini-kaem/m2-planet:latest
-    - stage0-posix/mescc-tools-mini-kaem/blood-elf:0
-    - stage0-posix/mescc-tools-mini-kaem/m1:latest
-    - stage0-posix/mescc-tools-mini-kaem/hex2:1
+    - stage0-posix/mescc-tools-mini-kaem/hex1:latest
   build:
     compile:
-      - /x86/artifact/M2 --architecture x86 -f  /M2libc/sys/types.h -f  /M2libc/stddef.h -f  /M2libc/x86/linux/unistd.c -f  /M2libc/x86/linux/fcntl.c -f  /M2libc/fcntl.c -f  /M2libc/x86/linux/sys/stat.c -f  /M2libc/stdlib.c -f  /M2libc/stdio.h -f  /M2libc/stdio.c -f  /M2libc/bootstrappable.c -f  /mescc-tools/hex2.h -f  /mescc-tools/hex2_linker.c -f  /mescc-tools/hex2_word.c -f  /mescc-tools/hex2.c --debug -o  /x86/artifact/hex2_linker-2.M1
-      - /x86/artifact/blood-elf-0 -f  /x86/artifact/hex2_linker-2.M1 --little-endian -o  /x86/artifact/hex2_linker-2-footer.M1
-      - /x86/bin/M1 --architecture x86 --little-endian -f  /M2libc/x86/x86_defs.M1 -f  /M2libc/x86/libc-full.M1 -f  /x86/artifact/hex2_linker-2.M1 -f  /x86/artifact/hex2_linker-2-footer.M1 -o  /x86/artifact/hex2_linker-2.hex2
-      - /x86/artifact/hex2-1 --architecture x86 --little-endian --base-address 0x8048000 -f  /M2libc/x86/ELF-x86-debug.hex2 -f  /x86/artifact/hex2_linker-2.hex2 -o  /x86/bin/hex2
+      - /x86/artifact/hex1 /x86/hex2_x86.hex1 /x86/artifact/hex2-0
   artefacts:
-    - /x86/bin/hex2
+    - /x86/artifact/hex2-0

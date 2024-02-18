@@ -1,1 +1,1 @@
-sysc/ca-certificates:3.88.1
+stage0-posix/final:latest
