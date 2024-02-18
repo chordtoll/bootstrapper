@@ -1,0 +1,16 @@
+1.0:
+  source:
+    live-bootstrap:
+      extract: /live-bootstrap
+    M2libc:
+      extract: /M2libc
+  deps:
+    - stage0-posix/final:latest
+  build:
+    compile:
+      - pkg=checksum-transcriber-1.0
+      - cd /live-bootstrap/steps/${pkg}
+      - M2-Mesoplanet --architecture ${ARCH} -f src/checksum-transcriber.c -o ${bindir}/checksum-transcriber
+      - sha256sum -c ${pkg}.${ARCH}.checksums
+  artefacts:
+    - /usr/bin/checksum-transcriber

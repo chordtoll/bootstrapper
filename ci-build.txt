@@ -1,1 +1,1 @@
-stage0-posix/final:latest
+live-bootstrap/checksum-transcriber:1.0

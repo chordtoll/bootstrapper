@@ -1,6 +1,9 @@
 bootstrap-seeds:
   url: https://github.com/oriansj/bootstrap-seeds/archive/99a0ee1e544905d4aaace0de3867f13425e502f2.zip
   sha: 7a43bd1fcd21b877b1bd84b9e31d4bcd099f727c10d6859b8cfbc6352aa6dd46
+live-bootstrap:
+  url: https://github.com/fosslinux/live-bootstrap/archive/32138d13b9254a44ffa8d5952beee8d94b888317.zip
+  sha: 1f9b0c4767c230fedff962ef2b9d8b1cbe4a498f14dceea498a381d25bd336b4
 M2libc:
   url: https://github.com/oriansj/M2libc/archive/ddbb23567190e1e787305a545b81996be82b9cf9.zip
   sha: b2feb89d064cdb609a70295eeaa0c8eb1c3a9a0544cfce8c13055705ce464730
