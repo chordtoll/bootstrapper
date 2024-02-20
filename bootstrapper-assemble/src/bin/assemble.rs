@@ -321,6 +321,7 @@ async fn do_build(
 }
 
 async fn build_single(target: &str, version: &str, mut recipe: NamedRecipeVersion) -> String {
+    println!(" Build requested of {} {}",target,version);
     let recipe_digest = get_recipe_digest(target.to_owned(), version.to_owned());
 
     let mods_path = PathBuf::from(format!("recipes/{}/{}", target, version));
@@ -332,8 +333,9 @@ async fn build_single(target: &str, version: &str, mut recipe: NamedRecipeVersio
         .join("env")
         .to_owned()];
 
-    let link_path = PathBuf::from(BUILD_CACHE_LINK_PATH).join(recipe_digest);
+    let link_path = PathBuf::from(BUILD_CACHE_LINK_PATH).join(recipe_digest.clone());
     if link_path.exists() {
+        println!("  Exists! {}",recipe_digest);
         return std::fs::read_link(link_path)
             .unwrap()
             .file_name()
@@ -454,7 +456,8 @@ async fn build_single(target: &str, version: &str, mut recipe: NamedRecipeVersio
 
     std::os::unix::fs::symlink(format!("../out/{}", out_digest), link_path).unwrap();
 
-    println!("Finished build for {}:{}", target, version);
+    println!("  Finished build for {}:{}", target, version);
+    println!("  {}->{}",recipe_digest,out_digest);
 
     out_digest
 }
@@ -465,7 +468,6 @@ async fn build_recipe(
     version: &str,
     built: &mut BTreeMap<(String, String), String>,
 ) -> String {
-    println!("Build requested of {} {}", target, version);
     // Don't retry builds we've already done
     if let Some(hash_built) = built.get(&(target.to_owned(), version.to_owned())) {
         return hash_built.to_owned();

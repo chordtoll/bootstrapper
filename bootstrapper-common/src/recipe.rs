@@ -230,7 +230,7 @@ impl RecipeBuildSteps {
 impl Source {
     pub fn summary(&self, name: &str) -> String {
         let mut inputs = String::new();
-        let sha = &SOURCES.get(name).unwrap().sha;
+        let sha = &SOURCES.get(name).unwrap_or_else(|| panic!("Unknown source {}", name)).sha;
         inputs.push_str(&format!(
             " SHA:{}\n  {}\n",
             sha.len(),
