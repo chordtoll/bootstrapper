@@ -13,12 +13,18 @@ M2-Mesoplanet:
 M2-Planet:
   url: https://github.com/oriansj/M2-Planet/archive/0479606ed5131a64cd1dd2dd3f257e73cd9dce68.zip
   sha: 4e17ad4cb1d94586da09bc8cb0eef51357b413bda451f21bf5bf77cf70fb9e55
+mes-0.25:
+  url: https://mirrors.kernel.org/gnu/mes/mes-0.25.tar.gz
+  sha: 325250b3567ed9203ba70161c835af01079e73ebed97b4b5bb77ca500b828940
 mescc-tools:
   url: https://github.com/oriansj/mescc-tools/archive/08d5a0679fa4dc00babe02306f1bc50703083389.zip
   sha: ad0db50e9725713e83a9c7f3e7825858e413f8bab44bebcf96a1b08904226155
 mescc-tools-extra:
   url: https://github.com/oriansj/mescc-tools-extra/archive/8b9c03765774ad67b9b24f28f72a239f28df76a6.zip
   sha: c763307819b728151302c8d3372d286761d86d05b497306fba9e9e5290b7782b
+nyacc-1.00.2:
+  url: https://download.savannah.gnu.org/releases/nyacc/nyacc-1.00.2.tar.gz
+  sha: f36e4fb7dd524dc3f4b354d3d5313f69e7ce5a6ae93711e8cf6d51eaa8d2b318
 stage0-posix:
   url: https://github.com/oriansj/stage0-posix/archive/b6342a88fbcbbf13fa11daf8890dd6ddd5a9011f.zip
   sha: 9ec18cf0411148ee381eae434a0c9ce6eb4620781ebd932486a643ea3a3f7e2c
