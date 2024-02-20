@@ -272,6 +272,10 @@ async fn do_build(
     dockerfile: &mut Cursor<Vec<u8>>,
     env: &mut IndexMap<String, String>,
 ) {
+    let mut stage = 0;
+    let mut last_refresh = 0;
+    let mut workdir = PathBuf::from("/");
+
     let mut aliases = IndexMap::new();
     // Run our build steps
     if let Some(compile) = &recipe.build.compile {
@@ -287,14 +291,30 @@ async fn do_build(
                     .unwrap();
             } else if cmd[0] == "cd" {
                 assert_eq!(cmd.len(), 2);
+                workdir = workdir.join(cmd[1].clone());
                 dockerfile
-                    .write_all(format!("WORKDIR {}\r\n", cmd[1]).as_bytes())
+                    .write_all(format!("WORKDIR {}\r\n", workdir.to_str().unwrap()).as_bytes())
                     .unwrap();
             } else if cmd[0] == "alias" {
                 let (k,v) = cmd[1].split_once('=').unwrap();
                 aliases.insert(k.to_owned(),v.to_owned());
             } else {
                 emit_run(dockerfile, cmd, recipe.shell.is_some());
+            }
+            let newline_count = dockerfile.get_ref().iter().filter(|x| x==&&b'\n').count();
+            if newline_count - last_refresh == 120 {
+                dockerfile.write_all(format!("FROM scratch AS stage{}\r\n",stage+1).as_bytes()).unwrap();
+                dockerfile.write_all(format!("COPY --from=stage{} / /\r\n",stage).as_bytes()).unwrap();
+                for (k, v) in env.iter() {
+                    dockerfile
+                        .write_all(format!("ENV {}=\"{}\"\r\n", k, v).as_bytes())
+                        .unwrap();
+                }
+                dockerfile
+                    .write_all(format!("WORKDIR {}\r\n", workdir.to_str().unwrap()).as_bytes())
+                    .unwrap();
+                stage += 1;
+                last_refresh = newline_count;
             }
         }
     }
@@ -352,7 +372,7 @@ async fn build_single(target: &str, version: &str, mut recipe: NamedRecipeVersio
     recipe.source.as_mut().unwrap().push(bbox);*/
 
     let mut dockerfile = Cursor::new(Vec::new());
-    dockerfile.write_all(b"FROM scratch\n").unwrap();
+    dockerfile.write_all(b"FROM scratch AS stage0\n").unwrap();
 
     let mut context = Vec::new();
     let mut context_writer = TarArchiveWriter::from(context.as_mut());
