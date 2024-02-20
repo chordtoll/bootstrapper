@@ -8,6 +8,7 @@ use bollard::{
     service::{BuildInfoAux, ImageId},
 };
 use bootstrapper_assemble::{
+    alias,
     args::Args,
     docker, docker_export, download, emit_run, envify,
     tar::{ArchiveReader, TarArchiveReader, TarArchiveWriter, ZipArchiveReader},
@@ -271,11 +272,12 @@ async fn do_build(
     dockerfile: &mut Cursor<Vec<u8>>,
     env: &mut IndexMap<String, String>,
 ) {
+    let mut aliases = IndexMap::new();
     // Run our build steps
     if let Some(compile) = &recipe.build.compile {
         for i in compile {
             let cmd =
-                shlex::split(&envify(&i, &env)).unwrap_or_else(|| panic!("Failed at line: {}", i));
+                shlex::split(&alias(&envify(&i, &env), &aliases)).unwrap_or_else(|| panic!("Failed at line: {}", i));
             if cmd[0].contains('=') {
                 let ev: Vec<_> = cmd[0].split('=').collect();
                 assert_eq!(ev.len(), 2);
@@ -288,6 +290,9 @@ async fn do_build(
                 dockerfile
                     .write_all(format!("WORKDIR {}\r\n", cmd[1]).as_bytes())
                     .unwrap();
+            } else if cmd[0] == "alias" {
+                let (k,v) = cmd[1].split_once('=').unwrap();
+                aliases.insert(k.to_owned(),v.to_owned());
             } else {
                 emit_run(dockerfile, cmd, recipe.shell.is_some());
             }

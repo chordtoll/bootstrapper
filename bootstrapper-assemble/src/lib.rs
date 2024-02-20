@@ -69,6 +69,16 @@ pub fn envify(cmd: &str, env: &IndexMap<String, String>) -> String {
     cmd
 }
 
+pub fn alias(cmd: &str, alias: &IndexMap<String, String>) -> String {
+    let mut cmd = cmd.to_owned();
+    for (k, v) in alias {
+        if let Some(c) = cmd.strip_prefix(&(k.to_owned() + " ")) {
+            cmd = v.to_owned() + " " + c;
+        }
+    }
+    cmd
+}
+
 pub async fn docker_export<W: Write>(tag: &String, out: &mut W) {
     docker()
         .create_container(
