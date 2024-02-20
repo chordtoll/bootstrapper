@@ -379,6 +379,8 @@ async fn build_single(target: &str, version: &str, mut recipe: NamedRecipeVersio
     let mut context = Vec::new();
     let mut context_writer = TarArchiveWriter::from(context.as_mut());
 
+    context_writer.create_file(PathBuf::from(".dockerignore"), b"Dockerfile", Some(0o644)).unwrap();
+
     do_mkdirs(&recipe, &mut context_writer).await;
 
     do_sources(&recipe, &mut context_writer).await;
