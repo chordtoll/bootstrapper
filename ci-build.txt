@@ -1,1 +1,1 @@
-live-bootstrap/patch:2.5.9
+live-bootstrap/gzip:1.2.4
