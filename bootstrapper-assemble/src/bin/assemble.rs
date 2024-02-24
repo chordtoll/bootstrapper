@@ -291,7 +291,7 @@ async fn do_build(
                     .unwrap();
             } else if cmd[0] == "cd" {
                 assert_eq!(cmd.len(), 2);
-                workdir = workdir.join(cmd[1].clone());
+                workdir = path_clean::clean(workdir.join(cmd[1].clone()));
                 dockerfile
                     .write_all(format!("WORKDIR {}\r\n", workdir.to_str().unwrap()).as_bytes())
                     .unwrap();
@@ -411,6 +411,7 @@ async fn build_single(target: &str, version: &str, mut recipe: NamedRecipeVersio
     let mut bir = d.build_image(
         BuildImageOptions {
             dockerfile: "Dockerfile",
+            networkmode: "none",
             ..Default::default()
         },
         None,

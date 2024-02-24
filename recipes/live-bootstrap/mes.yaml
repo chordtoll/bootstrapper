@@ -315,3 +315,4 @@
     - usr/include/mes/
     - usr/lib/linux/x86-mes/
     - usr/lib/x86-mes/
+    - steps/mes-0.25/build
