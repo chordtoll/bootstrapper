@@ -1,0 +1,36 @@
+1.12:
+  source:
+    tar-1.12:
+      noextract: /external/distfiles/tar-1.12.tar.gz
+    live-bootstrap:
+      extract: /
+      copy:
+        - /steps/tar-1.12
+  deps:
+    - stage0-posix/final:latest
+    - live-bootstrap/mes:0.25
+    - live-bootstrap/tcc:0.9.27-pass1
+    - live-bootstrap/make:3.82
+    - live-bootstrap/patch:2.5.9
+    - live-bootstrap/gzip:1.2.4
+  build:
+    compile:
+      - pkg="tar-1.12"
+      - cd /steps/${pkg}
+      - mkdir build src
+      - cd build
+      - cp ${DISTFILES}/${pkg}.tar.gz ../src/
+      - gzip -d -f ../src/${pkg}.tar.gz
+      - untar --file ../src/${pkg}.tar
+      - cd ${pkg}
+      - cp ../../mk/main.mk Makefile
+      - cp ../../files/getdate_stub.c lib/getdate_stub.c
+      - catm src/create.c.new ../../files/stat_override.c src/create.c
+      - cp src/create.c.new src/create.c
+      - make -f Makefile
+      - cp tar ${PREFIX}/bin/tar
+      - chmod 755 ${PREFIX}/bin/tar
+      - cd ../..
+      - sha256sum -c ${pkg}.checksums
+  artefacts:
+    - /usr/bin/tar

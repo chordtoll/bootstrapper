@@ -40,6 +40,9 @@ stage0-posix:
 stage0-posix-x86:
   url: https://github.com/oriansj/stage0-posix-x86/archive/83508012c952e3aa3f70a89fd7d85d9a1af6f305.zip
   sha: e20dfd39d331026dacf6754dee21dbf7b4b6d3ec41066efeff541516750442a8
+tar-1.12:
+  url: https://mirrors.kernel.org/gnu/tar/tar-1.12.tar.gz
+  sha: c6c37e888b136ccefab903c51149f4b7bd659d69d4aea21245f61053a57aa60a
 tcc-0.9.26:
   url: https://lilypond.org/janneke/tcc/tcc-0.9.26-1147-gee75a10c.tar.gz
   sha: 6b8cbd0a5fed0636d4f0f763a603247bc1935e206e1cc5bda6a2818bab6e819f
