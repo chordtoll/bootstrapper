@@ -1,0 +1,53 @@
+2.05b:
+  source:
+    bash-2.05b:
+      noextract: /external/distfiles/bash-2.05b.tar.bz2
+    live-bootstrap:
+      extract: /
+      copy:
+        - /steps/bash-2.05b
+  deps:
+    - stage0-posix/final:latest
+    - live-bootstrap/mes:0.25
+    - live-bootstrap/tcc:0.9.27-pass1
+    - live-bootstrap/make:3.82
+    - live-bootstrap/patch:2.5.9
+    - live-bootstrap/tar:1.12
+    - live-bootstrap/bzip2:1.0.8
+    - live-bootstrap/sed:4.0.9
+    - live-bootstrap/coreutils:5.0
+    - live-bootstrap/heirloom-devtools:070527
+  build:
+    compile:
+      - pkg="bash-2.05b"
+      - cd /steps/${pkg}
+      - mkdir build src
+      - cd build
+      - cp ${DISTFILES}/${pkg}.tar.bz2 ../src/
+      - bzip2 -d -f ../src/${pkg}.tar.bz2
+      - tar xf ../src/${pkg}.tar
+      - cd ${pkg}
+      - cp ../../mk/main.mk Makefile
+      - cp ../../mk/builtins.mk builtins/Makefile
+      - cp ../../mk/common.mk common.mk
+      - touch config.h
+      - touch include/version.h
+      - touch include/pipesize.h
+      - rm y.tab.c y.tab.h
+      - patch -Np0 -i ../../patches/mes-libc.patch
+      - patch -Np0 -i ../../patches/tinycc.patch
+      - patch -Np0 -i ../../patches/missing-defines.patch
+      - patch -Np0 -i ../../patches/locale.patch
+      - patch -Np0 -i ../../patches/dev-tty.patch
+      - make mkbuiltins
+      - cd builtins
+      - make libbuiltins.a
+      - cd ..
+      - make
+      - install bash ${PREFIX}/bin/
+      - install bash ${PREFIX}/bin/sh
+      - cd ../..
+      - sha256sum -c ${pkg}.checksums
+  artefacts:
+    - /usr/bin/bash
+    - /usr/bin/sh

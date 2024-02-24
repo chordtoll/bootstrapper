@@ -1,1 +1,1 @@
-live-bootstrap/heirloom-devtools:070527
+live-bootstrap/bash:2.05b
