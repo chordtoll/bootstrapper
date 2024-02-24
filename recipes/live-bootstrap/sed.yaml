@@ -1,0 +1,35 @@
+4.0.9:
+  source:
+    sed-4.0.9:
+      noextract: /external/distfiles/sed-4.0.9.tar.gz
+    live-bootstrap:
+      extract: /
+      copy:
+        - /steps/sed-4.0.9
+  deps:
+    - stage0-posix/final:latest
+    - live-bootstrap/mes:0.25
+    - live-bootstrap/tcc:0.9.27-pass1
+    - live-bootstrap/make:3.82
+    - live-bootstrap/patch:2.5.9
+    - live-bootstrap/gzip:1.2.4
+    - live-bootstrap/tar:1.12
+  build:
+    compile:
+      - pkg="sed-4.0.9"
+      - cd /steps/${pkg}
+      - mkdir build src
+      - cd build
+      - cp ${DISTFILES}/${pkg}.tar.gz ../src/
+      - gzip -d -f ../src/${pkg}.tar.gz
+      - tar xf ../src/${pkg}.tar
+      - cd ${pkg}
+      - cp ../../mk/main.mk Makefile
+      - catm config.h
+      - make -f Makefile LIBC=mes
+      - cp sed/sed ${PREFIX}/bin/sed
+      - chmod 755 ${PREFIX}/bin/sed
+      - cd ../..
+      - sha256sum -c ${pkg}.checksums
+  artefacts:
+    - /usr/bin/sed
