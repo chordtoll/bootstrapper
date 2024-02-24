@@ -34,3 +34,6 @@ stage0-posix-x86:
 tcc-0.9.26:
   url: https://lilypond.org/janneke/tcc/tcc-0.9.26-1147-gee75a10c.tar.gz
   sha: 6b8cbd0a5fed0636d4f0f763a603247bc1935e206e1cc5bda6a2818bab6e819f
+tcc-0.9.27:
+  url: https://download.savannah.gnu.org/releases/tinycc/tcc-0.9.27.tar.bz2
+  sha: de23af78fca90ce32dff2dd45b3432b2334740bb9bb7b05bf60fdbfc396ceb9c
