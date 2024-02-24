@@ -1,6 +1,9 @@
 bootstrap-seeds:
   url: https://github.com/oriansj/bootstrap-seeds/archive/99a0ee1e544905d4aaace0de3867f13425e502f2.zip
   sha: 7a43bd1fcd21b877b1bd84b9e31d4bcd099f727c10d6859b8cfbc6352aa6dd46
+bzip2-1.0.8:
+  url: https://mirrors.kernel.org/slackware/slackware-14.0/patches/source/bzip2/bzip2-1.0.8.tar.xz
+  sha: 47fd74b2ff83effad0ddf62074e6fad1f6b4a77a96e121ab421c20a216371a1f
 gzip-1.2.4:
   url: https://mirrors.kernel.org/gnu/gzip/gzip-1.2.4.tar.gz
   sha: 1ca41818a23c9c59ef1d5e1d00c0d5eaa2285d931c0fb059637d7c0cc02ad967

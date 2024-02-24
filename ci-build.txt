@@ -1,1 +1,1 @@
-live-bootstrap/sed:4.0.9
+live-bootstrap/bzip2:1.0.8
