@@ -1,0 +1,105 @@
+5.0:
+  source:
+    coreutils-5.0:
+      noextract: /external/distfiles/coreutils-5.0.tar.bz2
+    live-bootstrap:
+      extract: /
+      copy:
+        - /steps/coreutils-5.0
+  deps:
+    - stage0-posix/final:latest
+    - live-bootstrap/mes:0.25
+    - live-bootstrap/tcc:0.9.27-pass1
+    - live-bootstrap/make:3.82
+    - live-bootstrap/patch:2.5.9
+    - live-bootstrap/tar:1.12
+    - live-bootstrap/bzip2:1.0.8
+    - live-bootstrap/sed:4.0.9
+  build:
+    compile:
+      - pkg="coreutils-5.0"
+      - cd /steps/${pkg}
+      - mkdir build src
+      - cd build
+      - cp ${DISTFILES}/${pkg}.tar.bz2 ../src/
+      - bunzip2 -f ../src/${pkg}.tar.bz2
+      - tar xf ../src/${pkg}.tar
+      - cd ${pkg}
+      - cp ../../mk/main.mk Makefile
+      - cp lib/fnmatch_.h lib/fnmatch.h
+      - cp lib/ftw_.h lib/ftw.h
+      - cp lib/search_.h lib/search.h
+      - catm config.h
+      - rm src/false.c
+      - rm src/dircolors.h
+      - patch -Np0 -i ../../patches/modechange.patch
+      - patch -Np0 -i ../../patches/mbstate.patch
+      - patch -Np0 -i ../../patches/ls-strcmp.patch
+      - patch -Np0 -i ../../patches/touch-getdate.patch
+      - patch -Np0 -i ../../patches/touch-dereference.patch
+      - patch -Np0 -i ../../patches/tac-uint64.patch
+      - patch -Np0 -i ../../patches/expr-strcmp.patch
+      - patch -Np0 -i ../../patches/sort-locale.patch
+      - patch -Np0 -i ../../patches/uniq-fopen.patch
+      - make -f Makefile PREFIX=${PREFIX}
+      - make -f Makefile PREFIX=${PREFIX} install
+      - cd ../..
+      - sha256sum -c ${pkg}.checksums
+  artefacts:
+    - usr/bin/basename
+    - usr/bin/cat
+    - usr/bin/cksum
+    - usr/bin/csplit
+    - usr/bin/cut
+    - usr/bin/dirname
+    - usr/bin/echo
+    - usr/bin/expand
+    - usr/bin/expr
+    - usr/bin/factor
+    - usr/bin/false
+    - usr/bin/fmt
+    - usr/bin/fold
+    - usr/bin/head
+    - usr/bin/hostname
+    - usr/bin/id
+    - usr/bin/install
+    - usr/bin/join
+    - usr/bin/kill
+    - usr/bin/link
+    - usr/bin/ln
+    - usr/bin/logname
+    - usr/bin/ls
+    - usr/bin/md5sum
+    - usr/bin/mkfifo
+    - usr/bin/mknod
+    - usr/bin/mv
+    - usr/bin/nl
+    - usr/bin/od
+    - usr/bin/paste
+    - usr/bin/pathchk
+    - usr/bin/pr
+    - usr/bin/printf
+    - usr/bin/ptx
+    - usr/bin/pwd
+    - usr/bin/readlink
+    - usr/bin/rmdir
+    - usr/bin/seq
+    - usr/bin/sha1sum
+    - usr/bin/sleep
+    - usr/bin/sort
+    - usr/bin/split
+    - usr/bin/sum
+    - usr/bin/tac
+    - usr/bin/tail
+    - usr/bin/tee
+    - usr/bin/test
+    - usr/bin/touch
+    - usr/bin/tr
+    - usr/bin/true
+    - usr/bin/tsort
+    - usr/bin/unexpand
+    - usr/bin/uniq
+    - usr/bin/unlink
+    - usr/bin/wc
+    - usr/bin/whoami
+    - usr/bin/yes
