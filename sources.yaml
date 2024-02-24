@@ -10,6 +10,9 @@ coreutils-5.0:
 gzip-1.2.4:
   url: https://mirrors.kernel.org/gnu/gzip/gzip-1.2.4.tar.gz
   sha: 1ca41818a23c9c59ef1d5e1d00c0d5eaa2285d931c0fb059637d7c0cc02ad967
+heirloom-devtools-070527:
+  url: http://downloads.sourceforge.net/project/heirloom/heirloom-devtools/070527/heirloom-devtools-070527.tar.bz2
+  sha: 9f233d8b78e4351fe9dd2d50d83958a0e5af36f54e9818521458a08e058691ba
 live-bootstrap:
   url: https://github.com/fosslinux/live-bootstrap/archive/32138d13b9254a44ffa8d5952beee8d94b888317.zip
   sha: 1f9b0c4767c230fedff962ef2b9d8b1cbe4a498f14dceea498a381d25bd336b4

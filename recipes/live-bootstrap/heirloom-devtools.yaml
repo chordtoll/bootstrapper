@@ -1,0 +1,48 @@
+070527:
+  source:
+    heirloom-devtools-070527:
+      noextract: /external/distfiles/heirloom-devtools-070527.tar.bz2
+    live-bootstrap:
+      extract: /
+      copy:
+        - /steps/heirloom-devtools-070527
+  deps:
+    - stage0-posix/final:latest
+    - live-bootstrap/mes:0.25
+    - live-bootstrap/tcc:0.9.27-pass1
+    - live-bootstrap/make:3.82
+    - live-bootstrap/patch:2.5.9
+    - live-bootstrap/tar:1.12
+    - live-bootstrap/bzip2:1.0.8
+    - live-bootstrap/sed:4.0.9
+    - live-bootstrap/coreutils:5.0
+  build:
+    compile:
+      - pkg="heirloom-devtools-070527"
+      - cd /steps/${pkg}
+      - mkdir build src
+      - cd build
+      - cp ${DISTFILES}/${pkg}.tar.bz2 ../src/
+      - bunzip2 -f ../src/${pkg}.tar.bz2
+      - tar xf ../src/${pkg}.tar ${pkg}/yacc ${pkg}/lex
+      - cd ${pkg}
+      - patch -Np0 -i ../../patches/yacc_remove_wchar.patch
+      - patch -Np0 -i ../../patches/lex_remove_wchar.patch
+      - cd yacc
+      - make -f Makefile.mk CC=tcc AR=tcc\ -ar CFLAGS=-DMAXPATHLEN=100\ -DEILSEQ=84\ -DMB_LEN_MAX=100 LDFLAGS=-lgetopt\ -static RANLIB=true
+      - install yacc ${BINDIR}
+      - install -m 644 yaccpar ${LIBDIR}
+      - cd ../lex
+      - make -f Makefile.mk CC=tcc AR=tcc\ -ar CFLAGS=-DEILSEQ=84\ -DMB_LEN_MAX=100 LDFLAGS=-lgetopt\ -static RANLIB=true
+      - mkdir ${LIBDIR}/lex
+      - install lex ${BINDIR}
+      - install libl.a ${LIBDIR}
+      - install -m 644 ncform ${LIBDIR}/lex
+      - cd ../../..
+      - sha256sum -c ${pkg}.checksums
+  artefacts:
+    - /usr/bin/yacc
+    - /usr/bin/lex
+    - /usr/lib/mes/libl.a
+    - /usr/lib/mes/yaccpar
+    - /lex/ncform
