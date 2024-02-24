@@ -1,0 +1,33 @@
+2.5.9:
+  source:
+    patch-2.5.9:
+      noextract: /external/distfiles/patch-2.5.9.tar.gz
+    live-bootstrap:
+      extract: /
+      copy:
+        - /steps/patch-2.5.9
+  deps:
+    - stage0-posix/final:latest
+    - live-bootstrap/mes:0.25
+    - live-bootstrap/tcc:0.9.27-pass1
+    - live-bootstrap/make:3.82
+  build:
+    compile:
+      - pkg=patch-2.5.9
+      - cd /steps/${pkg}
+      - mkdir build
+      - cd build
+      - ungz --file ${DISTFILES}/${pkg}.tar.gz --output ${pkg}.tar
+      - untar --file ${pkg}.tar
+      - rm ${pkg}.tar
+      - cd ${pkg}
+      - cp ../../mk/main.mk Makefile
+      - catm config.h
+      - catm patchlevel.h
+      - make -f Makefile PREFIX=${PREFIX}
+      - cp patch ${PREFIX}/bin/patch
+      - chmod 755 ${PREFIX}/bin/patch
+      - cd ../..
+      - sha256sum -c ${pkg}.checksums
+  artefacts:
+    - /usr/bin/patch

@@ -28,6 +28,9 @@ mescc-tools-extra:
 nyacc-1.00.2:
   url: https://download.savannah.gnu.org/releases/nyacc/nyacc-1.00.2.tar.gz
   sha: f36e4fb7dd524dc3f4b354d3d5313f69e7ce5a6ae93711e8cf6d51eaa8d2b318
+patch-2.5.9:
+  url: https://mirrors.kernel.org/gnu/patch/patch-2.5.9.tar.gz
+  sha: ecb5c6469d732bcf01d6ec1afe9e64f1668caba5bfdb103c28d7f537ba3cdb8a
 stage0-posix:
   url: https://github.com/oriansj/stage0-posix/archive/b6342a88fbcbbf13fa11daf8890dd6ddd5a9011f.zip
   sha: 9ec18cf0411148ee381eae434a0c9ce6eb4620781ebd932486a643ea3a3f7e2c
