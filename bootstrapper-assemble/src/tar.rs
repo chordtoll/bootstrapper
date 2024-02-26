@@ -1,3 +1,4 @@
+use bimap::BiBTreeMap;
 use std::{
     io::{Cursor, Read},
     path::{Component, PathBuf},
@@ -125,6 +126,35 @@ impl<'a> TarArchiveWriter<'a> {
         }
     }
 
+    pub fn add_entry(&mut self, e: tar::Entry<Cursor<&[u8]>>, outpath: PathBuf) {
+        if e.header().entry_type().is_file() {
+            let mut eh = e.header().clone();
+            eh.set_path(outpath).unwrap();
+            eh.set_cksum();
+            self.builder.append(&eh, e).unwrap();
+        } else if e.header().entry_type().is_dir() {
+            let mut eh = e.header().clone();
+            eh.set_path(outpath).unwrap();
+            eh.set_cksum();
+            self.builder.append(&eh, std::io::empty()).unwrap();
+        } else if e.header().entry_type().is_symlink() {
+            let mut eh = e.header().clone();
+            eh.set_path(outpath.clone()).unwrap();
+            eh.set_cksum();
+            self.builder
+                .append_link(&mut eh, outpath, e.link_name().unwrap().unwrap())
+                .unwrap();
+        } else if e.header().entry_type().is_hard_link() {
+            let mut eh = e.header().clone();
+            eh.set_path(outpath).unwrap();
+            eh.set_cksum();
+            self.builder.append(&eh, std::io::empty()).unwrap();
+        } else {
+            println!("{:?}", e.header().entry_type());
+            todo!();
+        }
+    }
+
     pub fn copy_from_tar(
         &mut self,
         tar: &mut TarArchiveReader,
@@ -147,66 +177,15 @@ impl<'a> TarArchiveWriter<'a> {
         );
         for e in tar.archive.entries().unwrap() {
             let e = e.unwrap();
-            if e.header().entry_type().is_file() {
-                if let Ok(outpath) = e.header().path().unwrap().strip_prefix(in_prefix.clone()) {
-                    let outpath = if outpath.as_os_str().is_empty() {
-                        out_prefix.clone()
-                    } else {
-                        out_prefix.join(outpath)
-                    };
-                    if !outpath.as_os_str().is_empty() {
-                        let mut eh = e.header().clone();
-                        eh.set_path(outpath).unwrap();
-                        eh.set_cksum();
-                        self.builder.append(&eh, e).unwrap();
-                    }
+            if let Ok(outpath) = e.header().path().unwrap().strip_prefix(in_prefix.clone()) {
+                let outpath = if outpath.as_os_str().is_empty() {
+                    out_prefix.clone()
+                } else {
+                    out_prefix.join(outpath)
+                };
+                if !outpath.as_os_str().is_empty() {
+                    self.add_entry(e,outpath);
                 }
-            } else if e.header().entry_type().is_dir() {
-                if let Ok(outpath) = e.header().path().unwrap().strip_prefix(in_prefix.clone()) {
-                    let outpath = if outpath.as_os_str().is_empty() {
-                        out_prefix.clone()
-                    } else {
-                        out_prefix.join(outpath)
-                    };
-                    if !outpath.as_os_str().is_empty() {
-                        let mut eh = e.header().clone();
-                        eh.set_path(outpath).unwrap();
-                        eh.set_cksum();
-                        self.builder.append(&eh, std::io::empty()).unwrap();
-                        
-                    }
-                }
-            } else if e.header().entry_type().is_symlink() {
-                if let Ok(outpath) = e.header().path().unwrap().strip_prefix(in_prefix.clone()) {
-                    let outpath = if outpath.as_os_str().is_empty() {
-                        out_prefix.clone()
-                    } else {
-                        out_prefix.join(outpath)
-                    };
-                    if !outpath.as_os_str().is_empty() {
-                        let mut eh = e.header().clone();
-                        eh.set_path(outpath.clone()).unwrap();
-                        eh.set_cksum();
-                        self.builder.append_link(&mut eh, outpath, e.link_name().unwrap().unwrap()).unwrap();
-                    }
-                }
-            } else if e.header().entry_type().is_hard_link() {
-                if let Ok(outpath) = e.header().path().unwrap().strip_prefix(in_prefix.clone()) {
-                    let outpath = if outpath.as_os_str().is_empty() {
-                        out_prefix.clone()
-                    } else {
-                        out_prefix.join(outpath)
-                    };
-                    if !outpath.as_os_str().is_empty() {
-                        let mut eh = e.header().clone();
-                        eh.set_path(outpath).unwrap();
-                        eh.set_cksum();
-                        self.builder.append(&eh, std::io::empty()).unwrap(); 
-                    }
-                }
-            } else {
-                println!("{:?}", e.header().entry_type());
-                todo!();
             }
         }
         tar.reset();
@@ -301,4 +280,26 @@ impl<'a> TarArchiveWriter<'a> {
 pub enum ArchiveReader<'a> {
     TAR(TarArchiveReader<'a>),
     ZIP(ZipArchiveReader<'a>),
+}
+
+pub fn flatten_tar(v: Vec<u8>) -> Vec<u8> {
+    let mut path_index = BiBTreeMap::new();
+    let mut tar = tar::Archive::new(Cursor::new(v.as_slice()));
+    for (j,entry) in tar.entries_with_seek().unwrap().enumerate() {
+        let entry = entry.unwrap();
+        let path = entry.path().unwrap().into_owned();
+        path_index.insert(j,path.clone());
+    }
+    let mut tar = tar::Archive::new(Cursor::new(v.as_slice()));
+    let mut outbuf = Vec::new();
+    let mut taw = TarArchiveWriter::from(&mut outbuf);
+    for (j,entry) in tar.entries_with_seek().unwrap().enumerate() {
+        let entry = entry.unwrap();
+        let path = entry.path().unwrap().into_owned();
+        if path_index.contains_left(&j) {
+            taw.add_entry(entry, path);
+        }
+    }
+    std::mem::drop(taw);
+    outbuf
 }

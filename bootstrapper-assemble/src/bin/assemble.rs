@@ -11,7 +11,7 @@ use bootstrapper_assemble::{
     alias,
     args::Args,
     docker, docker_export, download, emit_run, envify,
-    tar::{ArchiveReader, TarArchiveReader, TarArchiveWriter, ZipArchiveReader},
+    tar::{flatten_tar, ArchiveReader, TarArchiveReader, TarArchiveWriter, ZipArchiveReader},
 };
 use bootstrapper_common::recipe::{get_recipe_digest, NamedRecipeVersion, SourceContents, SOURCES};
 use bytes::Bytes;
@@ -404,6 +404,8 @@ async fn build_single(target: &str, version: &str, mut recipe: NamedRecipeVersio
     context_writer.finish().unwrap();
 
     std::mem::drop(context_writer);
+
+    let context = flatten_tar(context);
 
     std::fs::write("t.tar", context.clone()).unwrap();
 
