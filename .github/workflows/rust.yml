@@ -13,34 +13,54 @@ jobs:
   assemble:
     runs-on: ubuntu-latest
     env:
-      cache-key: build-cache
+      cache-key-rust: rust-cache
+      cache-key-build: build-cache
     steps:
       - uses: actions/checkout@v3
-      - name: Restore Cache
-        id: cache-restore
+      - name: Restore Rust Cache
+        id: cache-restore-rust
         uses: actions/cache/restore@v3
         with:
-          key: ${{ env.cache-key }}
+          key: ${{ env.cache-key-rust }}
+          path: |
+            target
+      - name: Restore Build Cache
+        id: cache-restore-build
+        uses: actions/cache/restore@v3
+        with:
+          key: ${{ env.cache-key-build }}
           path: |
             build-cache
-            target
       - name: Run
         run: cargo run --bin=assemble -- -- `cat ci-build.txt`
-      - name: Delete Previous Cache
-        if: ${{ steps.cache-restore.outputs.cache-hit }}
+      - name: Delete Previous Rust Cache
+        if: ${{ steps.cache-restore-rust.outputs.cache-hit }}
         continue-on-error: true
         run: |
           gh extension install actions/gh-actions-cache
-          gh actions-cache delete "${{ env.cache-key }}" --confirm
+          gh actions-cache delete "${{ env.cache-key-rust }}" --confirm
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Save Cache
+      - name: Delete Previous Build Cache
+        if: ${{ steps.cache-restore-build.outputs.cache-hit }}
+        continue-on-error: true
+        run: |
+          gh extension install actions/gh-actions-cache
+          gh actions-cache delete "${{ env.cache-key-build }}" --confirm
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Save Rust Cache
         uses: actions/cache/save@v3
         with:
-          key: build-cache
+          key: ${{ env.cache-key-rust }}
+          path: |
+            target
+      - name: Save Build Cache
+        uses: actions/cache/save@v3
+        with:
+          key: ${{ env.cache-key-build }}
           path: |
             build-cache
-            target
   depgraph:
     runs-on: ubuntu-latest
     steps:
