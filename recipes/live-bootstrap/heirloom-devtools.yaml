@@ -45,4 +45,4 @@
     - /usr/bin/lex
     - /usr/lib/mes/libl.a
     - /usr/lib/mes/yaccpar
-    - /lex/ncform
+    - /usr/lib/mes/lex/ncform

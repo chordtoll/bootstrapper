@@ -1,1 +1,1 @@
-live-bootstrap/improvements:merged_usr
+live-bootstrap/flex:2.5.11

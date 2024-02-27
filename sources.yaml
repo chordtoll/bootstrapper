@@ -10,6 +10,9 @@ bzip2-1.0.8:
 coreutils-5.0:
   url: https://mirrors.kernel.org/gnu/coreutils/coreutils-5.0.tar.bz2
   sha: c25b36b8af6e0ad2a875daf4d6196bd0df28a62be7dd252e5f99a4d5d7288d95
+flex-2.5.11:
+  url: http://download.nust.na/pub2/openpkg1/sources/DST/flex/flex-2.5.11.tar.gz
+  sha: bc79b890f35ca38d66ff89a6e3758226131e51ccbd10ef78d5ff150b7bd73689
 gzip-1.2.4:
   url: https://mirrors.kernel.org/gnu/gzip/gzip-1.2.4.tar.gz
   sha: 1ca41818a23c9c59ef1d5e1d00c0d5eaa2285d931c0fb059637d7c0cc02ad967
