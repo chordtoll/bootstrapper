@@ -19,7 +19,7 @@ use clap::Parser;
 use futures_util::StreamExt;
 use indexmap::IndexMap;
 use std::{
-    collections::BTreeMap, io::{Cursor, Read, Write}, os::unix::fs::MetadataExt, path::PathBuf
+    collections::BTreeMap, io::{Cursor, ErrorKind, Read, Write}, os::unix::fs::MetadataExt, path::PathBuf
 };
 
 const BUILD_CACHE_SOURCE_PATH: &str = "build-cache/source";
@@ -320,7 +320,7 @@ async fn do_build(
     }
 }
 
-async fn build_single(target: &str, version: &str, mut recipe: NamedRecipeVersion) -> String {
+async fn build_single(target: &str, version: &str, mut recipe: NamedRecipeVersion, force: bool) -> String {
     println!(" Build requested of {} {}",target,version);
     let recipe_digest = get_recipe_digest(target.to_owned(), version.to_owned());
 
@@ -334,7 +334,7 @@ async fn build_single(target: &str, version: &str, mut recipe: NamedRecipeVersio
         .to_owned()];
 
     let link_path = PathBuf::from(BUILD_CACHE_LINK_PATH).join(recipe_digest.clone());
-    if link_path.exists() {
+    if link_path.exists() && !force{
         println!("  Exists! {}",recipe_digest);
         return std::fs::read_link(link_path)
             .unwrap()
@@ -459,7 +459,13 @@ async fn build_single(target: &str, version: &str, mut recipe: NamedRecipeVersio
         .write_all(&output_clean)
         .unwrap();
 
-    std::os::unix::fs::symlink(format!("../out/{}", out_digest), link_path).unwrap();
+    match std::os::unix::fs::symlink(format!("../out/{}", out_digest), link_path.clone()) {
+        Ok(_) => {},
+        Err(v) => if v.kind() == ErrorKind::AlreadyExists {
+            std::fs::remove_file(link_path.clone()).unwrap();
+            std::os::unix::fs::symlink(format!("../out/{}", out_digest), link_path).unwrap();
+        },
+    }
 
     println!("  Finished build for {}:{}", target, version);
     println!("  {}->{}",recipe_digest,out_digest);
@@ -472,6 +478,7 @@ async fn build_recipe(
     target: &str,
     version: &str,
     built: &mut BTreeMap<(String, String), String>,
+    force: bool,
 ) -> String {
     // Don't retry builds we've already done
     if let Some(hash_built) = built.get(&(target.to_owned(), version.to_owned())) {
@@ -486,11 +493,11 @@ async fn build_recipe(
         for i in deps {
             let target_name = i.split(':').nth(0).unwrap();
             let target_version = i.split(':').nth(1).unwrap();
-            build_recipe(target_name, target_version, built).await;
+            build_recipe(target_name, target_version, built, false).await;
         }
     }
 
-    let hash_built = build_single(target, version, recipe).await;
+    let hash_built = build_single(target, version, recipe, force).await;
 
     built.insert(
         (target.to_owned(), version.to_owned()),
@@ -514,5 +521,5 @@ async fn main() {
         }
     }
 
-    build_recipe(target_name, target_version, &mut built).await;
+    build_recipe(target_name, target_version, &mut built, true).await;
 }
