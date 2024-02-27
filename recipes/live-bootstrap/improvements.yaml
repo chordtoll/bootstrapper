@@ -1,0 +1,14 @@
+merged_usr:
+  deps:
+    - live-bootstrap/coreutils:5.0
+  build:
+    single:
+      - ln -sv bin /usr/sbin
+      - ln -sv /usr/bin /bin
+      - ln -sv /usr/lib /lib
+      - ln -sv /usr/sbin /sbin
+  artefacts:
+    - /bin
+    - /lib
+    - /sbin
+    - /usr/sbin
