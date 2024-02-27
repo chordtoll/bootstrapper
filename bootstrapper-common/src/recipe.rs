@@ -108,7 +108,16 @@ impl Recipe {
         if let Some(recipe) = RECIPE_CACHE.get(path) {
             return recipe.1.clone();
         }
-        let res = serde_yaml::from_reader::<File, Self>(File::open(path).unwrap()).unwrap();
+        let res = match serde_yaml::from_reader::<File, Self>(File::open(path).unwrap()) {
+            Ok(v) => v,
+            Err(e) => panic!(
+                "Parse error in YAML at {}:{}:{} ({:?})",
+                path.to_str().unwrap(),
+                e.location().unwrap().line(),
+                e.location().unwrap().column(),
+                e
+            ),
+        };
         RECIPE_CACHE.insert(path.to_owned(), res.clone());
         res
     }
