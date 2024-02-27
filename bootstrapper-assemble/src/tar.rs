@@ -24,7 +24,7 @@ impl<'a> TarArchiveReader<'a> {
     pub fn reset(&mut self) {
         self.archive = tar::Archive::new(Cursor::new(self.data));
     }
-    pub fn file_contents(&mut self, path: PathBuf) -> Vec<u8>{
+    pub fn file_contents(&mut self, path: PathBuf) -> Vec<u8> {
         let path = PathBuf::from(
             path.as_os_str()
                 .to_str()
@@ -41,7 +41,7 @@ impl<'a> TarArchiveReader<'a> {
                 return buf;
             }
         }
-        panic!("Did not find entry {:?} in archive",path);
+        panic!("Did not find entry {:?} in archive", path);
     }
 }
 
@@ -184,7 +184,7 @@ impl<'a> TarArchiveWriter<'a> {
                     out_prefix.join(outpath)
                 };
                 if !outpath.as_os_str().is_empty() {
-                    self.add_entry(e,outpath);
+                    self.add_entry(e, outpath);
                 }
             }
         }
@@ -285,15 +285,15 @@ pub enum ArchiveReader<'a> {
 pub fn flatten_tar(v: Vec<u8>) -> Vec<u8> {
     let mut path_index = BiBTreeMap::new();
     let mut tar = tar::Archive::new(Cursor::new(v.as_slice()));
-    for (j,entry) in tar.entries_with_seek().unwrap().enumerate() {
+    for (j, entry) in tar.entries_with_seek().unwrap().enumerate() {
         let entry = entry.unwrap();
         let path = entry.path().unwrap().into_owned();
-        path_index.insert(j,path.clone());
+        path_index.insert(j, path.clone());
     }
     let mut tar = tar::Archive::new(Cursor::new(v.as_slice()));
     let mut outbuf = Vec::new();
     let mut taw = TarArchiveWriter::from(&mut outbuf);
-    for (j,entry) in tar.entries_with_seek().unwrap().enumerate() {
+    for (j, entry) in tar.entries_with_seek().unwrap().enumerate() {
         let entry = entry.unwrap();
         let path = entry.path().unwrap().into_owned();
         if path_index.contains_left(&j) {

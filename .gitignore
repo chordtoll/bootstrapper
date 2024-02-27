@@ -10,3 +10,6 @@
 /patches
 /ctx
 build-cache/
+recipes-old
+tx
+build.log

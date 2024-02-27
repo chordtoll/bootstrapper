@@ -78,13 +78,13 @@ fn main() {
         let version = package.version;
         let tag = build_depgraph(&name, &version, &mut built, &mut deps);
         recipes_by_section
-            .entry(name.rsplit_once("/").unwrap().0.to_owned())
+            .entry(name.rsplit_once('/').unwrap().0.to_owned())
             .or_default()
             .insert(tag);
     }
 
     let mut transdeps = deps.clone();
-    let mut tdl = transdeps.iter().map(|(_, x)| x.len()).sum::<usize>();
+    let mut tdl = transdeps.values().map(|x| x.len()).sum::<usize>();
     loop {
         let keys: Vec<String> = transdeps.keys().cloned().collect();
         for k in keys {
@@ -98,7 +98,7 @@ fn main() {
                 }
             }
         }
-        let tdln = transdeps.iter().map(|(_, x)| x.len()).sum::<usize>();
+        let tdln = transdeps.values().map(|x| x.len()).sum::<usize>();
         if tdln == tdl {
             break;
         }
@@ -119,10 +119,8 @@ fn main() {
         for d in v {
             let mut is_trans = false;
             for dd in v {
-                if transdeps.contains_key(dd) {
-                    if transdeps[dd].contains(d) {
-                        is_trans = true;
-                    }
+                if transdeps.contains_key(dd) && transdeps[dd].contains(d) {
+                    is_trans = true;
                 }
             }
             if !is_trans {

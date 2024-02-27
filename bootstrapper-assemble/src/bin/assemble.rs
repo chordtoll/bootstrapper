@@ -1,7 +1,5 @@
 #![allow(clippy::iter_nth_zero)]
-use bzip2::read::BzDecoder;
-use maplit::btreemap;
-use walkdir::WalkDir;
+#![warn(clippy::unused_async)]
 use async_recursion::async_recursion;
 use bollard::{
     image::BuildImageOptions,
@@ -13,14 +11,22 @@ use bootstrapper_assemble::{
     docker, docker_export, download, emit_run, envify,
     tar::{flatten_tar, ArchiveReader, TarArchiveReader, TarArchiveWriter, ZipArchiveReader},
 };
-use bootstrapper_common::recipe::{get_recipe_digest, NamedRecipeVersion, RecipeBuildSteps, SourceContents, SOURCES};
+use bootstrapper_common::recipe::{
+    get_recipe_digest, NamedRecipeVersion, RecipeBuildSteps, SourceContents, SOURCES,
+};
+use bzip2::read::BzDecoder;
 use clap::Parser;
 use futures_util::StreamExt;
 use indexmap::IndexMap;
-use std::{
-    collections::BTreeMap, io::{Cursor, ErrorKind, Read, Write}, os::unix::fs::MetadataExt, path::PathBuf
-};
+use maplit::btreemap;
 use regex::Regex;
+use std::{
+    collections::BTreeMap,
+    io::{Cursor, ErrorKind, Read, Write},
+    os::unix::fs::MetadataExt,
+    path::PathBuf,
+};
+use walkdir::WalkDir;
 
 const BUILD_CACHE_SOURCE_PATH: &str = "build-cache/source";
 const BUILD_CACHE_OUT_PATH: &str = "build-cache/out";
@@ -45,7 +51,7 @@ async fn build_source(name: &str) -> SourceContents {
     source.clone()
 }
 
-async fn do_mkdirs(recipe: &NamedRecipeVersion, context_writer: &mut TarArchiveWriter<'_>) {
+fn do_mkdirs(recipe: &NamedRecipeVersion, context_writer: &mut TarArchiveWriter<'_>) {
     if let Some(mkdirs) = &recipe.mkdirs {
         for mkdir in mkdirs {
             context_writer.create_empty_dir(mkdir.into()).unwrap();
@@ -56,7 +62,7 @@ async fn do_mkdirs(recipe: &NamedRecipeVersion, context_writer: &mut TarArchiveW
 async fn do_sources(recipe: &NamedRecipeVersion, context_writer: &mut TarArchiveWriter<'_>) {
     // Copy in our sources
     if let Some(source) = &recipe.source {
-        for (name,source) in source {
+        for (name, source) in source {
             let sc = build_source(name).await;
             if let Some(extract) = &source.extract {
                 assert!(source.chmod.is_none());
@@ -97,9 +103,10 @@ async fn do_sources(recipe: &NamedRecipeVersion, context_writer: &mut TarArchive
                         std::fs::read(format!("build-cache/source/{}", sc.sha))
                             .unwrap()
                             .as_ref(),
-                        source.chmod
+                        source
+                            .chmod
                             .as_ref()
-                            .map(|x| u32::from_str_radix(&x, 8).unwrap()),
+                            .map(|x| u32::from_str_radix(x, 8).unwrap()),
                     )
                     .unwrap();
             } else {
@@ -109,7 +116,7 @@ async fn do_sources(recipe: &NamedRecipeVersion, context_writer: &mut TarArchive
     }
 }
 
-async fn do_deps(recipe: &NamedRecipeVersion, context_writer: &mut TarArchiveWriter<'_>) {
+fn do_deps(recipe: &NamedRecipeVersion, context_writer: &mut TarArchiveWriter<'_>) {
     // Build and copy in our dependencies
     if let Some(deps) = &recipe.deps {
         for dep in deps {
@@ -136,16 +143,15 @@ async fn do_deps(recipe: &NamedRecipeVersion, context_writer: &mut TarArchiveWri
     }
 }
 
-async fn do_shell(
+fn do_shell(
     recipe: &NamedRecipeVersion,
-    context_writer: &mut TarArchiveWriter<'_>,
-    dockerfile: &mut Cursor<Vec<u8>>,
 ) {
     // Load up a shell
     if let Some(shell) = &recipe.shell {
         let mut shell_it = shell.split(':');
-        let shell_img = shell_it.next().unwrap();
-        let shell_ver = shell_it.next().unwrap();
+        let _shell_img = shell_it.next().unwrap();
+        let _shell_ver = shell_it.next().unwrap();
+        todo!();
         /*let tag = get_dep_tag(shell_img, shell_ver);
         let shell = shell_it.next().unwrap();
         dockerfile
@@ -154,17 +160,16 @@ async fn do_shell(
     }
 }
 
-async fn do_mods(
+fn do_mods(
     recipe: &NamedRecipeVersion,
     context_writer: &mut TarArchiveWriter<'_>,
-    dockerfile: &mut Cursor<Vec<u8>>,
 ) {
     let mods_path = PathBuf::from(format!("recipes/{}/{}", recipe.name, recipe.version));
     let mods_tar_path = PathBuf::from(format!("recipes/{}/{}.tar", recipe.name, recipe.version));
 
     // Copy in any mods
     if mods_tar_path.exists() {
-        panic!();
+        todo!();
         /*std::fs::copy(mods_tar_path, build_path.join("mod.tar")).unwrap();
         dockerfile.write_all(b"COPY ./mod.tar / \n").unwrap();
         dockerfile.write_all(b"RUN [\"tar\", \"xf\", \"/mod.tar\", \"--exclude=etc/resolv.conf\", \"--exclude=usr/bin/tar\", \"--exclude=bin\", \"--exclude=usr/sbin\"] \n").unwrap();
@@ -175,14 +180,23 @@ async fn do_mods(
             let e = e.unwrap();
             let metadata = e.metadata().unwrap();
             if metadata.is_file() {
-                println!("Applying mod {:?}",e.path().strip_prefix(&mods_path).unwrap().to_owned());
-                context_writer.create_file(e.path().strip_prefix(&mods_path).unwrap().to_owned(), std::fs::read(e.path()).unwrap().as_ref(), Some(metadata.mode())).unwrap();
+                println!(
+                    "Applying mod {:?}",
+                    e.path().strip_prefix(&mods_path).unwrap().to_owned()
+                );
+                context_writer
+                    .create_file(
+                        e.path().strip_prefix(&mods_path).unwrap().to_owned(),
+                        std::fs::read(e.path()).unwrap().as_ref(),
+                        Some(metadata.mode()),
+                    )
+                    .unwrap();
             }
         }
     }
 }
 
-async fn do_envs(
+fn do_envs(
     dockerfile: &mut Cursor<Vec<u8>>,
     envs: Vec<PathBuf>,
     env: &mut IndexMap<String, String>,
@@ -269,7 +283,7 @@ fn emit_steps(
     }
 }
 
-async fn do_build(
+fn do_build(
     recipe: &NamedRecipeVersion,
     dockerfile: &mut Cursor<Vec<u8>>,
     env: &mut IndexMap<String, String>,
@@ -290,40 +304,51 @@ async fn do_build(
             postprocess,
         } => {
             let mut steps = Vec::new();
-            let (pkg,pass) = if let Some(v) = Regex::new(r"^(.*)-pass([0-9]+)").unwrap().captures(&recipe.version) {
+            let (pkg, pass) = if let Some(v) = Regex::new(r"^(.*)-pass([0-9]+)")
+                .unwrap()
+                .captures(&recipe.version)
+            {
                 let pass: u32 = v.get(2).unwrap().as_str().parse().unwrap();
-                (format!(
-                    "{}-{}",
-                    recipe.name.split('/').last().unwrap(),
-                    v.get(1).unwrap().as_str()
-                ),pass-1)
+                (
+                    format!(
+                        "{}-{}",
+                        recipe.name.split('/').last().unwrap(),
+                        v.get(1).unwrap().as_str()
+                    ),
+                    pass - 1,
+                )
             } else {
-                (format!(
-                    "{}-{}",
-                    recipe.name.split('/').last().unwrap(),
-                    recipe.version
-                ),0)
+                (
+                    format!(
+                        "{}-{}",
+                        recipe.name.split('/').last().unwrap(),
+                        recipe.version
+                    ),
+                    0,
+                )
             };
             steps.push(format!("pkg={}", pkg));
             steps.push(format!("cd /steps/{}", pkg));
             steps.push(format!("base_dir=/steps/{}", pkg));
-            steps.push(format!("patch_dir=/steps/{}/{}",pkg,patch_dir));
-            steps.push(format!("mk_dir=/steps/{}/mk",pkg));
-            steps.push(format!("files_dir=/steps/{}/files",pkg));
-            steps.push(format!("revision={}",pass));
+            steps.push(format!("patch_dir=/steps/{}/{}", pkg, patch_dir));
+            steps.push(format!("mk_dir=/steps/{}/mk", pkg));
+            steps.push(format!("files_dir=/steps/{}/files", pkg));
+            steps.push(format!("revision={}", pass));
             steps.push("mkdir build".to_owned());
             steps.push("cd build".to_owned());
             if let Some(_unpack) = unpack {
                 todo!();
             } else {
                 steps.push("bash -exc '. /steps/helpers.sh; default_src_unpack'".to_owned());
-                steps.push(format!("dirname={}",unpack_dirname));
-                steps.push(format!("cd {}",unpack_dirname));
+                steps.push(format!("dirname={}", unpack_dirname));
+                steps.push(format!("cd {}", unpack_dirname));
             }
             if let Some(prepare) = prepare {
                 for i in prepare {
-                    if i=="default" {
-                        steps.push("bash -exc '. /steps/helpers.sh; default_src_prepare'".to_owned());
+                    if i == "default" {
+                        steps.push(
+                            "bash -exc '. /steps/helpers.sh; default_src_prepare'".to_owned(),
+                        );
                     } else {
                         steps.push(i.to_owned());
                     }
@@ -333,8 +358,10 @@ async fn do_build(
             }
             if let Some(configure) = configure {
                 for i in configure {
-                    if i=="default" {
-                        steps.push("bash -exc '. /steps/helpers.sh; default_src_configure'".to_owned());
+                    if i == "default" {
+                        steps.push(
+                            "bash -exc '. /steps/helpers.sh; default_src_configure'".to_owned(),
+                        );
                     } else {
                         steps.push(i.to_owned());
                     }
@@ -344,8 +371,10 @@ async fn do_build(
             }
             if let Some(compile) = compile {
                 for i in compile {
-                    if i=="default" {
-                        steps.push("bash -exc '. /steps/helpers.sh; default_src_compile'".to_owned());
+                    if i == "default" {
+                        steps.push(
+                            "bash -exc '. /steps/helpers.sh; default_src_compile'".to_owned(),
+                        );
                     } else {
                         steps.push(i.to_owned());
                     }
@@ -355,8 +384,10 @@ async fn do_build(
             }
             if let Some(install) = install {
                 for i in install {
-                    if i=="default" {
-                        steps.push("bash -exc '. /steps/helpers.sh; default_src_install'".to_owned());
+                    if i == "default" {
+                        steps.push(
+                            "bash -exc '. /steps/helpers.sh; default_src_install'".to_owned(),
+                        );
                     } else {
                         steps.push(i.to_owned());
                     }
@@ -366,8 +397,10 @@ async fn do_build(
             }
             if let Some(postprocess) = postprocess {
                 for i in postprocess {
-                    if i=="default" {
-                        steps.push("bash -exc '. /steps/helpers.sh; default_src_postprocess'".to_owned());
+                    if i == "default" {
+                        steps.push(
+                            "bash -exc '. /steps/helpers.sh; default_src_postprocess'".to_owned(),
+                        );
                     } else {
                         steps.push(i.to_owned());
                     }
@@ -378,14 +411,21 @@ async fn do_build(
             steps.push("cd ${DESTDIR}".to_owned());
             steps.push("bash -exc '. /steps/helpers.sh; src_pkg'".to_owned());
             steps.push("cd /external/repo".to_owned());
-            steps.push("bash -exc '. /steps/helpers.sh; src_checksum ${pkg} ${revision}'".to_owned());
+            steps.push(
+                "bash -exc '. /steps/helpers.sh; src_checksum ${pkg} ${revision}'".to_owned(),
+            );
             emit_steps(recipe, &steps, env, dockerfile);
         }
     }
 }
 
-async fn build_single(target: &str, version: &str, mut recipe: NamedRecipeVersion, force: bool) -> String {
-    println!(" Build requested of {} {}",target,version);
+async fn build_single(
+    target: &str,
+    version: &str,
+    mut recipe: NamedRecipeVersion,
+    force: bool,
+) -> String {
+    println!(" Build requested of {} {}", target, version);
     let recipe_digest = get_recipe_digest(target.to_owned(), version.to_owned());
 
     let mods_path = PathBuf::from(format!("recipes/{}/{}", target, version));
@@ -398,8 +438,8 @@ async fn build_single(target: &str, version: &str, mut recipe: NamedRecipeVersio
         .to_owned()];
 
     let link_path = PathBuf::from(BUILD_CACHE_LINK_PATH).join(recipe_digest.clone());
-    if link_path.exists() && !force{
-        println!("  Exists! {}",recipe_digest);
+    if link_path.exists() && !force {
+        println!("  Exists! {}", recipe_digest);
         return std::fs::read_link(link_path)
             .unwrap()
             .file_name()
@@ -413,7 +453,7 @@ async fn build_single(target: &str, version: &str, mut recipe: NamedRecipeVersio
     let mut env = IndexMap::new();
 
     if recipe.source.is_none() {
-        recipe.source = Some(btreemap!{});
+        recipe.source = Some(btreemap! {});
     }
 
     /*let u_str = Source {
@@ -443,23 +483,25 @@ async fn build_single(target: &str, version: &str, mut recipe: NamedRecipeVersio
     let mut context = Vec::new();
     let mut context_writer = TarArchiveWriter::from(context.as_mut());
 
-    context_writer.create_file(PathBuf::from(".dockerignore"), b"Dockerfile", Some(0o644)).unwrap();
+    context_writer
+        .create_file(PathBuf::from(".dockerignore"), b"Dockerfile", Some(0o644))
+        .unwrap();
 
-    do_mkdirs(&recipe, &mut context_writer).await;
+    do_mkdirs(&recipe, &mut context_writer);
 
     do_sources(&recipe, &mut context_writer).await;
 
-    do_deps(&recipe, &mut context_writer).await;
+    do_deps(&recipe, &mut context_writer);
 
-    do_shell(&recipe, &mut context_writer, &mut dockerfile).await;
+    do_shell(&recipe);
 
-    do_mods(&recipe, &mut context_writer, &mut dockerfile).await;
+    do_mods(&recipe, &mut context_writer);
 
-    do_envs(&mut dockerfile, envs, &mut env).await;
+    do_envs(&mut dockerfile, envs, &mut env);
 
     dockerfile.write_all(b"COPY . . \n").unwrap();
 
-    do_build(&recipe, &mut dockerfile, &mut env).await;
+    do_build(&recipe, &mut dockerfile, &mut env);
 
     context_writer
         .create_file("./Dockerfile".into(), dockerfile.get_ref(), None)
@@ -505,7 +547,11 @@ async fn build_single(target: &str, version: &str, mut recipe: NamedRecipeVersio
     let mut output_clean = Vec::new();
 
     if recipe.artefacts.len() == 1 && recipe.artefacts[0].ends_with(".tar.bz2") {
-        BzDecoder::new(Cursor::new(tar.file_contents(recipe.artefacts[0].clone().into()))).read_to_end(&mut output_clean).unwrap();
+        BzDecoder::new(Cursor::new(
+            tar.file_contents(recipe.artefacts[0].clone().into()),
+        ))
+        .read_to_end(&mut output_clean)
+        .unwrap();
     } else {
         let mut taw = TarArchiveWriter::from(&mut output_clean);
         for art in &recipe.artefacts {
@@ -524,15 +570,17 @@ async fn build_single(target: &str, version: &str, mut recipe: NamedRecipeVersio
         .unwrap();
 
     match std::os::unix::fs::symlink(format!("../out/{}", out_digest), link_path.clone()) {
-        Ok(_) => {},
-        Err(v) => if v.kind() == ErrorKind::AlreadyExists {
-            std::fs::remove_file(link_path.clone()).unwrap();
-            std::os::unix::fs::symlink(format!("../out/{}", out_digest), link_path).unwrap();
-        },
+        Ok(_) => {}
+        Err(v) => {
+            if v.kind() == ErrorKind::AlreadyExists {
+                std::fs::remove_file(link_path.clone()).unwrap();
+                std::os::unix::fs::symlink(format!("../out/{}", out_digest), link_path).unwrap();
+            }
+        }
     }
 
     println!("  Finished build for {}:{}", target, version);
-    println!("  {}->{}",recipe_digest,out_digest);
+    println!("  {}->{}", recipe_digest, out_digest);
 
     out_digest
 }
@@ -578,7 +626,7 @@ async fn main() {
     let target_version = args.target.split(':').nth(1).unwrap();
     let mut built = BTreeMap::new();
 
-    for cache in ["build-cache/source","build-cache/out","build-cache/link"] {
+    for cache in ["build-cache/source", "build-cache/out", "build-cache/link"] {
         let pb = PathBuf::from(cache);
         if !pb.exists() {
             std::fs::create_dir_all(pb).unwrap();

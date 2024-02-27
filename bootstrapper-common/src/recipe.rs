@@ -12,13 +12,15 @@ use serde::Deserialize;
 use memoize::memoize;
 
 lazy_static! {
-    static ref RECIPE_CACHE: lockfree::map::Map<PathBuf, Recipe> =
-        lockfree::map::Map::new();
+    static ref RECIPE_CACHE: lockfree::map::Map<PathBuf, Recipe> = lockfree::map::Map::new();
     pub static ref SOURCES: BTreeMap<String, SourceContents> = load_sources();
 }
 
 pub fn load_sources() -> BTreeMap<String, SourceContents> {
-    serde_yaml::from_reader::<File, BTreeMap<String, SourceContents>>(File::open("sources.yaml").unwrap()).unwrap()
+    serde_yaml::from_reader::<File, BTreeMap<String, SourceContents>>(
+        File::open("sources.yaml").unwrap(),
+    )
+    .unwrap()
 }
 
 #[memoize]
@@ -42,15 +44,13 @@ pub fn get_recipe_digest(target: String, version: String) -> String {
 
     let summary = recipe.summary();
 
-    let recipe_digest = sha256::digest(format!(
+    sha256::digest(format!(
         "{} {}/{} {}",
         summary.len(),
         summary,
         envs_summary.len(),
         envs_summary
-    ));
-
-    recipe_digest
+    ))
 }
 
 #[derive(Debug, Deserialize, Clone)]
@@ -87,7 +87,7 @@ pub enum RecipeBuildSteps {
 
 #[derive(Debug, Deserialize, Clone)]
 pub struct RecipeVersion {
-    pub source: Option<BTreeMap<String,Source>>,
+    pub source: Option<BTreeMap<String, Source>>,
     pub shell: Option<String>,
     pub deps: Option<Vec<String>>,
     pub mkdirs: Option<Vec<String>>,
@@ -99,7 +99,7 @@ pub struct RecipeVersion {
 pub struct NamedRecipeVersion {
     pub name: String,
     pub version: String,
-    pub source: Option<BTreeMap<String,Source>>,
+    pub source: Option<BTreeMap<String, Source>>,
     pub shell: Option<String>,
     pub deps: Option<Vec<String>>,
     pub mkdirs: Option<Vec<String>>,
@@ -189,7 +189,7 @@ impl NamedRecipeVersion {
     pub fn summary(&self) -> String {
         let mut inputs = String::new();
         if let Some(sources) = &self.source {
-            for (name,source) in sources {
+            for (name, source) in sources {
                 let summary = source.summary(name);
                 inputs.push_str(&format!("SOURCE:{}\n{}", summary.len(), summary));
             }
@@ -205,7 +205,7 @@ impl NamedRecipeVersion {
                 let to = i.split(':').nth(3);
                 inputs.push_str(&format!(
                     "DEP:{} {:?} {:?}\n",
-                    get_recipe_digest(target.to_owned(),version.to_owned()),
+                    get_recipe_digest(target.to_owned(), version.to_owned()),
                     from,
                     to
                 ));
@@ -249,8 +249,16 @@ impl RecipeBuildSteps {
                         inputs.push_str(&format!(" UNPACK:{}\n  {}\n", i.len(), i));
                     }
                 }
-                inputs.push_str(&format!(" DIRNAME={}\n  {}\n",unpack_dirname.len(),unpack_dirname));
-                inputs.push_str(&format!(" PATCH_DIR={}\n  {}\n",patch_dir.len(),patch_dir));
+                inputs.push_str(&format!(
+                    " DIRNAME={}\n  {}\n",
+                    unpack_dirname.len(),
+                    unpack_dirname
+                ));
+                inputs.push_str(&format!(
+                    " PATCH_DIR={}\n  {}\n",
+                    patch_dir.len(),
+                    patch_dir
+                ));
                 if let Some(prepare) = prepare {
                     for i in prepare {
                         inputs.push_str(&format!(" PREPARE:{}\n  {}\n", i.len(), i));
@@ -285,12 +293,11 @@ impl RecipeBuildSteps {
 impl Source {
     pub fn summary(&self, name: &str) -> String {
         let mut inputs = String::new();
-        let sha = &SOURCES.get(name).unwrap_or_else(|| panic!("Unknown source {}", name)).sha;
-        inputs.push_str(&format!(
-            " SHA:{}\n  {}\n",
-            sha.len(),
-            sha.to_lowercase()
-        ));
+        let sha = &SOURCES
+            .get(name)
+            .unwrap_or_else(|| panic!("Unknown source {}", name))
+            .sha;
+        inputs.push_str(&format!(" SHA:{}\n  {}\n", sha.len(), sha.to_lowercase()));
         if let Some(extract) = &self.extract {
             inputs.push_str(&format!(" EXTRACT:{}\n  {}\n", extract.len(), extract));
         }
