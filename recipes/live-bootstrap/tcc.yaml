@@ -1,3 +1,46 @@
+0.9.27-pass1:
+  source:
+    mes-0.25:
+      noextract: /external/distfiles/mes-0.25.tar.gz
+    tcc-0.9.27:
+      noextract: /external/distfiles/tcc-0.9.27.tar.bz2
+    live-bootstrap:
+      extract: /
+      copy:
+        - /steps/helpers.sh
+        - /steps/SHA256SUMS.pkgs
+        - /steps/tcc-0.9.27
+  mkdirs:
+    - /external/repo
+  deps:
+    - stage0-posix/final:latest
+    - live-bootstrap/mes:0.25
+    - live-bootstrap/tcc:0.9.26
+    - live-bootstrap/tcc:0.9.27-pass0
+    - live-bootstrap/make:3.82
+    - live-bootstrap/patch:2.5.9
+    - live-bootstrap/gzip:1.2.4
+    - live-bootstrap/tar:1.12
+    - live-bootstrap/bzip2:1.0.8
+    - live-bootstrap/coreutils:5.0
+    - live-bootstrap/bash:2.05b
+    - live-bootstrap/improvements:merged_usr
+    - live-bootstrap/flex:2.5.11
+  build:
+    unpack_dirname: tcc-0.9.27
+    patch_dir: patches
+    prepare:
+      - default
+      - touch config.h
+    compile:
+      - tcc-0.9.26 -v -static -o tcc -D TCC_TARGET_I386=1 -D CONFIG_TCCDIR=\\\""${LIBDIR}/tcc"\\\" -D CONFIG_TCC_CRTPREFIX=\\\""${LIBDIR}"\\\" -D CONFIG_TCC_ELFINTERP=\\\"/mes/loader\\\" -D CONFIG_TCC_LIBPATHS=\\\""${LIBDIR}:${LIBDIR}/tcc"\\\" -D CONFIG_TCC_SYSINCLUDEPATHS=\\\""${PREFIX}/include/mes"\\\" -D TCC_LIBGCC=\\\""${LIBDIR}/libc.a"\\\" -D CONFIG_TCC_STATIC=1 -D CONFIG_USE_LIBGCC=1 -D TCC_VERSION=\\\"0.9.27\\\" -D ONE_SOURCE=1 tcc.c
+      - tcc-0.9.26 -c -D HAVE_CONFIG_H=1 lib/libtcc1.c
+      - tcc-0.9.26 -ar cr libtcc1.a libtcc1.o
+    install:
+      - install -D libtcc1.a "${DESTDIR}${LIBDIR}/tcc/libtcc1.a"
+      - install -D tcc "${DESTDIR}${PREFIX}/bin/tcc"
+  artefacts:
+    - external/repo/tcc-0.9.27_0.tar.bz2
 0.9.27-pass0:
   source:
     mes-0.25:
