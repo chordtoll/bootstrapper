@@ -75,6 +75,7 @@ jobs:
         run: dot deps.dot -Tsvg > deps.svg
       - uses: hkusu/s3-upload-action@v2
         name: Upload PNG to S3
+        if: github.event_name != 'pull_request'
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -86,6 +87,7 @@ jobs:
           content-type: 'image/png'
       - uses: hkusu/s3-upload-action@v2
         name: Upload SVG to S3
+        if: github.event_name != 'pull_request'
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
