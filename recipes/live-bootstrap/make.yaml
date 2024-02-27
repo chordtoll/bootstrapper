@@ -13,7 +13,7 @@
     - live-bootstrap/mes:0.25
     - live-bootstrap/tcc:0.9.27-pass1
   build:
-    compile:
+    single:
       - pkg=make-3.82
       - cd /steps/${pkg}
       - mkdir build

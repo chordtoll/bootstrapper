@@ -18,7 +18,7 @@
     - live-bootstrap/coreutils:5.0
     - live-bootstrap/heirloom-devtools:070527
   build:
-    compile:
+    single:
       - pkg="bash-2.05b"
       - cd /steps/${pkg}
       - mkdir build src

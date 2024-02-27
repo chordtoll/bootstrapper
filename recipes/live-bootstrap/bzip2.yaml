@@ -14,7 +14,7 @@
     - live-bootstrap/patch:2.5.9
     - live-bootstrap/tar:1.12
   build:
-    compile:
+    single:
       - pkg="bzip2-1.0.8"
       - cd /steps/${pkg}
       - mkdir build src

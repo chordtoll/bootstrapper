@@ -12,6 +12,6 @@ latest:
     - stage0-posix/mescc-tools-mini-kaem/kaem:latest
     - stage0-posix/mescc-tools-mini-kaem/m1:latest
   build:
-    compile:
+    single:
       - /x86/bin/sha256sum -c /stage0-posix/x86.answers
   artefacts: []

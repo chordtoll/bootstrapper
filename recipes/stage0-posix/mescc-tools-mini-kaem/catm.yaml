@@ -5,7 +5,7 @@ latest:
   deps:
     - stage0-posix/mescc-tools-mini-kaem/hex2:0
   build:
-    compile:
+    single:
       - /x86/artifact/hex2-0 /x86/catm_x86.hex2 /x86/artifact/catm
   artefacts:
     - /x86/artifact/catm

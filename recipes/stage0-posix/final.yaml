@@ -9,7 +9,7 @@ latest:
     - stage0-posix/mescc-tools-mini-kaem/kaem:latest
     - stage0-posix/mescc-tools-mini-kaem/m1:latest
   build:
-    compile:
+    single:
       - ARCH_DIR=x86
       - bindir=/usr/bin
       - PATH=/${ARCH_DIR}/bin

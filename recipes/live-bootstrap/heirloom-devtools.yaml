@@ -17,7 +17,7 @@
     - live-bootstrap/sed:4.0.9
     - live-bootstrap/coreutils:5.0
   build:
-    compile:
+    single:
       - pkg="heirloom-devtools-070527"
       - cd /steps/${pkg}
       - mkdir build src

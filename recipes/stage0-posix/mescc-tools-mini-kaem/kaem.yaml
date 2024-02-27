@@ -10,7 +10,7 @@ latest:
     - stage0-posix/mescc-tools-mini-kaem/m1:latest
     - stage0-posix/mescc-tools-mini-kaem/hex2:latest
   build:
-    compile:
+    single:
       - /x86/artifact/M2 --architecture x86 -f /M2libc/sys/types.h -f /M2libc/stddef.h -f /M2libc/string.c -f /M2libc/sys/utsname.h -f /M2libc/x86/linux/unistd.c -f /M2libc/x86/linux/fcntl.c -f /M2libc/fcntl.c -f /M2libc/stdlib.c -f /M2libc/stdio.h -f /M2libc/stdio.c -f /M2libc/bootstrappable.c -f /mescc-tools/Kaem/kaem.h -f /mescc-tools/Kaem/variable.c -f /mescc-tools/Kaem/kaem_globals.c -f /mescc-tools/Kaem/kaem.c --debug -o /x86/artifact/kaem.M1
       - /x86/artifact/blood-elf-0 -f /x86/artifact/kaem.M1 --little-endian -o /x86/artifact/kaem-footer.M1
       - /x86/bin/M1 --architecture x86 --little-endian -f /M2libc/x86/x86_defs.M1 -f /M2libc/x86/libc-full.M1 -f /x86/artifact/kaem.M1 -f /x86/artifact/kaem-footer.M1 -o /x86/artifact/kaem.hex2

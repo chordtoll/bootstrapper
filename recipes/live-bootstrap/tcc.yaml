@@ -14,7 +14,7 @@
     - live-bootstrap/mes:0.25
     - live-bootstrap/tcc:0.9.26
   build:
-    compile:
+    single:
       - MES_STACK=15000000
       - MES_ARENA=30000000
       - MES_MAX_ARENA=30000000
@@ -78,7 +78,7 @@
     - live-bootstrap/simple-patch:1.0
     - live-bootstrap/mes:0.25
   build:
-    compile:
+    single:
       - MES_STACK=15000000
       - MES_ARENA=30000000
       - MES_MAX_ARENA=30000000

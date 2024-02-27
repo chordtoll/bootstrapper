@@ -14,7 +14,7 @@
     - live-bootstrap/patch:2.5.9
     - live-bootstrap/gzip:1.2.4
   build:
-    compile:
+    single:
       - pkg="tar-1.12"
       - cd /steps/${pkg}
       - mkdir build src

@@ -10,7 +10,7 @@ latest:
     - stage0-posix/mescc-tools-mini-kaem/m1:latest
     - stage0-posix/mescc-tools-mini-kaem/hex2:latest
   build:
-    compile:
+    single:
       - /x86/artifact/M2 --architecture ${ARCH} -f /M2libc/sys/types.h -f /M2libc/stddef.h -f /M2libc/sys/utsname.h -f /M2libc/${ARCH}/linux/unistd.c -f /M2libc/${ARCH}/linux/fcntl.c -f /M2libc/fcntl.c -f /M2libc/stdlib.c -f /M2libc/stdio.h -f /M2libc/stdio.c -f /M2libc/bootstrappable.c -f /mescc-tools/get_machine.c --debug -o /x86/artifact/get_machine.M1
       - /x86/bin/blood-elf ${BLOOD_FLAG} ${ENDIAN_FLAG} -f /x86/artifact/get_machine.M1 -o /x86/artifact/get_machine-footer.M1
       - /x86/bin/M1 --architecture ${ARCH} ${ENDIAN_FLAG} -f /M2libc/${ARCH}/${ARCH}_defs.M1 -f /M2libc/${ARCH}/libc-full.M1 -f /x86/artifact/get_machine.M1 -f /x86/artifact/get_machine-footer.M1 -o /x86/artifact/get_machine.hex2

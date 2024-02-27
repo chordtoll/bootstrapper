@@ -68,11 +68,21 @@ pub struct SourceContents {
 }
 
 #[derive(Debug, Deserialize, Clone)]
-pub struct RecipeBuildSteps {
-    pub prepare: Option<Vec<String>>,
-    pub configure: Option<Vec<String>>,
-    pub compile: Option<Vec<String>>,
-    pub install: Option<Vec<String>>,
+#[serde(untagged)]
+pub enum RecipeBuildSteps {
+    Single {
+        single: Vec<String>,
+    },
+    Piecewise {
+        unpack: Option<Vec<String>>,
+        unpack_dirname: String,
+        patch_dir: String,
+        prepare: Option<Vec<String>>,
+        configure: Option<Vec<String>>,
+        compile: Option<Vec<String>>,
+        install: Option<Vec<String>>,
+        postprocess: Option<Vec<String>>,
+    },
 }
 
 #[derive(Debug, Deserialize, Clone)]
@@ -218,19 +228,55 @@ impl NamedRecipeVersion {
 impl RecipeBuildSteps {
     pub fn summary(&self) -> String {
         let mut inputs = String::new();
-        if let Some(_prepare) = &self.prepare {
-            todo!()
-        }
-        if let Some(_configure) = &self.configure {
-            todo!()
-        }
-        if let Some(compile) = &self.compile {
-            for i in compile {
-                inputs.push_str(&format!(" COMPILE:{}\n  {}\n", i.len(), i));
+        match self {
+            Self::Single { single } => {
+                for i in single {
+                    inputs.push_str(&format!(" SINGLE:{}\n  {}\n", i.len(), i));
+                }
             }
-        }
-        if let Some(_install) = &self.install {
-            todo!()
+            Self::Piecewise {
+                unpack,
+                unpack_dirname,
+                patch_dir,
+                prepare,
+                configure,
+                compile,
+                install,
+                postprocess,
+            } => {
+                if let Some(unpack) = unpack {
+                    for i in unpack {
+                        inputs.push_str(&format!(" UNPACK:{}\n  {}\n", i.len(), i));
+                    }
+                }
+                inputs.push_str(&format!(" DIRNAME={}\n  {}\n",unpack_dirname.len(),unpack_dirname));
+                inputs.push_str(&format!(" PATCH_DIR={}\n  {}\n",patch_dir.len(),patch_dir));
+                if let Some(prepare) = prepare {
+                    for i in prepare {
+                        inputs.push_str(&format!(" PREPARE:{}\n  {}\n", i.len(), i));
+                    }
+                }
+                if let Some(configure) = configure {
+                    for i in configure {
+                        inputs.push_str(&format!(" CONFIGURE:{}\n  {}\n", i.len(), i));
+                    }
+                }
+                if let Some(compile) = compile {
+                    for i in compile {
+                        inputs.push_str(&format!(" COMPILE:{}\n  {}\n", i.len(), i));
+                    }
+                }
+                if let Some(install) = install {
+                    for i in install {
+                        inputs.push_str(&format!(" INSTALL:{}\n  {}\n", i.len(), i));
+                    }
+                }
+                if let Some(postprocess) = postprocess {
+                    for i in postprocess {
+                        inputs.push_str(&format!(" POSTPROCESS:{}\n  {}\n", i.len(), i));
+                    }
+                }
+            }
         }
         inputs
     }

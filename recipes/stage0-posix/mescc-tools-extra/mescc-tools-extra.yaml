@@ -15,7 +15,7 @@ latest:
     - stage0-posix/mescc-tools-mini-kaem/hex2:latest:/x86/bin:/bin
     - stage0-posix/mescc-tools-full-kaem/m2-mesoplanet:latest
   build:
-    compile:
+    single:
       - cd /mescc-tools-extra
       - ${CC} sha256sum.c -o ${BINDIR}/sha256sum${EXE_SUFFIX}
       - ${CC} match.c -o ${BINDIR}/match${EXE_SUFFIX}

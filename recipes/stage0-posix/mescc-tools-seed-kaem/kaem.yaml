@@ -5,7 +5,7 @@
   deps:
     - stage0-posix/mescc-tools-seed-kaem/hex0:latest
   build:
-    compile:
+    single:
       - /x86/artifact/hex0 /x86/kaem-minimal.hex0 /x86/artifact/kaem-0
   artefacts:
     - /x86/artifact/kaem-0

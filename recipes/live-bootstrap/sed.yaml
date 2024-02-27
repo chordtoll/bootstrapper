@@ -15,7 +15,7 @@
     - live-bootstrap/gzip:1.2.4
     - live-bootstrap/tar:1.12
   build:
-    compile:
+    single:
       - pkg="sed-4.0.9"
       - cd /steps/${pkg}
       - mkdir build src

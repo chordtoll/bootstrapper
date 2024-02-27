@@ -14,7 +14,7 @@
   deps:
     - stage0-posix/final:latest
   build:
-    compile:
+    single:
       - pkg=mes-0.25
       - cd /steps/${pkg}
       - MES_ARENA=20000000

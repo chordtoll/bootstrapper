@@ -7,7 +7,7 @@ latest:
     - stage0-posix/mescc-tools-mini-kaem/catm:latest
     - stage0-posix/mescc-tools-mini-kaem/hex2:0
   build:
-    compile:
+    single:
       - /x86/artifact/M0 /x86/cc_x86.M1 /x86/artifact/cc_x86-0.hex2
       - /x86/artifact/catm /x86/artifact/cc_x86-1.hex2 /x86/ELF-i386.hex2 /x86/artifact/cc_x86-0.hex2
       - /x86/artifact/hex2-0 /x86/artifact/cc_x86-1.hex2 /x86/artifact/cc_x86

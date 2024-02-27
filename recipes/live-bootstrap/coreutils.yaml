@@ -16,7 +16,7 @@
     - live-bootstrap/bzip2:1.0.8
     - live-bootstrap/sed:4.0.9
   build:
-    compile:
+    single:
       - pkg="coreutils-5.0"
       - cd /steps/${pkg}
       - mkdir build src

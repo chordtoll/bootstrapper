@@ -4,7 +4,7 @@ use maplit::btreemap;
 use walkdir::WalkDir;
 use async_recursion::async_recursion;
 use bollard::{
-    image::{BuildImageOptions, BuilderVersion},
+    image::BuildImageOptions,
     service::{BuildInfoAux, ImageId},
 };
 use bootstrapper_assemble::{
@@ -13,14 +13,14 @@ use bootstrapper_assemble::{
     docker, docker_export, download, emit_run, envify,
     tar::{flatten_tar, ArchiveReader, TarArchiveReader, TarArchiveWriter, ZipArchiveReader},
 };
-use bootstrapper_common::recipe::{get_recipe_digest, NamedRecipeVersion, SourceContents, SOURCES};
-use bytes::Bytes;
+use bootstrapper_common::recipe::{get_recipe_digest, NamedRecipeVersion, RecipeBuildSteps, SourceContents, SOURCES};
 use clap::Parser;
 use futures_util::StreamExt;
 use indexmap::IndexMap;
 use std::{
     collections::BTreeMap, io::{Cursor, ErrorKind, Read, Write}, os::unix::fs::MetadataExt, path::PathBuf
 };
+use regex::Regex;
 
 const BUILD_CACHE_SOURCE_PATH: &str = "build-cache/source";
 const BUILD_CACHE_OUT_PATH: &str = "build-cache/out";
@@ -38,65 +38,11 @@ async fn build_source(name: &str) -> SourceContents {
     let client = reqwest::Client::new();
     let srcdata = download(&client, &source.url).await.unwrap();
     assert_eq!(source.sha, sha256::digest(&srcdata));
-    /*let src = std::io::Cursor::new(srcdata.clone());
-    if source.extract.is_some() {
-        if source.url.ends_with(".zip") {
-            zip_extract::extract(src, &tempdir.join("ex"), true).unwrap();
-        } else if source.url.ends_with(".tar.gz") {
-            let tar = flate2::read::GzDecoder::new(src);
-            let mut archive = tar::Archive::new(tar);
-            archive.unpack(&tempdir.join("ex")).unwrap();
-        } else {
-            panic!("Unknown extension")
-        }
-    } else {
-        std::fs::create_dir_all(tempdir.join("ex")).unwrap();
-        std::fs::write(tempdir.join("ex").join("file"), srcdata).unwrap();
-    }
-    let mut builder = tar::Builder::new(std::fs::File::create(source_path).unwrap());
-    builder.append_dir_all(".", tempdir.join("ex")).unwrap();
-    builder.finish().unwrap();*/
     std::fs::File::create(source_path)
         .unwrap()
         .write_all(&srcdata)
         .unwrap();
     source.clone()
-}
-
-async fn build_image(context: Bytes) -> String {
-    let d = docker();
-    let mut bir = d.build_image(
-        BuildImageOptions {
-            t: "input",
-            dockerfile: "Dockerfile",
-            version: BuilderVersion::BuilderBuildKit,
-            session: Some("a".to_owned()),
-            ..Default::default()
-        },
-        None,
-        Some(context.into()),
-    );
-    let mut iid = None;
-    while let Some(v) = bir.next().await {
-        let v = v.unwrap();
-        if let Some(stream) = v.stream {
-            print!("STM {}", stream);
-        }
-        if let Some(status) = v.status {
-            print!("STS {}", status);
-        }
-        match v.aux {
-            Some(BuildInfoAux::BuildKit(v)) => {
-                for vx in v.vertexes {
-                    println!("    {}", vx.name);
-                }
-            }
-            Some(BuildInfoAux::Default(ImageId { id: Some(id) })) => iid = Some(id),
-            v => todo!("{:?}", v),
-        }
-    }
-
-    iid.unwrap()
 }
 
 async fn do_mkdirs(recipe: &NamedRecipeVersion, context_writer: &mut TarArchiveWriter<'_>) {
@@ -267,55 +213,173 @@ async fn do_envs(
     }
 }
 
-async fn do_build(
+fn emit_steps(
     recipe: &NamedRecipeVersion,
-    dockerfile: &mut Cursor<Vec<u8>>,
+    steps: &Vec<String>,
     env: &mut IndexMap<String, String>,
+    dockerfile: &mut Cursor<Vec<u8>>,
 ) {
     let mut stage = 0;
     let mut last_refresh = 0;
     let mut workdir = PathBuf::from("/");
 
     let mut aliases = IndexMap::new();
+
+    for i in steps {
+        let cmd = shlex::split(&alias(&envify(i, env), &aliases))
+            .unwrap_or_else(|| panic!("Failed at line: {}", i));
+        if cmd[0].contains('=') {
+            let ev: Vec<_> = cmd[0].split('=').collect();
+            assert_eq!(ev.len(), 2);
+            env.insert(ev[0].to_owned(), ev[1].to_owned());
+            dockerfile
+                .write_all(format!("ENV {}=\"{}\"\r\n", ev[0], ev[1]).as_bytes())
+                .unwrap();
+        } else if cmd[0] == "cd" {
+            assert_eq!(cmd.len(), 2);
+            workdir = path_clean::clean(workdir.join(cmd[1].clone()));
+            dockerfile
+                .write_all(format!("WORKDIR {}\r\n", workdir.to_str().unwrap()).as_bytes())
+                .unwrap();
+        } else if cmd[0] == "alias" {
+            let (k, v) = cmd[1].split_once('=').unwrap();
+            aliases.insert(k.to_owned(), v.to_owned());
+        } else {
+            emit_run(dockerfile, cmd, recipe.shell.is_some());
+        }
+        let newline_count = dockerfile.get_ref().iter().filter(|x| x == &&b'\n').count();
+        if newline_count - last_refresh == 120 {
+            dockerfile
+                .write_all(format!("FROM scratch AS stage{}\r\n", stage + 1).as_bytes())
+                .unwrap();
+            dockerfile
+                .write_all(format!("COPY --from=stage{} / /\r\n", stage).as_bytes())
+                .unwrap();
+            for (k, v) in env.iter() {
+                dockerfile
+                    .write_all(format!("ENV {}=\"{}\"\r\n", k, v).as_bytes())
+                    .unwrap();
+            }
+            dockerfile
+                .write_all(format!("WORKDIR {}\r\n", workdir.to_str().unwrap()).as_bytes())
+                .unwrap();
+            stage += 1;
+            last_refresh = newline_count;
+        }
+    }
+}
+
+async fn do_build(
+    recipe: &NamedRecipeVersion,
+    dockerfile: &mut Cursor<Vec<u8>>,
+    env: &mut IndexMap<String, String>,
+) {
     // Run our build steps
-    if let Some(compile) = &recipe.build.compile {
-        for i in compile {
-            let cmd =
-                shlex::split(&alias(&envify(&i, &env), &aliases)).unwrap_or_else(|| panic!("Failed at line: {}", i));
-            if cmd[0].contains('=') {
-                let ev: Vec<_> = cmd[0].split('=').collect();
-                assert_eq!(ev.len(), 2);
-                env.insert(ev[0].to_owned(), ev[1].to_owned());
-                dockerfile
-                    .write_all(format!("ENV {}=\"{}\"\r\n", ev[0], ev[1]).as_bytes())
-                    .unwrap();
-            } else if cmd[0] == "cd" {
-                assert_eq!(cmd.len(), 2);
-                workdir = path_clean::clean(workdir.join(cmd[1].clone()));
-                dockerfile
-                    .write_all(format!("WORKDIR {}\r\n", workdir.to_str().unwrap()).as_bytes())
-                    .unwrap();
-            } else if cmd[0] == "alias" {
-                let (k,v) = cmd[1].split_once('=').unwrap();
-                aliases.insert(k.to_owned(),v.to_owned());
+    match &recipe.build {
+        RecipeBuildSteps::Single { single } => {
+            emit_steps(recipe, single, env, dockerfile);
+        }
+        RecipeBuildSteps::Piecewise {
+            unpack,
+            unpack_dirname,
+            patch_dir,
+            prepare,
+            configure,
+            compile,
+            install,
+            postprocess,
+        } => {
+            let mut steps = Vec::new();
+            let (pkg,pass) = if let Some(v) = Regex::new(r"^(.*)-pass([0-9]+)").unwrap().captures(&recipe.version) {
+                let pass: u32 = v.get(2).unwrap().as_str().parse().unwrap();
+                (format!(
+                    "{}-{}",
+                    recipe.name.split('/').last().unwrap(),
+                    v.get(1).unwrap().as_str()
+                ),pass-1)
             } else {
-                emit_run(dockerfile, cmd, recipe.shell.is_some());
+                (format!(
+                    "{}-{}",
+                    recipe.name.split('/').last().unwrap(),
+                    recipe.version
+                ),0)
+            };
+            steps.push(format!("pkg={}", pkg));
+            steps.push(format!("cd /steps/{}", pkg));
+            steps.push(format!("base_dir=/steps/{}", pkg));
+            steps.push(format!("patch_dir=/steps/{}/{}",pkg,patch_dir));
+            steps.push(format!("mk_dir=/steps/{}/mk",pkg));
+            steps.push(format!("files_dir=/steps/{}/files",pkg));
+            steps.push(format!("revision={}",pass));
+            steps.push("mkdir build".to_owned());
+            steps.push("cd build".to_owned());
+            if let Some(_unpack) = unpack {
+                todo!();
+            } else {
+                steps.push("bash -exc '. /steps/helpers.sh; default_src_unpack'".to_owned());
+                steps.push(format!("dirname={}",unpack_dirname));
+                steps.push(format!("cd {}",unpack_dirname));
             }
-            let newline_count = dockerfile.get_ref().iter().filter(|x| x==&&b'\n').count();
-            if newline_count - last_refresh == 120 {
-                dockerfile.write_all(format!("FROM scratch AS stage{}\r\n",stage+1).as_bytes()).unwrap();
-                dockerfile.write_all(format!("COPY --from=stage{} / /\r\n",stage).as_bytes()).unwrap();
-                for (k, v) in env.iter() {
-                    dockerfile
-                        .write_all(format!("ENV {}=\"{}\"\r\n", k, v).as_bytes())
-                        .unwrap();
+            if let Some(prepare) = prepare {
+                for i in prepare {
+                    if i=="default" {
+                        steps.push("bash -exc '. /steps/helpers.sh; default_src_prepare'".to_owned());
+                    } else {
+                        steps.push(i.to_owned());
+                    }
                 }
-                dockerfile
-                    .write_all(format!("WORKDIR {}\r\n", workdir.to_str().unwrap()).as_bytes())
-                    .unwrap();
-                stage += 1;
-                last_refresh = newline_count;
+            } else {
+                steps.push("bash -exc '. /steps/helpers.sh; default_src_prepare'".to_owned());
             }
+            if let Some(configure) = configure {
+                for i in configure {
+                    if i=="default" {
+                        steps.push("bash -exc '. /steps/helpers.sh; default_src_configure'".to_owned());
+                    } else {
+                        steps.push(i.to_owned());
+                    }
+                }
+            } else {
+                steps.push("bash -exc '. /steps/helpers.sh; default_src_configure'".to_owned());
+            }
+            if let Some(compile) = compile {
+                for i in compile {
+                    if i=="default" {
+                        steps.push("bash -exc '. /steps/helpers.sh; default_src_compile'".to_owned());
+                    } else {
+                        steps.push(i.to_owned());
+                    }
+                }
+            } else {
+                steps.push("bash -exc '. /steps/helpers.sh; default_src_compile'".to_owned());
+            }
+            if let Some(install) = install {
+                for i in install {
+                    if i=="default" {
+                        steps.push("bash -exc '. /steps/helpers.sh; default_src_install'".to_owned());
+                    } else {
+                        steps.push(i.to_owned());
+                    }
+                }
+            } else {
+                steps.push("bash -exc '. /steps/helpers.sh; default_src_install'".to_owned());
+            }
+            if let Some(postprocess) = postprocess {
+                for i in postprocess {
+                    if i=="default" {
+                        steps.push("bash -exc '. /steps/helpers.sh; default_src_postprocess'".to_owned());
+                    } else {
+                        steps.push(i.to_owned());
+                    }
+                }
+            } else {
+                steps.push("bash -exc '. /steps/helpers.sh; default_src_postprocess'".to_owned());
+            }
+            steps.push("cd ${DESTDIR}".to_owned());
+            steps.push("bash -exc '. /steps/helpers.sh; src_pkg'".to_owned());
+            steps.push("cd /external/repo".to_owned());
+            steps.push("bash -exc '. /steps/helpers.sh; src_checksum ${pkg} ${revision}'".to_owned());
+            emit_steps(recipe, &steps, env, dockerfile);
         }
     }
 }

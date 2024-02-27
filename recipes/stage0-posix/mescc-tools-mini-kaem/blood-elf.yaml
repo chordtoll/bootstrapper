@@ -10,7 +10,7 @@
     - stage0-posix/mescc-tools-mini-kaem/m0:latest
     - stage0-posix/mescc-tools-mini-kaem/hex2:0
   build:
-    compile:
+    single:
       - /x86/artifact/M2 --architecture x86 -f /M2libc/x86/linux/bootstrap.c -f /M2libc/bootstrappable.c -f /mescc-tools/stringify.c -f /mescc-tools/blood-elf.c --bootstrap-mode -o /x86/artifact/blood-elf-0.M1
       - /x86/artifact/catm /x86/artifact/blood-elf-0-0.M1 /M2libc/x86/x86_defs.M1 /M2libc/x86/libc-core.M1 /x86/artifact/blood-elf-0.M1
       - /x86/artifact/M0 /x86/artifact/blood-elf-0-0.M1 /x86/artifact/blood-elf-0.hex2

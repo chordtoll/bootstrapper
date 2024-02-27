@@ -7,7 +7,7 @@ latest:
   mkdirs:
     - /x86/artifact/
   build:
-    compile:
+    single:
       - /bootstrap-seeds/POSIX/x86/hex0-seed /x86/hex0_x86.hex0 /x86/artifact/hex0
   artefacts:
     - /x86/artifact/hex0

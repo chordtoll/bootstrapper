@@ -7,7 +7,7 @@
   deps:
     - stage0-posix/final:latest
   build:
-    compile:
+    single:
       - pkg=simple-patch-1.0
       - cd /live-bootstrap/steps/${pkg}
       - M2-Mesoplanet --architecture ${ARCH} -f src/simple-patch.c -o ${bindir}/simple-patch

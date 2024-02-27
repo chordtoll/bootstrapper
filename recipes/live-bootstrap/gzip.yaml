@@ -13,7 +13,7 @@
     - live-bootstrap/make:3.82
     - live-bootstrap/patch:2.5.9
   build:
-    compile:
+    single:
       - pkg="gzip-1.2.4"
       - cd /steps/${pkg}
       - mkdir build
