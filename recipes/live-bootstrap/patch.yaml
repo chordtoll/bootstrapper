@@ -9,7 +9,7 @@
   deps:
     - stage0-posix/final:latest
     - live-bootstrap/mes:0.25
-    - live-bootstrap/tcc:0.9.27-pass1
+    - live-bootstrap/tcc:0.9.27-pass0
     - live-bootstrap/make:3.82
   build:
     single:

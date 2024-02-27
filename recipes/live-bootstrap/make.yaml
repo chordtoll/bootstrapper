@@ -11,7 +11,7 @@
     - stage0-posix/final:latest
     - live-bootstrap/simple-patch:1.0
     - live-bootstrap/mes:0.25
-    - live-bootstrap/tcc:0.9.27-pass1
+    - live-bootstrap/tcc:0.9.27-pass0
   build:
     single:
       - pkg=make-3.82
