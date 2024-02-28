@@ -13,7 +13,7 @@
     - live-bootstrap/make:3.82
     - live-bootstrap/patch:2.5.9
     - live-bootstrap/tar:1.12
-    - live-bootstrap/bzip2:1.0.8
+    - live-bootstrap/bzip2:1.0.8-pass0
     - live-bootstrap/sed:4.0.9-pass0
   build:
     single:

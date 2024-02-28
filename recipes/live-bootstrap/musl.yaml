@@ -16,7 +16,7 @@
     - live-bootstrap/patch:2.5.9
     - live-bootstrap/gzip:1.2.4
     - live-bootstrap/tar:1.12
-    - live-bootstrap/bzip2:1.0.8
+    - live-bootstrap/bzip2:1.0.8-pass0
     - live-bootstrap/sed:4.0.9-pass0
     - live-bootstrap/coreutils:5.0
     - live-bootstrap/bash:2.05b
@@ -58,7 +58,7 @@
     - live-bootstrap/patch:2.5.9
     - live-bootstrap/gzip:1.2.4
     - live-bootstrap/tar:1.12
-    - live-bootstrap/bzip2:1.0.8
+    - live-bootstrap/bzip2:1.0.8-pass0
     - live-bootstrap/sed:4.0.9-pass0
     - live-bootstrap/coreutils:5.0
     - live-bootstrap/bash:2.05b
