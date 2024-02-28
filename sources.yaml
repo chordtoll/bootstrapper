@@ -43,6 +43,9 @@ mescc-tools:
 mescc-tools-extra:
   url: https://github.com/oriansj/mescc-tools-extra/archive/8b9c03765774ad67b9b24f28f72a239f28df76a6.zip
   sha: c763307819b728151302c8d3372d286761d86d05b497306fba9e9e5290b7782b
+musl-1.1.24:
+  url: https://musl.libc.org/releases/musl-1.1.24.tar.gz
+  sha: 1370c9a812b2cf2a7d92802510cca0058cc37e66a7bedd70051f0a34015022a3
 nyacc-1.00.2:
   url: https://download.savannah.gnu.org/releases/nyacc/nyacc-1.00.2.tar.gz
   sha: f36e4fb7dd524dc3f4b354d3d5313f69e7ce5a6ae93711e8cf6d51eaa8d2b318

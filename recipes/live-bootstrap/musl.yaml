@@ -1,0 +1,41 @@
+1.1.24:
+  source:
+    musl-1.1.24:
+      noextract: /external/distfiles/musl-1.1.24.tar.gz
+    live-bootstrap:
+      extract: /
+      copy:
+        - /steps/helpers.sh
+        - /steps/SHA256SUMS.pkgs
+        - /steps/musl-1.1.24
+  mkdirs:
+    - /external/repo
+  deps:
+    - stage0-posix/final:latest
+    - live-bootstrap/make:3.82
+    - live-bootstrap/patch:2.5.9
+    - live-bootstrap/gzip:1.2.4
+    - live-bootstrap/tar:1.12
+    - live-bootstrap/bzip2:1.0.8
+    - live-bootstrap/sed:4.0.9
+    - live-bootstrap/coreutils:5.0
+    - live-bootstrap/bash:2.05b
+    - live-bootstrap/improvements:merged_usr
+    - live-bootstrap/tcc:0.9.27-pass1
+  build:
+    unpack_dirname: musl-1.1.24
+    patch_dir: patches
+    prepare:
+      - LIBDIR=${PREFIX}/lib/i386-unknown-linux-musl
+      - default
+      - rm -rf src/complex
+      - mkdir -p /dev
+    configure:
+      - CC=tcc
+      - ./configure --host=i386 --disable-shared --prefix="${PREFIX}" --libdir="${LIBDIR}" --includedir="${PREFIX}/include/"
+      - rm /dev/null
+    compile:
+      - MAKEJOBS=-j1
+      - make "${MAKEJOBS}" CROSS_COMPILE= AR="tcc -ar" RANLIB=true CFLAGS="-DSYSCALL_NO_TLS"
+  artefacts:
+    - external/repo/musl-1.1.24_0.tar.bz2
