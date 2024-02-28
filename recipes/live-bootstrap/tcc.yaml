@@ -22,7 +22,7 @@
     - live-bootstrap/bash:2.05b
     - live-bootstrap/improvements:merged_usr
     - live-bootstrap/tcc:0.9.26
-    - live-bootstrap/musl:1.1.24
+    - live-bootstrap/musl:1.1.24-pass1
   build:
     unpack_dirname: tcc-0.9.27
     patch_dir: patches
