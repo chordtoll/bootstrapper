@@ -1,4 +1,43 @@
-4.0.9:
+4.0.9-pass1:
+  source:
+    sed-4.0.9:
+      noextract: /external/distfiles/sed-4.0.9.tar.gz
+    live-bootstrap:
+      extract: /
+      copy:
+        - /steps/helpers.sh
+        - /steps/SHA256SUMS.pkgs
+        - /steps/sed-4.0.9
+  mkdirs:
+    - /external/repo
+  deps:
+    - stage0-posix/final:latest
+    - live-bootstrap/mes:0.25
+    - live-bootstrap/make:3.82
+    - live-bootstrap/patch:2.5.9
+    - live-bootstrap/tar:1.12
+    - live-bootstrap/bzip2:1.0.8
+    - live-bootstrap/gzip:1.2.4
+    - live-bootstrap/sed:4.0.9-pass0
+    - live-bootstrap/coreutils:5.0
+    - live-bootstrap/bash:2.05b
+    - live-bootstrap/improvements:merged_usr
+    - live-bootstrap/musl:1.1.24-pass2
+    - live-bootstrap/tcc:0.9.27-pass1
+    - live-bootstrap/tcc:0.9.27-pass2
+    - live-bootstrap/tcc:0.9.27-pass3
+  build:
+    unpack_dirname: sed-4.0.9
+    patch_dir: patches
+    prepare:
+      - LIBDIR=${PREFIX}/lib/i386-unknown-linux-musl
+      - default
+      - touch config.h
+    compile:
+      - make -j1 PREFIX="${PREFIX}"
+  artefacts:
+    - external/repo/sed-4.0.9_0.tar.bz2
+4.0.9-pass0:
   source:
     sed-4.0.9:
       noextract: /external/distfiles/sed-4.0.9.tar.gz
