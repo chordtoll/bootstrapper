@@ -1,1 +1,1 @@
-live-bootstrap/musl:1.1.24
+live-bootstrap/tcc:0.9.27-pass2

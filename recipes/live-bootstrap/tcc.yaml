@@ -1,3 +1,51 @@
+0.9.27-pass2:
+  source:
+    tcc-0.9.27:
+      noextract: /external/distfiles/tcc-0.9.27.tar.bz2
+    live-bootstrap:
+      extract: /
+      copy:
+        - /steps/helpers.sh
+        - /steps/SHA256SUMS.pkgs
+        - /steps/tcc-0.9.27
+  mkdirs:
+    - /external/repo
+  deps:
+    - stage0-posix/final:latest
+    - live-bootstrap/mes:0.25
+    - live-bootstrap/make:3.82
+    - live-bootstrap/patch:2.5.9
+    - live-bootstrap/tar:1.12
+    - live-bootstrap/bzip2:1.0.8
+    - live-bootstrap/sed:4.0.9
+    - live-bootstrap/coreutils:5.0
+    - live-bootstrap/bash:2.05b
+    - live-bootstrap/improvements:merged_usr
+    - live-bootstrap/tcc:0.9.26
+    - live-bootstrap/musl:1.1.24
+  build:
+    unpack_dirname: tcc-0.9.27
+    patch_dir: patches
+    prepare:
+      - LIBDIR=${PREFIX}/lib/i386-unknown-linux-musl
+      - default
+      - touch config.h
+    compile:
+      - ln -sf "${PREFIX}/lib/mes/tcc/libtcc1.a" ./libtcc1.a
+      - tcc-0.9.26 -v -static -o tcc-musl -D TCC_TARGET_I386=1 -D CONFIG_TCCDIR=\\\""${LIBDIR}/tcc"\\\" -D CONFIG_TCC_CRTPREFIX=\\\""${LIBDIR}"\\\" -D CONFIG_TCC_ELFINTERP=\\\"/musl/loader\\\" -D CONFIG_TCC_LIBPATHS=\\\""${LIBDIR}:${LIBDIR}/tcc"\\\" -D CONFIG_TCC_SYSINCLUDEPATHS=\\\""${PREFIX}/include"\\\" -D TCC_LIBGCC=\\\""${LIBDIR}/libc.a"\\\" -D CONFIG_TCC_STATIC=1 -D CONFIG_USE_LIBGCC=1 -D TCC_VERSION=\\\"0.9.27\\\" -D ONE_SOURCE=1 -B . tcc.c
+      - rm -f libtcc1.a
+      - tcc-0.9.26 -c -D HAVE_CONFIG_H=1 lib/libtcc1.c
+      - tcc-0.9.26 -ar cr libtcc1.a libtcc1.o
+      - ./tcc-musl -v -static -o tcc-musl -D TCC_TARGET_I386=1 -D CONFIG_TCCDIR=\\\""${LIBDIR}/tcc"\\\" -D CONFIG_TCC_CRTPREFIX=\\\""${LIBDIR}"\\\" -D CONFIG_TCC_ELFINTERP=\\\"/musl/loader\\\" -D CONFIG_TCC_LIBPATHS=\\\""${LIBDIR}:${LIBDIR}/tcc"\\\" -D CONFIG_TCC_SYSINCLUDEPATHS=\\\""${PREFIX}/include"\\\" -D TCC_LIBGCC=\\\""${LIBDIR}/libc.a"\\\" -D CONFIG_TCC_STATIC=1 -D CONFIG_USE_LIBGCC=1 -D TCC_VERSION=\\\"0.9.27\\\" -D ONE_SOURCE=1 -B . tcc.c
+      - rm -f libtcc1.a
+      - ./tcc-musl -c -D HAVE_CONFIG_H=1 lib/libtcc1.c
+      - ./tcc-musl -ar cr libtcc1.a libtcc1.o
+    install:
+      - install -D tcc-musl "${DESTDIR}${PREFIX}/bin/tcc-musl"
+      - ln -s tcc-musl "${DESTDIR}${PREFIX}/bin/tcc"
+      - install -D libtcc1.a "${DESTDIR}${LIBDIR}/tcc/libtcc1.a"
+  artefacts:
+    - external/repo/tcc-0.9.27_1.tar.bz2
 0.9.27-pass1:
   source:
     mes-0.25:
