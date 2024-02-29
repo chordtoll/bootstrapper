@@ -1,1 +1,1 @@
-live-bootstrap/bzip2:1.0.8-pass1
+live-bootstrap/m4:1.4.7

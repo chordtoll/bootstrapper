@@ -31,6 +31,9 @@ M2-Mesoplanet:
 M2-Planet:
   url: https://github.com/oriansj/M2-Planet/archive/0479606ed5131a64cd1dd2dd3f257e73cd9dce68.zip
   sha: 4e17ad4cb1d94586da09bc8cb0eef51357b413bda451f21bf5bf77cf70fb9e55
+m4-1.4.7:
+  url: https://mirrors.kernel.org/gnu/m4/m4-1.4.7.tar.bz2
+  sha: a88f3ddaa7c89cf4c34284385be41ca85e9135369c333fdfa232f3bf48223213
 make-3.82:
   url: https://mirrors.kernel.org/gnu/make/make-3.82.tar.bz2
   sha: e2c1a73f179c40c71e2fe8abf8a8a0688b8499538512984da4a76958d0402966
