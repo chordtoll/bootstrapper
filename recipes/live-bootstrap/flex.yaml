@@ -32,6 +32,6 @@
       - touch config.h
       - rm parse.c parse.h scan.c skel.c
     compile:
-      - make -j1 PREFIX="${PREFIX}"
+      - make "${MAKEJOBS}" PREFIX="${PREFIX}"
   artefacts:
     - /external/repo/flex-2.5.11_0.tar.bz2

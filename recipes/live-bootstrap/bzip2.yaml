@@ -33,7 +33,7 @@
     prepare:
       - LIBDIR=${PREFIX}/lib/i386-unknown-linux-musl
     compile:
-      - make -j1 CC=tcc AR="tcc -ar" bzip2
+      - make "${MAKEJOBS}" CC=tcc AR="tcc -ar" bzip2
     install:
       - install -D bzip2 "${DESTDIR}${PREFIX}/bin/bzip2"
       - ln -sf "${PREFIX}/bin/bzip2" "${DESTDIR}${PREFIX}/bin/bunzip2"

@@ -34,7 +34,7 @@
       - default
       - touch config.h
     compile:
-      - make -j1 PREFIX="${PREFIX}"
+      - make "${MAKEJOBS}" PREFIX="${PREFIX}"
   artefacts:
     - external/repo/sed-4.0.9_0.tar.bz2
 4.0.9-pass0:

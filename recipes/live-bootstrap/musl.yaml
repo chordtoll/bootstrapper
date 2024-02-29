@@ -36,7 +36,6 @@
       - ./configure --host=i386 --disable-shared --prefix="${PREFIX}" --libdir="${LIBDIR}" --includedir="${PREFIX}/include/"
       - rm /dev/null
     compile:
-      - MAKEJOBS=-j1
       - make "${MAKEJOBS}" CROSS_COMPILE= AR="tcc -ar" RANLIB=true CFLAGS="-DSYSCALL_NO_TLS"
   artefacts:
     - external/repo/musl-1.1.24_1.tar.bz2
@@ -77,7 +76,6 @@
       - ./configure --host=i386 --disable-shared --prefix="${PREFIX}" --libdir="${LIBDIR}" --includedir="${PREFIX}/include/"
       - rm /dev/null
     compile:
-      - MAKEJOBS=-j1
       - make "${MAKEJOBS}" CROSS_COMPILE= AR="tcc -ar" RANLIB=true CFLAGS="-DSYSCALL_NO_TLS"
   artefacts:
     - external/repo/musl-1.1.24_0.tar.bz2
