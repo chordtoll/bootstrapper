@@ -1,3 +1,49 @@
+2.6.4:
+  source:
+    flex-2.6.4:
+      noextract: /external/distfiles/flex-2.6.4.tar.gz
+    live-bootstrap:
+      extract: /
+      copy:
+        - /steps/helpers.sh
+        - /steps/SHA256SUMS.pkgs
+        - /steps/flex-2.6.4
+  mkdirs:
+    - /external/repo
+  deps:
+    - stage0-posix/final:latest
+    - live-bootstrap/make:3.82
+    - live-bootstrap/patch:2.5.9
+    - live-bootstrap/tar:1.12
+    - live-bootstrap/bzip2:1.0.8-pass0
+    - live-bootstrap/gzip:1.2.4
+    - live-bootstrap/coreutils:5.0
+    - live-bootstrap/bash:2.05b
+    - live-bootstrap/improvements:merged_usr
+    - live-bootstrap/musl:1.1.24-pass2
+    - live-bootstrap/tcc:0.9.27-pass2
+    - live-bootstrap/heirloom-devtools:070527
+    - live-bootstrap/flex:2.5.11
+    - live-bootstrap/sed:4.0.9-pass1
+    - live-bootstrap/m4:1.4.7
+  build:
+    unpack_dirname: flex-2.6.4
+    patch_dir: patches
+    prepare:
+      - default
+      - mv Makefile src/
+      - touch src/config.h
+      - rm src/parse.c src/parse.h src/scan.c src/skel.c
+    compile:
+      - cd src
+      - make -j1 PREFIX="${PREFIX}"
+      - cd ..
+    install:
+      - cd src
+      - default
+      - cd ..
+  artefacts:
+    - /external/repo/flex-2.6.4_0.tar.bz2
 2.5.11:
   source:
     flex-2.5.11:
