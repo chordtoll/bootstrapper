@@ -1,6 +1,9 @@
 bash-2.05b:
   url: https://src.fedoraproject.org/repo/pkgs/bash/bash-2.05b.tar.bz2/f3e5428ed52a4f536f571a945d5de95d/bash-2.05b.tar.bz2
   sha: 1ce4e5b47a6354531389f0adefb54dee2823227bf6e1e59a31c0e9317a330822
+bison-3.4.1:
+  url: https://mirrors.kernel.org/gnu/bison/bison-3.4.1.tar.xz
+  sha: 27159ac5ebf736dffd5636fd2cd625767c9e437de65baa63cb0de83570bd820d
 bootstrap-seeds:
   url: https://github.com/oriansj/bootstrap-seeds/archive/99a0ee1e544905d4aaace0de3867f13425e502f2.zip
   sha: 7a43bd1fcd21b877b1bd84b9e31d4bcd099f727c10d6859b8cfbc6352aa6dd46
