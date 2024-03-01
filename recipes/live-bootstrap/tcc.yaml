@@ -10,8 +10,9 @@
         - /steps/tcc-0.9.27
   mkdirs:
     - /external/repo
+    - /tmp
   deps:
-    - stage0-posix/final:latest
+    - stage0-posix/final:sha256sum
     - live-bootstrap/mes:0.25
     - live-bootstrap/make:3.82
     - live-bootstrap/patch:2.5.9
@@ -51,8 +52,9 @@
         - /steps/tcc-0.9.27
   mkdirs:
     - /external/repo
+    - /tmp
   deps:
-    - stage0-posix/final:latest
+    - stage0-posix/final:sha256sum
     - live-bootstrap/mes:0.25
     - live-bootstrap/make:3.82
     - live-bootstrap/patch:2.5.9
@@ -101,8 +103,9 @@
         - /steps/tcc-0.9.27
   mkdirs:
     - /external/repo
+    - /tmp
   deps:
-    - stage0-posix/final:latest
+    - stage0-posix/final:sha256sum
     - live-bootstrap/mes:0.25
     - live-bootstrap/tcc:0.9.26
     - live-bootstrap/tcc:0.9.27-pass0
@@ -140,8 +143,10 @@
       extract: /
       copy:
         - /steps/tcc-0.9.27
+  mkdirs:
+    - /tmp
   deps:
-    - stage0-posix/final:latest
+    - stage0-posix/final:all
     - live-bootstrap/simple-patch:1.0
     - live-bootstrap/mes:0.25
     - live-bootstrap/tcc:0.9.26
@@ -206,7 +211,7 @@
   mkdirs:
     - /usr/lib/mes
   deps:
-    - stage0-posix/final:latest
+    - stage0-posix/final:all
     - live-bootstrap/simple-patch:1.0
     - live-bootstrap/mes:0.25
   build:

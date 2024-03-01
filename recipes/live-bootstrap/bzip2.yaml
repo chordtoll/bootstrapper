@@ -11,7 +11,8 @@
   mkdirs:
     - /external/repo
   deps:
-    - stage0-posix/final:latest
+    - stage0-posix/final:sha256sum
+    - stage0-posix/final:unxz
     - live-bootstrap/mes:0.25
     - live-bootstrap/make:3.82
     - live-bootstrap/patch:2.5.9
@@ -49,7 +50,7 @@
       copy:
         - /steps/bzip2-1.0.8
   deps:
-    - stage0-posix/final:latest
+    - stage0-posix/final:all
     - live-bootstrap/mes:0.25
     - live-bootstrap/tcc:0.9.27-pass0
     - live-bootstrap/make:3.82

@@ -5,7 +5,7 @@
     M2libc:
       extract: /M2libc
   deps:
-    - stage0-posix/final:latest
+    - stage0-posix/final:all
   build:
     single:
       - pkg=simple-patch-1.0

@@ -6,8 +6,10 @@
       extract: /
       copy:
         - /steps/bash-2.05b
+  mkdirs:
+    - /tmp
   deps:
-    - stage0-posix/final:latest
+    - stage0-posix/final:sha256sum
     - live-bootstrap/mes:0.25
     - live-bootstrap/tcc:0.9.27-pass0
     - live-bootstrap/make:3.82

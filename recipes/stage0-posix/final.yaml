@@ -1,4 +1,18 @@
-latest:
+unxz:
+  deps:
+    - stage0-posix/final:all
+  build:
+    single: []
+  artefacts:
+    - /usr/bin/unxz
+sha256sum:
+  deps:
+    - stage0-posix/final:all
+  build:
+    single: []
+  artefacts:
+    - /usr/bin/sha256sum
+all:
   deps:
     - stage0-posix/mescc-tools-extra/mescc-tools-extra:latest
     - stage0-posix/mescc-tools-full-kaem/blood-elf:latest

@@ -12,7 +12,7 @@
     - /x86/bin/
     - /tmp/
   deps:
-    - stage0-posix/final:latest
+    - stage0-posix/final:all
   build:
     single:
       - pkg=mes-0.25

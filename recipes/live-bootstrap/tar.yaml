@@ -7,7 +7,7 @@
       copy:
         - /steps/tar-1.12
   deps:
-    - stage0-posix/final:latest
+    - stage0-posix/final:all
     - live-bootstrap/mes:0.25
     - live-bootstrap/tcc:0.9.27-pass0
     - live-bootstrap/make:3.82

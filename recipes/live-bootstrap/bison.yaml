@@ -10,8 +10,10 @@
         - /steps/bison-3.4.1
   mkdirs:
     - /external/repo
+    - /tmp
   deps:
-    - stage0-posix/final:latest
+    - stage0-posix/final:sha256sum
+    - stage0-posix/final:unxz
     - live-bootstrap/make:3.82
     - live-bootstrap/patch:2.5.9
     - live-bootstrap/tar:1.12
@@ -54,8 +56,10 @@
         - /steps/bison-3.4.1
   mkdirs:
     - /external/repo
+    - /tmp
   deps:
-    - stage0-posix/final:latest
+    - stage0-posix/final:sha256sum
+    - stage0-posix/final:unxz
     - live-bootstrap/make:3.82
     - live-bootstrap/patch:2.5.9
     - live-bootstrap/tar:1.12
@@ -99,8 +103,10 @@
         - /steps/bison-3.4.1
   mkdirs:
     - /external/repo
+    - /tmp
   deps:
-    - stage0-posix/final:latest
+    - stage0-posix/final:sha256sum
+    - stage0-posix/final:unxz
     - live-bootstrap/make:3.82
     - live-bootstrap/patch:2.5.9
     - live-bootstrap/tar:1.12

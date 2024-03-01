@@ -10,8 +10,9 @@
         - /steps/musl-1.1.24
   mkdirs:
     - /external/repo
+    - /tmp
   deps:
-    - stage0-posix/final:latest
+    - stage0-posix/final:sha256sum
     - live-bootstrap/make:3.82
     - live-bootstrap/patch:2.5.9
     - live-bootstrap/gzip:1.2.4
@@ -51,8 +52,9 @@
         - /steps/musl-1.1.24
   mkdirs:
     - /external/repo
+    - /tmp
   deps:
-    - stage0-posix/final:latest
+    - stage0-posix/final:sha256sum
     - live-bootstrap/make:3.82
     - live-bootstrap/patch:2.5.9
     - live-bootstrap/gzip:1.2.4

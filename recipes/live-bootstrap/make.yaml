@@ -8,7 +8,7 @@
         - /steps/make-3.82
   mkdirs: []
   deps:
-    - stage0-posix/final:latest
+    - stage0-posix/final:all
     - live-bootstrap/simple-patch:1.0
     - live-bootstrap/mes:0.25
     - live-bootstrap/tcc:0.9.27-pass0
