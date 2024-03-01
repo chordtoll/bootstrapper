@@ -1,0 +1,30 @@
+2.4:
+  source:
+    grep-2.4:
+      noextract: /external/distfiles/grep-2.4.tar.gz
+    live-bootstrap:
+      extract: /
+      copy:
+        - /steps/helpers.sh
+        - /steps/SHA256SUMS.pkgs
+        - /steps/grep-2.4
+  mkdirs:
+    - /external/repo
+  deps:
+    - stage0-posix/final:latest
+    - live-bootstrap/make:3.82
+    - live-bootstrap/tar:1.12
+    - live-bootstrap/bzip2:1.0.8-pass0
+    - live-bootstrap/gzip:1.2.4
+    - live-bootstrap/coreutils:5.0
+    - live-bootstrap/bash:2.05b
+    - live-bootstrap/improvements:merged_usr
+    - live-bootstrap/musl:1.1.24-pass2
+    - live-bootstrap/tcc:0.9.27-pass2
+  build:
+    unpack_dirname: grep-2.4
+    patch_dir: patches
+    prepare:
+      - default
+  artefacts:
+    - /external/repo/grep-2.4_0.tar.bz2
