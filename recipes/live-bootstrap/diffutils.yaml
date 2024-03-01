@@ -1,0 +1,31 @@
+2.7:
+  source:
+    diffutils-2.7:
+      noextract: /external/distfiles/diffutils-2.7.tar.bz2
+    live-bootstrap:
+      extract: /
+      copy:
+        - /steps/helpers.sh
+        - /steps/SHA256SUMS.pkgs
+        - /steps/diffutils-2.7
+  mkdirs:
+    - /external/repo
+  deps:
+    - stage0-posix/final:latest
+    - live-bootstrap/make:3.82
+    - live-bootstrap/bzip2:1.0.8-pass0
+    - live-bootstrap/tar:1.12
+    - live-bootstrap/coreutils:5.0
+    - live-bootstrap/heirloom-devtools:070527
+    - live-bootstrap/bash:2.05b
+    - live-bootstrap/improvements:merged_usr
+    - live-bootstrap/musl:1.1.24-pass2
+    - live-bootstrap/tcc:0.9.27-pass2
+  build:
+    unpack_dirname: diffutils-2.7
+    patch_dir: patches
+    prepare:
+      - default
+      - touch config.h
+  artefacts:
+    - /external/repo/diffutils-2.7_0.tar.bz2
