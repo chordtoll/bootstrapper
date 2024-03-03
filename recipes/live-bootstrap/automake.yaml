@@ -1,3 +1,54 @@
+1.10.3:
+  source:
+    automake-1.10.3:
+      noextract: /external/distfiles/automake-1.10.3.tar.bz2
+    live-bootstrap:
+      extract: /
+      copy:
+        - /steps/helpers.sh
+        - /steps/SHA256SUMS.pkgs
+        - /steps/automake-1.10.3
+  mkdirs:
+    - /external/repo
+    - /tmp
+  deps:
+    - live-bootstrap/make:3.82
+    - live-bootstrap/tar:1.12
+    - live-bootstrap/bash:2.05b
+    - live-bootstrap/improvements:merged_usr
+    - live-bootstrap/tcc:0.9.27-pass2
+    - live-bootstrap/musl:1.1.24-pass2
+    - live-bootstrap/tcc:0.9.27-pass3
+    - live-bootstrap/sed:4.0.9-pass1
+    - live-bootstrap/bzip2:1.0.8-pass1
+    - live-bootstrap/patch:2.5.9
+    - live-bootstrap/m4:1.4.7
+    - live-bootstrap/coreutils:6.10
+    - live-bootstrap/diffutils:2.7
+    - live-bootstrap/grep:2.4
+    - live-bootstrap/gawk:3.0.4
+    - live-bootstrap/perl:5.6.2
+    - live-bootstrap/autoconf:2.61
+    - live-bootstrap/automake:1.9.6
+  build:
+    unpack_dirname: automake-1.10.3
+    patch_dir: patches
+    prepare:
+      - default
+      - bash -c 'rm doc/amhello-1.0.tar.gz doc/automake.info*'
+      - bash -c "awk '/SUBDIRS/{sub(\\\"doc \\\", \\\"\\\", $0)} {print}' Makefile.am > Makefile.am.tmp"
+      - mv Makefile.am.tmp Makefile.am
+      - ln -sv /usr/bin/autoconf-2.61 /usr/bin/autoconf
+      - bash -c 'AUTOM4TE=autom4te-2.61 AUTOCONF=autoconf-2.61 AUTOHEADER=autoheader-2.61 AUTORECONF=autoreconf-2.61 ./bootstrap'
+    configure:
+      - bash -c 'AUTOCONF=autoconf-2.61 ./configure --prefix=\"${PREFIX}\"'
+    compile:
+      - make "${MAKEJOBS}" MAKEINFO=true
+    install:
+      - make install MAKEINFO=true DESTDIR="${DESTDIR}"
+      - rm "${DESTDIR}/usr/bin/automake" "${DESTDIR}/usr/bin/aclocal"
+  artefacts:
+    - /external/repo/automake-1.10.3_0.tar.bz2
 1.9.6:
   source:
     automake-1.9.6:
