@@ -1,1 +1,1 @@
-live-bootstrap/coreutils:5.0-pass1
+live-bootstrap/coreutils:6.10

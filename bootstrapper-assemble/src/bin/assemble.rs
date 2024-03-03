@@ -546,20 +546,30 @@ async fn build_single(
 
     let mut output_clean = Vec::new();
 
-    if recipe.artefacts.len() == 1 && recipe.artefacts[0].ends_with(".tar.bz2") {
+    let mut taw = TarArchiveWriter::from(&mut output_clean);
+
+    let mut artefacts = recipe.artefacts.clone();
+    
+    if artefacts.len() > 0 && recipe.artefacts[0].ends_with(".tar.bz2") {
+        println!("Extracting archive");
+        let mut buf = Vec::new();
         BzDecoder::new(Cursor::new(
             tar.file_contents(recipe.artefacts[0].clone().into()),
         ))
-        .read_to_end(&mut output_clean)
+        .read_to_end(&mut buf)
         .unwrap();
+        let mut tar = TarArchiveReader::from(buf.as_slice());
+        taw.copy_from_tar(&mut tar, PathBuf::new(), PathBuf::new());
+        artefacts.remove(0);
     } else {
-        let mut taw = TarArchiveWriter::from(&mut output_clean);
-        for art in &recipe.artefacts {
-            taw.copy_from_tar(&mut tar, art.into(), art.into());
-        }
-        taw.finish().unwrap();
-        std::mem::drop(taw);
+        println!("Not extracting archive");
     }
+    tar.reset();
+    for art in &recipe.artefacts {
+        taw.copy_from_tar(&mut tar, art.into(), art.into());
+    }
+    taw.finish().unwrap();
+    std::mem::drop(taw);
 
     let out_digest = sha256::digest(&output_clean);
     let out_path = PathBuf::from(BUILD_CACHE_OUT_PATH).join(&out_digest);
