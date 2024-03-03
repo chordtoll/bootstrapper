@@ -1,14 +1,13 @@
 #![allow(clippy::iter_nth_zero)]
 #![warn(clippy::unused_async)]
+use crate::{
+    alias, docker, docker_export, download, emit_run, envify,
+    tar::{flatten_tar, ArchiveReader, TarArchiveReader, TarArchiveWriter, ZipArchiveReader},
+};
 use async_recursion::async_recursion;
 use bollard::{
     image::BuildImageOptions,
     service::{BuildInfoAux, ImageId},
-};
-use crate::{
-    alias,
-    docker, docker_export, download, emit_run, envify,
-    tar::{flatten_tar, ArchiveReader, TarArchiveReader, TarArchiveWriter, ZipArchiveReader},
 };
 use bootstrapper_common::recipe::{
     get_recipe_digest, NamedRecipeVersion, RecipeBuildSteps, SourceContents, SOURCES,
@@ -141,9 +140,7 @@ fn do_deps(recipe: &NamedRecipeVersion, context_writer: &mut TarArchiveWriter<'_
     }
 }
 
-fn do_shell(
-    recipe: &NamedRecipeVersion,
-) {
+fn do_shell(recipe: &NamedRecipeVersion) {
     // Load up a shell
     if let Some(shell) = &recipe.shell {
         let mut shell_it = shell.split(':');
@@ -158,10 +155,7 @@ fn do_shell(
     }
 }
 
-fn do_mods(
-    recipe: &NamedRecipeVersion,
-    context_writer: &mut TarArchiveWriter<'_>,
-) {
+fn do_mods(recipe: &NamedRecipeVersion, context_writer: &mut TarArchiveWriter<'_>) {
     let mods_path = PathBuf::from(format!("recipes/{}/{}", recipe.name, recipe.version));
     let mods_tar_path = PathBuf::from(format!("recipes/{}/{}.tar", recipe.name, recipe.version));
 
@@ -295,6 +289,7 @@ fn do_build(
             unpack,
             unpack_dirname,
             patch_dir,
+            package_dir,
             prepare,
             configure,
             compile,
@@ -324,6 +319,11 @@ fn do_build(
                     ),
                     0,
                 )
+            };
+            let pkg = if let Some(package_dir) = package_dir {
+                package_dir.to_owned()
+            } else {
+                pkg
             };
             steps.push(format!("pkg={}", pkg));
             steps.push(format!("cd /steps/{}", pkg));
@@ -547,7 +547,7 @@ async fn build_single(
     let mut taw = TarArchiveWriter::from(&mut output_clean);
 
     let mut artefacts = recipe.artefacts.clone();
-    
+
     if artefacts.len() > 0 && recipe.artefacts[0].ends_with(".tar.bz2") {
         println!("Extracting archive");
         let mut buf = Vec::new();

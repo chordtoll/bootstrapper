@@ -77,6 +77,7 @@ pub enum RecipeBuildSteps {
         unpack: Option<Vec<String>>,
         unpack_dirname: String,
         patch_dir: String,
+        package_dir: Option<String>,
         prepare: Option<Vec<String>>,
         configure: Option<Vec<String>>,
         compile: Option<Vec<String>>,
@@ -238,6 +239,7 @@ impl RecipeBuildSteps {
                 unpack,
                 unpack_dirname,
                 patch_dir,
+                package_dir,
                 prepare,
                 configure,
                 compile,
@@ -259,6 +261,13 @@ impl RecipeBuildSteps {
                     patch_dir.len(),
                     patch_dir
                 ));
+                if let Some(package_dir) = package_dir {
+                    inputs.push_str(&format!(
+                        " PACKAGE_DIR={}\n  {}\n",
+                        package_dir.len(),
+                        package_dir
+                    ));
+                }
                 if let Some(prepare) = prepare {
                     for i in prepare {
                         inputs.push_str(&format!(" PREPARE:{}\n  {}\n", i.len(), i));
