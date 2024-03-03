@@ -109,4 +109,5 @@ pub fn docker() -> Docker {
 }
 
 pub mod args;
+pub mod assemble;
 pub mod tar;

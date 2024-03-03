@@ -32,7 +32,7 @@ jobs:
           path: |
             build-cache
       - name: Run
-        run: cargo run --bin=assemble -- -- `cat ci-build.txt`
+        run: cargo run --bin=assemble-all
       - name: Delete Previous Rust Cache
         if: ${{ steps.cache-restore-rust.outputs.cache-hit }}
         continue-on-error: true
