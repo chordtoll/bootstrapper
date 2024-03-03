@@ -1,3 +1,52 @@
+2.61:
+  source:
+    autoconf-2.61:
+      noextract: /external/distfiles/autoconf-2.61.tar.bz2
+    live-bootstrap:
+      extract: /
+      copy:
+        - /steps/helpers.sh
+        - /steps/SHA256SUMS.pkgs
+        - /steps/autoconf-2.61
+  mkdirs:
+    - /external/repo
+    - /tmp
+  deps:
+    - live-bootstrap/make:3.82
+    - live-bootstrap/tar:1.12
+    - live-bootstrap/bash:2.05b
+    - live-bootstrap/improvements:merged_usr
+    - live-bootstrap/tcc:0.9.27-pass2
+    - live-bootstrap/musl:1.1.24-pass2
+    - live-bootstrap/tcc:0.9.27-pass3
+    - live-bootstrap/sed:4.0.9-pass1
+    - live-bootstrap/bzip2:1.0.8-pass1
+    - live-bootstrap/m4:1.4.7
+    - live-bootstrap/patch:2.5.9
+    - live-bootstrap/coreutils:6.10
+    - live-bootstrap/diffutils:2.7
+    - live-bootstrap/grep:2.4
+    - live-bootstrap/gawk:3.0.4
+    - live-bootstrap/perl:5.6.2
+    - live-bootstrap/autoconf:2.59
+    - live-bootstrap/automake:1.8.5
+    - live-bootstrap/help2man:1.36.4
+  build:
+    unpack_dirname: autoconf-2.61
+    patch_dir: patches
+    prepare:
+      - bash -c 'rm doc/standards.info man/*.1'
+      - sed -i -e '/AC_PROG_GREP/d' -e '/AC_PROG_SED/d' configure.ac
+      - bash -c 'AUTOMAKE=automake-1.8 ACLOCAL=aclocal-1.8 AUTOM4TE=autom4te-2.59 AUTOCONF=autoconf-2.59 autoreconf-2.59 -f'
+      - bash -c 'for file in */*/Makefile.in */Makefile.in Makefile.in; do sed -i \"/^pkgdatadir/s:$:-@VERSION@:\" \"$file\"; done'
+    configure:
+      - ./configure --prefix="${PREFIX}" --program-suffix=-2.61
+    compile:
+      - make -j1 MAKEINFO=true PREFIX="${PREFIX}"
+    install:
+      - make install MAKEINFO=true DESTDIR="${DESTDIR}"
+  artefacts:
+    - /external/repo/autoconf-2.61_0.tar.bz2
 2.59:
   source:
     autoconf-2.59:
