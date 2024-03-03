@@ -13,6 +13,9 @@ autoconf-2.55:
 autoconf-2.57:
   url: https://mirrors.kernel.org/gnu/autoconf/autoconf-2.57.tar.bz2
   sha: e1035aa2c21fae2a934d1ab56c774ce9d22717881dab8a1a5b16d294fb793489
+autoconf-2.59:
+  url: https://mirrors.kernel.org/gnu/autoconf/autoconf-2.59.tar.bz2
+  sha: f0cde70a8f135098a6a3e85869f2e1cc3f141beea766fa3d6636e086cd8b90a7
 automake-1.6.3:
   url: https://mirrors.kernel.org/gnu/automake/automake-1.6.3.tar.bz2
   sha: 0dbafacaf21e135cab35d357a14bdcd981d2f2d00e1387801be8091a31b7bb81
