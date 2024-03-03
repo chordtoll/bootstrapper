@@ -76,6 +76,9 @@ patch-2.5.9:
 perl-5.000:
   url: https://github.com/Perl/perl5/archive/perl-5.000.tar.gz
   sha: 1ae43c8d2983404b9eec61c96e3ffa27e7b07e08215c95c015a4ab0095373ef3
+perl-5.003:
+  url: https://github.com/Perl/perl5/archive/perl-5.003.tar.gz
+  sha: 9fa29beb2fc4a3c373829fc051830796de301f32a719d0b52a400d1719bbd7b1
 sed-4.0.9:
   url: https://mirrors.kernel.org/gnu/sed/sed-4.0.9.tar.gz
   sha: c365874794187f8444e5d22998cd5888ffa47f36def4b77517a808dec27c0600
