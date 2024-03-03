@@ -82,6 +82,9 @@ perl-5.003:
 perl-5.004-05:
   url: https://www.cpan.org/src/5.0/perl5.004_05.tar.gz
   sha: 1184478b298978b164a383ed5661e3a117c48ab97d6d0ab7ef614cdbe918b9eb
+perl-5.005-03:
+  url: https://www.cpan.org/src/5.0/perl5.005_03.tar.gz
+  sha: 93f41cd87ab8ee83391cfa39a63b076adeb7c3501d2efa31b98d0ef037122bd1
 sed-4.0.9:
   url: https://mirrors.kernel.org/gnu/sed/sed-4.0.9.tar.gz
   sha: c365874794187f8444e5d22998cd5888ffa47f36def4b77517a808dec27c0600
