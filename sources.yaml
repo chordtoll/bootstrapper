@@ -73,6 +73,9 @@ nyacc-1.00.2:
 patch-2.5.9:
   url: https://mirrors.kernel.org/gnu/patch/patch-2.5.9.tar.gz
   sha: ecb5c6469d732bcf01d6ec1afe9e64f1668caba5bfdb103c28d7f537ba3cdb8a
+perl-5.000:
+  url: https://github.com/Perl/perl5/archive/perl-5.000.tar.gz
+  sha: 1ae43c8d2983404b9eec61c96e3ffa27e7b07e08215c95c015a4ab0095373ef3
 sed-4.0.9:
   url: https://mirrors.kernel.org/gnu/sed/sed-4.0.9.tar.gz
   sha: c365874794187f8444e5d22998cd5888ffa47f36def4b77517a808dec27c0600

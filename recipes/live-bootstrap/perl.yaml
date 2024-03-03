@@ -1,0 +1,49 @@
+5.000:
+  source:
+    perl-5.000:
+      noextract: /external/distfiles/perl-5.000.tar.gz
+    live-bootstrap:
+      extract: /
+      copy:
+        - /steps/helpers.sh
+        - /steps/SHA256SUMS.pkgs
+        - /steps/perl-5.000
+  mkdirs:
+    - /external/repo
+    - /tmp
+  deps:
+    - live-bootstrap/make:3.82
+    - live-bootstrap/patch:2.5.9
+    - live-bootstrap/tar:1.12
+    - live-bootstrap/gzip:1.2.4
+    - live-bootstrap/bash:2.05b
+    - live-bootstrap/improvements:merged_usr
+    - live-bootstrap/flex:2.5.11
+    - live-bootstrap/tcc:0.9.27-pass2
+    - live-bootstrap/musl:1.1.24-pass2
+    - live-bootstrap/tcc:0.9.27-pass3
+    - live-bootstrap/sed:4.0.9-pass1
+    - live-bootstrap/bzip2:1.0.8-pass1
+    - live-bootstrap/bison:3.4.1-pass3
+    - live-bootstrap/m4:1.4.7
+    - live-bootstrap/coreutils:6.10
+    - live-bootstrap/gawk:3.0.4
+  build:
+    unpack_dirname: perl5-perl-5.000
+    patch_dir: patches
+    prepare:
+      - default
+      - rm -f perly.c perly.h
+      - bison -d perly.y
+      - mv perly.tab.c perly.c
+      - mv perly.tab.h perly.h
+      - rm -f embed.h
+      - ./embed_h.SH
+      - rm -f keywords.h
+      - chmod +x keywords.sh
+      - ./keywords.sh
+      - rm -f opcode.h
+      - chmod +x opcode.sh
+      - ./opcode.sh
+  artefacts:
+    - /external/repo/perl-5.000_0.tar.bz2
