@@ -16,6 +16,9 @@ automake-1.6.3:
 automake-1.7:
   url: https://mirrors.kernel.org/gnu/automake/automake-1.7.tar.bz2
   sha: 6633ee1202375e3c8798a92e1b7f46894f78d541aeea7f49654503fdc0b28835
+automake-1.7.8:
+  url: https://mirrors.kernel.org/gnu/automake/automake-1.7.8.tar.bz2
+  sha: 2dddc3b51506e702647ccc6757e15c05323fa67245d2d53e81ed36a832f9be42
 bash-2.05b:
   url: https://src.fedoraproject.org/repo/pkgs/bash/bash-2.05b.tar.bz2/f3e5428ed52a4f536f571a945d5de95d/bash-2.05b.tar.bz2
   sha: 1ce4e5b47a6354531389f0adefb54dee2823227bf6e1e59a31c0e9317a330822
