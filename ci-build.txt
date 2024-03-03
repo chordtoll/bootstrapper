@@ -1,1 +1,1 @@
-live-bootstrap/diffutils:2.7
+live-bootstrap/coreutils:5.0-pass1

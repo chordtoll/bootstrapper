@@ -1,4 +1,48 @@
-5.0:
+5.0-pass1:
+  source:
+    coreutils-5.0:
+      noextract: /external/distfiles/coreutils-5.0.tar.bz2
+    live-bootstrap:
+      extract: /
+      copy:
+        - /steps/helpers.sh
+        - /steps/SHA256SUMS.pkgs
+        - /steps/coreutils-5.0
+  mkdirs:
+    - /external/repo
+    - /tmp
+  deps:
+    - stage0-posix/final:sha256sum
+    - live-bootstrap/make:3.82
+    - live-bootstrap/patch:2.5.9
+    - live-bootstrap/tar:1.12
+    - live-bootstrap/coreutils:5.0-pass0
+    - live-bootstrap/bash:2.05b
+    - live-bootstrap/improvements:merged_usr
+    - live-bootstrap/flex:2.5.11
+    - live-bootstrap/tcc:0.9.27-pass2
+    - live-bootstrap/musl:1.1.24-pass2
+    - live-bootstrap/tcc:0.9.27-pass3
+    - live-bootstrap/sed:4.0.9-pass1
+    - live-bootstrap/bzip2:1.0.8-pass1
+  build:
+    unpack_dirname: coreutils-5.0
+    patch_dir: patches-pass2
+    prepare:
+      - cp ../../patches/touch-dereference.patch ../../patches-pass2/touch-dereference.patch
+      - cp ../../patches/touch-getdate.patch ../../patches-pass2/touch-getdate.patch
+      - default
+      - cp lib/fnmatch_.h lib/fnmatch.h
+      - cp lib/ftw_.h lib/ftw.h
+      - cp lib/search_.h lib/search.h
+      - touch config.h
+      - rm -f src/false.c
+      - rm -f src/dircolors.h
+      - rm lib/getdate.c
+      - cp "${mk_dir}/pass2.mk" Makefile
+  artefacts:
+    - /external/repo/coreutils-5.0_0.tar.bz2
+5.0-pass0:
   source:
     coreutils-5.0:
       noextract: /external/distfiles/coreutils-5.0.tar.bz2

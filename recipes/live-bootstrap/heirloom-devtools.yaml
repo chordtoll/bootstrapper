@@ -17,7 +17,7 @@
     - live-bootstrap/tar:1.12
     - live-bootstrap/bzip2:1.0.8-pass0
     - live-bootstrap/sed:4.0.9-pass0
-    - live-bootstrap/coreutils:5.0
+    - live-bootstrap/coreutils:5.0-pass0
   build:
     single:
       - pkg="heirloom-devtools-070527"

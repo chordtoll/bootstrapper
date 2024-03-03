@@ -1,6 +1,6 @@
 merged_usr:
   deps:
-    - live-bootstrap/coreutils:5.0
+    - live-bootstrap/coreutils:5.0-pass0
   build:
     single:
       - ln -sv bin /usr/sbin
