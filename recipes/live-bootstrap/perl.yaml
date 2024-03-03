@@ -1,3 +1,64 @@
+5.6.2:
+  source:
+    perl-5.6.2:
+      noextract: /external/distfiles/perl-5.6.2.tar.gz
+    live-bootstrap:
+      extract: /
+      copy:
+        - /steps/helpers.sh
+        - /steps/SHA256SUMS.pkgs
+        - /steps/perl-5.6.2
+  mkdirs:
+    - /external/repo
+    - /tmp
+  deps:
+    - live-bootstrap/make:3.82
+    - live-bootstrap/patch:2.5.9
+    - live-bootstrap/tar:1.12
+    - live-bootstrap/gzip:1.2.4
+    - live-bootstrap/bash:2.05b
+    - live-bootstrap/improvements:merged_usr
+    - live-bootstrap/flex:2.5.11
+    - live-bootstrap/tcc:0.9.27-pass2
+    - live-bootstrap/musl:1.1.24-pass2
+    - live-bootstrap/tcc:0.9.27-pass3
+    - live-bootstrap/sed:4.0.9-pass1
+    - live-bootstrap/bzip2:1.0.8-pass1
+    - live-bootstrap/bison:3.4.1-pass3
+    - live-bootstrap/m4:1.4.7
+    - live-bootstrap/coreutils:6.10
+    - live-bootstrap/gawk:3.0.4
+    - live-bootstrap/perl:5.005-03
+  build:
+    unpack_dirname: perl-5.6.2
+    patch_dir: patches
+    prepare:
+      - default
+      - sed -i '/yydestruct/d' perly.y
+      - rm -f perly.c perly.h
+      - bison -d perly.y
+      - mv perly.tab.c perly.c
+      - mv perly.tab.h perly.h
+      - rm -f embed.h
+      - perl embed.pl
+      - rm -f keywords.h
+      - perl keywords.pl
+      - rm -f opcode.h
+      - perl opcode.pl
+      - rm -f regnodes.h
+      - perl regcomp.pl
+      - rm -f ext/ByteLoader/byterun.h ext/ByteLoader/byterun.c
+      - perl bytecode.pl
+      - rm -f warnings.h lib/warnings.pm
+      - perl warnings.pl
+      - sed -i 's/perl_call_method/Perl_call_method/' ext/Data/Dumper/Dumper.xs
+      - sed -i 's/perl_call_sv/Perl_call_sv/' ext/Data/Dumper/Dumper.xs
+      - sed -i 's/sv_setptrobj/Perl_sv_setref_iv/' ext/POSIX/POSIX.xs
+      - sed -i "s#/usr/include/errno.h#${PREFIX}/include/bits/errno.h#" ext/Errno/Errno_pm.PL
+    compile:
+      - make -j1 PREFIX="${PREFIX}"
+  artefacts:
+    - /external/repo/perl-5.6.2_0.tar.bz2
 5.005-03:
   source:
     perl-5.005-03:
