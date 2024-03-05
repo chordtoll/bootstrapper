@@ -1,3 +1,55 @@
+1.15.1:
+  source:
+    automake-1.15.1:
+      noextract: /external/distfiles/automake-1.15.1.tar.xz
+    live-bootstrap:
+      extract: /
+      copy:
+        - /steps/helpers.sh
+        - /steps/SHA256SUMS.pkgs
+        - /steps/automake-1.15.1
+  mkdirs:
+    - /external/repo
+    - /tmp
+  deps:
+    - stage0-posix/final:unxz
+    - live-bootstrap/make:3.82
+    - live-bootstrap/tar:1.12
+    - live-bootstrap/bash:2.05b
+    - live-bootstrap/improvements:merged_usr
+    - live-bootstrap/tcc:0.9.27-pass2
+    - live-bootstrap/musl:1.1.24-pass2
+    - live-bootstrap/tcc:0.9.27-pass3
+    - live-bootstrap/sed:4.0.9-pass1
+    - live-bootstrap/bzip2:1.0.8-pass1
+    - live-bootstrap/patch:2.5.9
+    - live-bootstrap/m4:1.4.7
+    - live-bootstrap/coreutils:6.10
+    - live-bootstrap/diffutils:2.7
+    - live-bootstrap/grep:2.4
+    - live-bootstrap/gawk:3.0.4
+    - live-bootstrap/perl:5.6.2
+    - live-bootstrap/autoconf:2.69
+    - live-bootstrap/automake:1.11.2
+  build:
+    unpack_dirname: automake-1.15.1
+    patch_dir: patches
+    prepare:
+      - default
+      - rm doc/amhello-1.0.tar.gz
+      - sed -i '/doc\\/Makefile.inc/d' Makefile.am
+      - sed -i '/t\\/Makefile.inc/d' Makefile.am
+      - bash -c 'AUTOCONF=\"autoconf-2.69 -f\" AUTOM4TE=autom4te-2.69 ./bootstrap'
+      - bash -c 'rm doc/automake-history.info doc/automake.info*'
+    configure:
+      - bash -c 'AUTORECONF=autoreconf-2.69 AUTOM4TE=autom4te-2.69 AUTOHEADER=autoheader-2.69 AUTOCONF=\"autoconf-2.69 -f\" ./configure --prefix=\"${PREFIX}\"'
+    compile:
+      - bash -c 'AUTORECONF=autoreconf-2.69 AUTOM4TE=autom4te-2.69 AUTOHEADER=autoheader-2.69 AUTOCONF=\"autoconf-2.69 -f\" make -j1 MAKEINFO=true'
+    install:
+      - make install MAKEINFO=true DESTDIR="${DESTDIR}"
+      - rm "${DESTDIR}/usr/bin/automake" "${DESTDIR}/usr/bin/aclocal"
+  artefacts:
+    - /external/repo/automake-1.15.1_0.tar.bz2
 1.11.2:
   source:
     automake-1.11.2:

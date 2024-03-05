@@ -46,6 +46,9 @@ automake-1.10.3:
 automake-1.11.2:
   url: https://mirrors.kernel.org/gnu/automake/automake-1.11.2.tar.bz2
   sha: 4f46d1f9380c8a3506280750f630e9fc915cb1a435b724be56b499d016368718
+automake-1.15.1:
+  url: https://mirrors.kernel.org/gnu/automake/automake-1.15.1.tar.xz
+  sha: af6ba39142220687c500f79b4aa2f181d9b24e4f8d8ec497cea4ba26c64bedaf
 bash-2.05b:
   url: https://src.fedoraproject.org/repo/pkgs/bash/bash-2.05b.tar.bz2/f3e5428ed52a4f536f571a945d5de95d/bash-2.05b.tar.bz2
   sha: 1ce4e5b47a6354531389f0adefb54dee2823227bf6e1e59a31c0e9317a330822
