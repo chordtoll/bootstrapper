@@ -1,3 +1,43 @@
+1.11.2:
+  source:
+    automake-1.11.2:
+      noextract: /external/distfiles/automake-1.11.2.tar.bz2
+    live-bootstrap:
+      extract: /
+      copy:
+        - /steps/helpers.sh
+        - /steps/SHA256SUMS.pkgs
+        - /steps/automake-1.11.2
+  mkdirs:
+    - /external/repo
+    - /tmp
+  deps:
+    - live-bootstrap/make:3.82
+    - live-bootstrap/tar:1.12
+    - live-bootstrap/bash:2.05b
+    - live-bootstrap/improvements:merged_usr
+    - live-bootstrap/tcc:0.9.27-pass2
+    - live-bootstrap/musl:1.1.24-pass2
+    - live-bootstrap/tcc:0.9.27-pass3
+    - live-bootstrap/sed:4.0.9-pass1
+    - live-bootstrap/bzip2:1.0.8-pass1
+    - live-bootstrap/patch:2.5.9
+    - live-bootstrap/m4:1.4.7
+    - live-bootstrap/coreutils:6.10
+    - live-bootstrap/diffutils:2.7
+    - live-bootstrap/grep:2.4
+    - live-bootstrap/gawk:3.0.4
+    - live-bootstrap/perl:5.6.2
+    - live-bootstrap/autoconf:2.64
+    - live-bootstrap/automake:1.10.3
+  build:
+    single:
+      - LIBDIR="${PREFIX}/lib/i386-unknown-linux-musl"
+      - pkg="automake-1.11.2"
+      - cd /steps/${pkg}
+      - bash -ex -c "source ../helpers.sh; build automake-1.11.2" # TODO: idk what's up with this one
+  artefacts:
+    - /external/repo/automake-1.11.2_0.tar.bz2
 1.10.3:
   source:
     automake-1.10.3:
