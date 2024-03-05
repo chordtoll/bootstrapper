@@ -88,6 +88,9 @@ heirloom-devtools-070527:
 help2man-1.36.4:
   url: https://mirrors.kernel.org/gnu/help2man/help2man-1.36.4.tar.gz
   sha: a4adadf76b496a6bc50795702253ecfcb6f0d159b68038f31a5362009340bca2
+libtool-2.2.4:
+  url: https://mirrors.kernel.org/gnu/libtool/libtool-2.2.4.tar.lzma
+  sha: d81839fa4d566dbef7c286fdca9b430d3530983fff6d389fac0f08baf27e4c3a
 live-bootstrap:
   url: https://github.com/fosslinux/live-bootstrap/archive/32138d13b9254a44ffa8d5952beee8d94b888317.zip
   sha: 1f9b0c4767c230fedff962ef2b9d8b1cbe4a498f14dceea498a381d25bd336b4
