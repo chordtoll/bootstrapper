@@ -52,6 +52,9 @@ automake-1.15.1:
 bash-2.05b:
   url: https://src.fedoraproject.org/repo/pkgs/bash/bash-2.05b.tar.bz2/f3e5428ed52a4f536f571a945d5de95d/bash-2.05b.tar.bz2
   sha: 1ce4e5b47a6354531389f0adefb54dee2823227bf6e1e59a31c0e9317a330822
+binutils-2.30:
+  url: https://mirrors.kernel.org/gnu/binutils/binutils-2.30.tar.xz
+  sha: 6e46b8aeae2f727a36f0bd9505e405768a72218f1796f0d09757d45209871ae6
 bison-3.4.1:
   url: https://mirrors.kernel.org/gnu/bison/bison-3.4.1.tar.xz
   sha: 27159ac5ebf736dffd5636fd2cd625767c9e437de65baa63cb0de83570bd820d
