@@ -13,5 +13,5 @@ lockfree = "0.5.1"
 memoize = "0.4.2"
 petgraph = "0.6.4"
 serde = { version = "1.0.197", features = ["derive"] }
-serde_yaml = "0.9.32"
+serde_yaml = "0.9.33"
 sha256 = "1.5.0"
