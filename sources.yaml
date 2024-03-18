@@ -68,7 +68,7 @@ coreutils-6.10:
   url: https://mirrors.kernel.org/gnu/coreutils/coreutils-6.10.tar.lzma
   sha: 8b05bba1b2726a164e444c314e3f359604b58216be704bed8f2e028449cc6204
 diffutils-2.7:
-  url: https://dept.rpi.edu/acm/packages/diffutils/2.7/distrib/diffutils-2.7.tar.bz2
+  url: https://bootstrapping.world/diffutils-2.7.tar.bz2
   sha: fd6c44f7cbd0a942a3f0c012365997965451197ad4faeb0b8aac1fe03192de58
 flex-2.5.11:
   url: http://download.nust.na/pub2/openpkg1/sources/DST/flex/flex-2.5.11.tar.gz
