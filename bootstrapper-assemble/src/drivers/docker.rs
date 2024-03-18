@@ -50,7 +50,13 @@ impl DockerDriver {
         let cmd = if shell {
             format!("RUN {}", cmd.join(" "))
         } else {
-            format!("RUN [\"{}\"]", cmd.join("\",\""))
+            format!(
+                "RUN [\"{}\"]",
+                cmd.iter()
+                    .map(|x| x.replace("\\", "\\\\").replace("\"", "\\\""))
+                    .collect::<Vec<String>>()
+                    .join("\",\"")
+            )
         };
         self.dockerfile.write_all(cmd.as_bytes()).unwrap();
         self.dockerfile.write_all(b" \n").unwrap();

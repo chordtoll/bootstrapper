@@ -36,6 +36,6 @@
     install:
       - default
       - install -d "${DESTDIR}${PREFIX}/share/awk/"
-      - bash -c 'for file in awklib/eg/lib/*.awk; do install -m 644 \"$file\" \"${DESTDIR}${PREFIX}/share/awk/\"; done'
+      - bash -c 'for file in awklib/eg/lib/*.awk; do install -m 644 "$file" "${DESTDIR}${PREFIX}/share/awk/"; done'
   artefacts:
     - /external/repo/gawk-3.0.4_0.tar.bz2

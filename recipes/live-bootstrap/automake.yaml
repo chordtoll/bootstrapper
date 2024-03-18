@@ -37,14 +37,14 @@
     prepare:
       - default
       - rm doc/amhello-1.0.tar.gz
-      - sed -i '/doc\\/Makefile.inc/d' Makefile.am
-      - sed -i '/t\\/Makefile.inc/d' Makefile.am
-      - bash -c 'AUTOCONF=\"autoconf-2.69 -f\" AUTOM4TE=autom4te-2.69 ./bootstrap'
+      - sed -i '/doc\/Makefile.inc/d' Makefile.am
+      - sed -i '/t\/Makefile.inc/d' Makefile.am
+      - bash -c 'AUTOCONF="autoconf-2.69 -f" AUTOM4TE=autom4te-2.69 ./bootstrap'
       - bash -c 'rm doc/automake-history.info doc/automake.info*'
     configure:
-      - bash -c 'AUTORECONF=autoreconf-2.69 AUTOM4TE=autom4te-2.69 AUTOHEADER=autoheader-2.69 AUTOCONF=\"autoconf-2.69 -f\" ./configure --prefix=\"${PREFIX}\"'
+      - bash -c 'AUTORECONF=autoreconf-2.69 AUTOM4TE=autom4te-2.69 AUTOHEADER=autoheader-2.69 AUTOCONF="autoconf-2.69 -f" ./configure --prefix="${PREFIX}"'
     compile:
-      - bash -c 'AUTORECONF=autoreconf-2.69 AUTOM4TE=autom4te-2.69 AUTOHEADER=autoheader-2.69 AUTOCONF=\"autoconf-2.69 -f\" make -j1 MAKEINFO=true'
+      - bash -c 'AUTORECONF=autoreconf-2.69 AUTOM4TE=autom4te-2.69 AUTOHEADER=autoheader-2.69 AUTOCONF="autoconf-2.69 -f" make -j1 MAKEINFO=true'
     install:
       - make install MAKEINFO=true DESTDIR="${DESTDIR}"
       - rm "${DESTDIR}/usr/bin/automake" "${DESTDIR}/usr/bin/aclocal"
@@ -128,12 +128,12 @@
     prepare:
       - default
       - bash -c 'rm doc/amhello-1.0.tar.gz doc/automake.info*'
-      - bash -c "awk '/SUBDIRS/{sub(\\\"doc \\\", \\\"\\\", $0)} {print}' Makefile.am > Makefile.am.tmp"
+      - bash -c "awk '/SUBDIRS/{sub(\"doc \", \"\", $0)} {print}' Makefile.am > Makefile.am.tmp"
       - mv Makefile.am.tmp Makefile.am
       - ln -sv /usr/bin/autoconf-2.61 /usr/bin/autoconf
       - bash -c 'AUTOM4TE=autom4te-2.61 AUTOCONF=autoconf-2.61 AUTOHEADER=autoheader-2.61 AUTORECONF=autoreconf-2.61 ./bootstrap'
     configure:
-      - bash -c 'AUTOCONF=autoconf-2.61 ./configure --prefix=\"${PREFIX}\"'
+      - bash -c 'AUTOCONF=autoconf-2.61 ./configure --prefix="${PREFIX}"'
     compile:
       - make "${MAKEJOBS}" MAKEINFO=true
     install:
@@ -180,7 +180,7 @@
       - sed -i 's/1.8a/1.8.5/; s/ filename-length-max=99//' configure.ac
       - bash -c 'AUTOMAKE=automake-1.8 ACLOCAL=aclocal-1.8 AUTOM4TE=autom4te-2.61 AUTOCONF=autoconf-2.61 autoreconf-2.61 -f'
     configure:
-      - bash -c 'AUTOCONF=autoconf-2.61 ./configure --prefix=\"${PREFIX}\"'
+      - bash -c 'AUTOCONF=autoconf-2.61 ./configure --prefix="${PREFIX}"'
     compile:
       - make "${MAKEJOBS}" MAKEINFO=true
     install:
@@ -226,7 +226,7 @@
       - bash -c 'rm doc/automake.info*'
       - bash -c 'AUTOMAKE=automake-1.7 ACLOCAL=aclocal-1.7 AUTOCONF=autoconf-2.59 autoreconf-2.59 -f'
     configure:
-      - bash -c 'AUTOCONF=autoconf-2.59 ./configure --prefix=\"${PREFIX}\"'
+      - bash -c 'AUTOCONF=autoconf-2.59 ./configure --prefix="${PREFIX}"'
     compile:
       - make "${MAKEJOBS}" MAKEINFO=true
     install:
@@ -272,7 +272,7 @@
       - bash -c 'rm -- configure Makefile.in */Makefile.in */*/Makefile.in aclocal.m4 automake.info*'
       - bash -c 'AUTOMAKE=automake-1.7 ACLOCAL=aclocal-1.7 AUTOCONF=autoconf-2.55 autoreconf-2.55'
     configure:
-      - bash -c 'AUTOCONF=autoconf-2.55 ./configure --prefix=\"${PREFIX}\"'
+      - bash -c 'AUTOCONF=autoconf-2.55 ./configure --prefix="${PREFIX}"'
     compile:
       - make "${MAKEJOBS}" MAKEINFO=true
     install:
@@ -378,11 +378,11 @@
       - install -D automake "${DESTDIR}${PREFIX}"/bin/automake-1.6
       - mkdir -p "${DESTDIR}${PREFIX}"/share/automake-1.6/am
       - mkdir -p "${DESTDIR}${PREFIX}"/share/automake-1.6/Automake
-      - bash -c 'cp lib/Automake/*.pm \"${DESTDIR}${PREFIX}\"/share/automake-1.6/Automake/'
-      - bash -c 'cp -r lib/am/*.am \"${DESTDIR}${PREFIX}\"/share/automake-1.6/am/'
+      - bash -c 'cp lib/Automake/*.pm "${DESTDIR}${PREFIX}"/share/automake-1.6/Automake/'
+      - bash -c 'cp -r lib/am/*.am "${DESTDIR}${PREFIX}"/share/automake-1.6/am/'
       - install -D aclocal "${DESTDIR}${PREFIX}"/bin/aclocal-1.6
       - mkdir -p "${DESTDIR}${PREFIX}"/share/aclocal-1.6/
-      - bash -c 'cp -r m4/*.m4 \"${DESTDIR}${PREFIX}\"/share/aclocal-1.6/'
+      - bash -c 'cp -r m4/*.m4 "${DESTDIR}${PREFIX}"/share/aclocal-1.6/'
   artefacts:
     - /external/repo/automake-1.6.3_1.tar.bz2
 1.6.3-pass1:
@@ -422,9 +422,9 @@
       - sed -i -e "s#@PERL@#${PREFIX}/bin/perl#" -e 's/@PACKAGE@/automake/' -e 's/@APIVERSION@/1.6/' -e 's/@VERSION@/1.6.3/' -e "s#@prefix@#${PREFIX}#" -e "s#@datadir@#${PREFIX}/share#" aclocal
     install:
       - mkdir -p "${DESTDIR}${PREFIX}"/share/automake-1.6/Automake
-      - bash -c 'cp lib/Automake/*.pm \"${DESTDIR}${PREFIX}\"/share/automake-1.6/Automake/'
+      - bash -c 'cp lib/Automake/*.pm "${DESTDIR}${PREFIX}"/share/automake-1.6/Automake/'
       - install -D aclocal "${DESTDIR}${PREFIX}"/bin/aclocal-1.6
       - mkdir -p "${DESTDIR}${PREFIX}"/share/aclocal-1.6
-      - bash -c 'cp -r m4/*.m4 \"${DESTDIR}${PREFIX}\"/share/aclocal-1.6/'
+      - bash -c 'cp -r m4/*.m4 "${DESTDIR}${PREFIX}"/share/aclocal-1.6/'
   artefacts:
     - /external/repo/automake-1.6.3_0.tar.bz2

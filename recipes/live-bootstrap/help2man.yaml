@@ -41,7 +41,7 @@
       - touch help2man.info
       - bash -c 'rm help2man*.1'
     configure:
-      - bash -c 'CC=tcc ./configure --prefix=\"${PREFIX}\" --disable-nls'
+      - bash -c 'CC=tcc ./configure --prefix="${PREFIX}" --disable-nls'
     compile:
       - make "${MAKEJOBS}" MAKEINFO=true
     install:

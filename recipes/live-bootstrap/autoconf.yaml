@@ -38,7 +38,7 @@
     prepare:
       - bash -c 'rm doc/standards.info man/*.1'
       - bash -c 'AUTOMAKE=automake-1.11 ACLOCAL=aclocal-1.11 autoreconf-2.64 -f'
-      - bash -c 'for file in */*/Makefile.in */Makefile.in Makefile.in; do sed -i \"/^pkgdatadir/s:$:-@VERSION@:\" \"$file\"; done'
+      - bash -c 'for file in */*/Makefile.in */Makefile.in Makefile.in; do sed -i "/^pkgdatadir/s:$:-@VERSION@:" "$file"; done'
     configure:
       - ./configure --prefix="${PREFIX}" --program-suffix=-2.69
     compile:
@@ -87,7 +87,7 @@
     prepare:
       - bash -c 'rm doc/standards.info man/*.1'
       - bash -c 'AUTOMAKE=automake-1.10 ACLOCAL=aclocal-1.10 AUTOM4TE=autom4te-2.61 AUTOCONF=autoconf-2.61 autoreconf-2.61 -f'
-      - bash -c 'for file in */*/Makefile.in */Makefile.in Makefile.in; do sed -i \"/^pkgdatadir/s:$:-@VERSION@:\" \"$file\"; done'
+      - bash -c 'for file in */*/Makefile.in */Makefile.in Makefile.in; do sed -i "/^pkgdatadir/s:$:-@VERSION@:" "$file"; done'
     configure:
       - ./configure --prefix="${PREFIX}" --program-suffix=-2.64
     compile:
@@ -136,7 +136,7 @@
       - bash -c 'rm doc/standards.info man/*.1'
       - sed -i -e '/AC_PROG_GREP/d' -e '/AC_PROG_SED/d' configure.ac
       - bash -c 'AUTOMAKE=automake-1.8 ACLOCAL=aclocal-1.8 AUTOM4TE=autom4te-2.59 AUTOCONF=autoconf-2.59 autoreconf-2.59 -f'
-      - bash -c 'for file in */*/Makefile.in */Makefile.in Makefile.in; do sed -i \"/^pkgdatadir/s:$:-@VERSION@:\" \"$file\"; done'
+      - bash -c 'for file in */*/Makefile.in */Makefile.in Makefile.in; do sed -i "/^pkgdatadir/s:$:-@VERSION@:" "$file"; done'
     configure:
       - ./configure --prefix="${PREFIX}" --program-suffix=-2.61
     compile:
@@ -185,7 +185,7 @@
       - rm doc/standards.info
       - sed -i '/SUBDIRS/s/ man//' Makefile.am
       - bash -c 'AUTOMAKE=automake-1.7 ACLOCAL=aclocal-1.7 AUTOCONF=autoconf-2.57 autoreconf-2.57'
-      - bash -c 'for file in */*/Makefile.in */Makefile.in Makefile.in; do sed -i \"/^pkgdatadir/s:$:-@VERSION@:\" \"$file\"; done'
+      - bash -c 'for file in */*/Makefile.in */Makefile.in Makefile.in; do sed -i "/^pkgdatadir/s:$:-@VERSION@:" "$file"; done'
     configure:
       - ./configure --prefix="${PREFIX}" --program-suffix=-2.59
     compile:
@@ -236,7 +236,7 @@
       - rm doc/standards.info
       - sed -i '/SUBDIRS/s/ man//' Makefile.am
       - bash -c 'AUTOMAKE=automake-1.7 ACLOCAL=aclocal-1.7 AUTOCONF=autoconf-2.55 autoreconf-2.55'
-      - bash -c 'for file in */*/Makefile.in */Makefile.in Makefile.in; do sed -i \"/^pkgdatadir/s:$:-@VERSION@:\" \"$file\"; done'
+      - bash -c 'for file in */*/Makefile.in */Makefile.in Makefile.in; do sed -i "/^pkgdatadir/s:$:-@VERSION@:" "$file"; done'
     configure:
       - ./configure --prefix="${PREFIX}" --program-suffix=-2.57
     compile:
@@ -288,7 +288,7 @@
       - rm doc/standards.info doc/autoconf.info
       - sed -i '/SUBDIRS/s/ man//' Makefile.am
       - bash -c 'AUTOMAKE=automake-1.7 ACLOCAL=aclocal-1.7 AUTOCONF=autoconf-2.54 autoreconf-2.54'
-      - bash -c 'for file in */*/Makefile.in */Makefile.in Makefile.in; do sed -i \"/^pkgdatadir/s:$:-@VERSION@:\" \"$file\"; done'
+      - bash -c 'for file in */*/Makefile.in */Makefile.in Makefile.in; do sed -i "/^pkgdatadir/s:$:-@VERSION@:" "$file"; done'
     configure:
       - ./configure --prefix="${PREFIX}" --program-suffix=-2.55
     compile:
@@ -345,7 +345,7 @@
       - autoconf-2.53
       - ln -s "${PREFIX}"/bin/autoconf-2.53 "${PREFIX}"/bin/autoconf
       - automake-1.7
-      - bash -c 'for file in */*/Makefile.in */Makefile.in Makefile.in; do sed -i \"/^pkgdatadir/s:$:-@VERSION@:\" \"$file\"; done'
+      - bash -c 'for file in */*/Makefile.in */Makefile.in Makefile.in; do sed -i "/^pkgdatadir/s:$:-@VERSION@:" "$file"; done'
     configure:
       - ./configure --prefix="${PREFIX}" --program-suffix=-2.54
     compile:
@@ -400,9 +400,9 @@
       - bash -c 'cat config/m4.m4 >> aclocal.m4'
       - autoconf-2.52
       - automake-1.6
-      - bash -c 'sed -i \"s#@abs_top_builddir@#$PWD#\" tests/wrappl.in'
-      - bash -c 'sed -i \"s#@abs_top_srcdir@#$PWD#\" tests/wrappl.in'
-      - bash -c 'for file in */*/Makefile.in */Makefile.in Makefile.in; do sed -i \"/^pkgdatadir/s:$:-@VERSION@:\" \"$file\"; done'
+      - bash -c 'sed -i "s#@abs_top_builddir@#$PWD#" tests/wrappl.in'
+      - bash -c 'sed -i "s#@abs_top_srcdir@#$PWD#" tests/wrappl.in'
+      - bash -c 'for file in */*/Makefile.in */Makefile.in Makefile.in; do sed -i "/^pkgdatadir/s:$:-@VERSION@:" "$file"; done'
     configure:
       - ./configure --prefix="${PREFIX}" --program-suffix=-2.53
     compile:
@@ -448,6 +448,6 @@
     install:
       - install -D autoconf "${DESTDIR}${PREFIX}/bin/autoconf-2.52"
       - mkdir -p "${DESTDIR}${PREFIX}/share/autoconf-2.52"
-      - bash -c 'cp -r -- *.m4* \"${DESTDIR}${PREFIX}/share/autoconf-2.52/\"'
+      - bash -c 'cp -r -- *.m4* "${DESTDIR}${PREFIX}/share/autoconf-2.52/"'
   artefacts:
     - /external/repo/autoconf-2.52_0.tar.bz2
