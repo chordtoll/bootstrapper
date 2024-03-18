@@ -24,7 +24,7 @@ pub fn load_sources() -> BTreeMap<String, SourceContents> {
 }
 
 #[memoize]
-pub fn get_recipe_digest(target: String, version: String) -> String {
+pub fn get_recipe_digest(target: String, version: String, additional_salt: &'static str) -> String {
     let recipe = NamedRecipeVersion::load_by_target_version(&target, &version);
 
     let mods_path = PathBuf::from(format!("recipes/{}/{}", target, version));
@@ -42,15 +42,27 @@ pub fn get_recipe_digest(target: String, version: String) -> String {
         envs_summary.push_str(&format!("{} {}", env.len(), env));
     }
 
-    let summary = recipe.summary();
+    let summary = recipe.summary(additional_salt);
 
-    sha256::digest(format!(
-        "{} {}/{} {}",
-        summary.len(),
-        summary,
-        envs_summary.len(),
-        envs_summary
-    ))
+    if additional_salt.is_empty() {
+        sha256::digest(format!(
+            "{} {}/{} {}",
+            summary.len(),
+            summary,
+            envs_summary.len(),
+            envs_summary
+        ))
+    } else {
+        sha256::digest(format!(
+            "{} {}/{} {}/{} {}",
+            summary.len(),
+            summary,
+            envs_summary.len(),
+            envs_summary,
+            additional_salt.len(),
+            additional_salt,
+        ))
+    }
 }
 
 #[derive(Debug, Deserialize, Clone)]
@@ -187,7 +199,7 @@ impl NamedRecipeVersion {
         }
     }
 
-    pub fn summary(&self) -> String {
+    pub fn summary(&self, additional_salt: &'static str) -> String {
         let mut inputs = String::new();
         if let Some(sources) = &self.source {
             for (name, source) in sources {
@@ -206,7 +218,7 @@ impl NamedRecipeVersion {
                 let to = i.split(':').nth(3);
                 inputs.push_str(&format!(
                     "DEP:{} {:?} {:?}\n",
-                    get_recipe_digest(target.to_owned(), version.to_owned()),
+                    get_recipe_digest(target.to_owned(), version.to_owned(), additional_salt),
                     from,
                     to
                 ));

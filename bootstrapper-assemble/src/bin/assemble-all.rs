@@ -1,11 +1,14 @@
 use std::{collections::BTreeMap, path::PathBuf};
 
-use bootstrapper_assemble::assemble::build_recipe;
+use bootstrapper_assemble::{args::Args, assemble::build_recipe};
 use bootstrapper_common::helpers::gen_graph_all;
+use clap::Parser;
 use petgraph::algo::toposort;
 
 #[tokio::main]
 async fn main() {
+    let args = Args::parse();
+
     let mut built = BTreeMap::new();
 
     for cache in ["build-cache/source", "build-cache/out", "build-cache/link"] {
@@ -21,7 +24,18 @@ async fn main() {
         .map(|x| g.node_weight(*x).unwrap())
         .rev()
         .collect();
+
+    let additional_salt = if args.no_checksum { "NOCHECKSUM" } else { "" };
+
     for i in order {
-        build_recipe(&i.name, &i.version, &mut built, false).await;
+        build_recipe(
+            &args,
+            &i.name,
+            &i.version,
+            &mut built,
+            false,
+            additional_salt,
+        )
+        .await;
     }
 }

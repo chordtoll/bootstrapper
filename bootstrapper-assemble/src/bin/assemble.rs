@@ -7,8 +7,8 @@ use clap::Parser;
 #[tokio::main]
 async fn main() {
     let args = Args::parse();
-    let target_name = args.target.split(':').nth(0).unwrap();
-    let target_version = args.target.split(':').nth(1).unwrap();
+    let target_name = args.target.as_ref().unwrap().split(':').nth(0).unwrap();
+    let target_version = args.target.as_ref().unwrap().split(':').nth(1).unwrap();
     let mut built = BTreeMap::new();
 
     for cache in ["build-cache/source", "build-cache/out", "build-cache/link"] {
@@ -18,5 +18,15 @@ async fn main() {
         }
     }
 
-    build_recipe(target_name, target_version, &mut built, true).await;
+    let additional_salt = if args.no_checksum { "NOCHECKSUM" } else { "" };
+
+    build_recipe(
+        &args,
+        target_name,
+        target_version,
+        &mut built,
+        true,
+        additional_salt,
+    )
+    .await;
 }
