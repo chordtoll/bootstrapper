@@ -57,19 +57,19 @@ impl<'a> From<&'a [u8]> for ZipArchiveReader<'a> {
     }
 }
 
-pub struct TarArchiveWriter<'a> {
-    builder: tar::Builder<Cursor<&'a mut Vec<u8>>>,
+pub struct TarArchiveWriter {
+    builder: tar::Builder<Cursor<Vec<u8>>>,
 }
 
-impl<'a> From<&'a mut Vec<u8>> for TarArchiveWriter<'a> {
-    fn from(value: &'a mut Vec<u8>) -> Self {
+impl From<Vec<u8>> for TarArchiveWriter {
+    fn from(value: Vec<u8>) -> Self {
         Self {
             builder: tar::Builder::new(Cursor::new(value)),
         }
     }
 }
 
-impl<'a> TarArchiveWriter<'a> {
+impl TarArchiveWriter {
     pub fn create_empty_dir(&mut self, path: PathBuf) -> Result<(), std::io::Error> {
         let path = PathBuf::from(
             path.as_os_str()
@@ -275,6 +275,10 @@ impl<'a> TarArchiveWriter<'a> {
             }
         }
     }
+
+    pub fn take(self) -> Vec<u8> {
+        self.builder.into_inner().unwrap().into_inner()
+    }
 }
 
 pub enum ArchiveReader<'a> {
@@ -282,7 +286,7 @@ pub enum ArchiveReader<'a> {
     ZIP(ZipArchiveReader<'a>),
 }
 
-pub fn flatten_tar(v: Vec<u8>) -> Vec<u8> {
+pub fn flatten_tar(v: &Vec<u8>) -> Vec<u8> {
     let mut path_index = BiBTreeMap::new();
     let mut tar = tar::Archive::new(Cursor::new(v.as_slice()));
     for (j, entry) in tar.entries_with_seek().unwrap().enumerate() {
@@ -291,8 +295,7 @@ pub fn flatten_tar(v: Vec<u8>) -> Vec<u8> {
         path_index.insert(j, path.clone());
     }
     let mut tar = tar::Archive::new(Cursor::new(v.as_slice()));
-    let mut outbuf = Vec::new();
-    let mut taw = TarArchiveWriter::from(&mut outbuf);
+    let mut taw = TarArchiveWriter::from(Vec::new());
     for (j, entry) in tar.entries_with_seek().unwrap().enumerate() {
         let entry = entry.unwrap();
         let path = entry.path().unwrap().into_owned();
@@ -300,6 +303,6 @@ pub fn flatten_tar(v: Vec<u8>) -> Vec<u8> {
             taw.add_entry(entry, path);
         }
     }
-    std::mem::drop(taw);
-    outbuf
+    taw.finish().unwrap();
+    taw.take()
 }

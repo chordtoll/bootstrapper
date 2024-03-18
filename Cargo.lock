@@ -268,8 +268,9 @@ dependencies = [
 
 [[package]]
 name = "bollard"
-version = "0.15.0"
-source = "git+https://github.com/fussybeaver/bollard#0972b1aac0ad5c08798e100319ddd0d2ee010365"
+version = "0.16.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "83545367eb6428eb35c29cdec3a1f350fa8d6d9085d59a7d7bcb637f2e38db5a"
 dependencies = [
  "base64",
  "bollard-buildkit-proto",
@@ -286,7 +287,7 @@ dependencies = [
  "hyper-named-pipe",
  "hyper-rustls",
  "hyper-util",
- "hyperlocal",
+ "hyperlocal-next",
  "log",
  "num",
  "pin-project-lite",
@@ -311,8 +312,9 @@ dependencies = [
 
 [[package]]
 name = "bollard-buildkit-proto"
-version = "0.2.1"
-source = "git+https://github.com/fussybeaver/bollard#0972b1aac0ad5c08798e100319ddd0d2ee010365"
+version = "0.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a05d0a37f626808eb1c944969b96cb75da6af72409cc2e73c92f793c0047b73f"
 dependencies = [
  "prost",
  "prost-types",
@@ -321,8 +323,9 @@ dependencies = [
 
 [[package]]
 name = "bollard-stubs"
-version = "1.44.0-rc.1"
-source = "git+https://github.com/fussybeaver/bollard#0972b1aac0ad5c08798e100319ddd0d2ee010365"
+version = "1.44.0-rc.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "709d9aa1c37abb89d40f19f5d0ad6f0d88cb1581264e571c9350fc5bb89cf1c5"
 dependencies = [
  "base64",
  "bollard-buildkit-proto",
@@ -1060,9 +1063,10 @@ dependencies = [
 ]
 
 [[package]]
-name = "hyperlocal"
-version = "0.9.0-alpha"
-source = "git+https://github.com/softprops/hyperlocal?rev=34dc8579d74f96b68ddbd55582c76019ae18cfdc#34dc8579d74f96b68ddbd55582c76019ae18cfdc"
+name = "hyperlocal-next"
+version = "0.9.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "acf569d43fa9848e510358c07b80f4adf34084ddc28c6a4a651ee8474c070dcc"
 dependencies = [
  "hex",
  "http-body-util",
@@ -2122,9 +2126,9 @@ dependencies = [
 
 [[package]]
 name = "tempfile"
-version = "3.10.0"
+version = "3.10.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a365e8cd18e44762ef95d87f284f4b5cd04107fec2ff3052bd6a3e6069669e67"
+checksum = "85b77fafb263dd9d05cbeac119526425676db3784113aa9295c88498cbf8bff1"
 dependencies = [
  "cfg-if",
  "fastrand",
@@ -2284,9 +2288,9 @@ dependencies = [
 
 [[package]]
 name = "tonic"
-version = "0.10.2"
+version = "0.11.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d560933a0de61cf715926b9cac824d4c883c2c43142f787595e48280c40a1d0e"
+checksum = "76c4eb7a4e9ef9d4763600161f12f5070b92a578e1b634db88a6887844c91a13"
 dependencies = [
  "async-stream",
  "async-trait",

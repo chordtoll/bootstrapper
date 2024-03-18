@@ -8,16 +8,6 @@ use futures_util::{future::ready, StreamExt};
 use indexmap::IndexMap;
 use indicatif::{ProgressBar, ProgressStyle};
 
-pub fn emit_run<W: Write>(f: &mut W, cmd: Vec<String>, shell: bool) {
-    let cmd = if shell {
-        format!("RUN {}", cmd.join(" "))
-    } else {
-        format!("RUN [\"{}\"]", cmd.join("\",\""))
-    };
-    f.write_all(cmd.as_bytes()).unwrap();
-    f.write_all(b" \n").unwrap();
-}
-
 pub async fn download(client: &reqwest::Client, url: &str) -> Result<Vec<u8>, String> {
     // Reqwest setup
     let res = client
@@ -110,4 +100,5 @@ pub fn docker() -> Docker {
 
 pub mod args;
 pub mod assemble;
+pub mod drivers;
 pub mod tar;

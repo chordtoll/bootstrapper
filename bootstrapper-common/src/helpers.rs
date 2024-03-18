@@ -86,7 +86,7 @@ pub fn gen_graph_all() -> DiGraph<Package, ()> {
         for dep in get_deps(&package) {
             g.add_edge(
                 *indices.get(&package).unwrap(),
-                *indices.get(&dep).unwrap(),
+                *indices.get(&dep).unwrap_or_else(||panic!("Package {}:{} has unknown dependency on {}:{}",package.name,package.version,dep.name,dep.version)),
                 (),
             );
         }
