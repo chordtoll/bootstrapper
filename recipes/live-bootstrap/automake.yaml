@@ -83,11 +83,22 @@
     - live-bootstrap/autoconf:2.64
     - live-bootstrap/automake:1.10.3
   build:
-    single:
-      - LIBDIR="${PREFIX}/lib/i386-unknown-linux-musl"
-      - pkg="automake-1.11.2"
-      - cd /steps/${pkg}
-      - bash -ex -c "source ../helpers.sh; build automake-1.11.2" # TODO: idk what's up with this one
+    unpack_dirname: automake-1.11.2
+    patch_dir: patches
+    prepare:
+      - default
+      - bash -c 'rm -f doc/amhello-1.0.tar.gz doc/automake.info* doc/aclocal-1.11.1 doc/automake-1.11.1'
+      - bash -c "awk '/SUBDIRS/{sub(\"doc \", \"\", $0)} {print}' Makefile.am > Makefile.am.tmp"
+      - mv Makefile.am.tmp Makefile.am
+      - bash -c 'AUTOCONF=autoconf-2.64 AUTOM4TE=autom4te-2.64 ./bootstrap'
+    configure:
+      - bash -c 'AUTORECONF=autoreconf-2.64 AUTOM4TE=autom4te-2.64 AUTOHEADER=autoheader-2.64 AUTOCONF=autoconf-2.64 ./configure --prefix="${PREFIX}"'
+    compile:
+      - bash -c 'AUTORECONF=autoreconf-2.64 AUTOM4TE=autom4te-2.64 AUTOHEADER=autoheader-2.64 AUTOCONF=autoconf-2.64 make "${MAKEJOBS}" MAKEINFO=true'
+    install:
+      - make install MAKEINFO=true DESTDIR="${DESTDIR}"
+      - rm "${DESTDIR}/usr/bin/automake"
+      - ls -i ${DESTDIR}/usr/bin/aclocal ${DESTDIR}/usr/bin/aclocal-1.11
   artefacts:
     - /external/repo/automake-1.11.2_0.tar.bz2
 1.10.3:
