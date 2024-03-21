@@ -1,3 +1,60 @@
+1.1.24-pass3:
+  source:
+    musl-1.1.24:
+      noextract: /external/distfiles/musl-1.1.24.tar.gz
+    live-bootstrap:
+      extract: /
+      copy:
+        - /steps/helpers.sh
+        - /steps/SHA256SUMS.pkgs
+        - /steps/musl-1.1.24
+  mkdirs:
+    - /external/repo
+    - /tmp
+  deps:
+    - live-bootstrap/make:3.82
+    - live-bootstrap/patch:2.5.9
+    - live-bootstrap/gzip:1.2.4
+    - live-bootstrap/tar:1.12
+    - stage0-posix/final:sha256sum
+    - live-bootstrap/bash:2.05b
+    - live-bootstrap/improvements:merged_usr
+    - live-bootstrap/tcc:0.9.27-pass2
+    - live-bootstrap/musl:1.1.24-pass2
+    - live-bootstrap/tcc:0.9.27-pass3
+    - live-bootstrap/sed:4.0.9-pass1
+    - live-bootstrap/bzip2:1.0.8-pass1
+    - live-bootstrap/m4:1.4.7
+    - live-bootstrap/flex:2.6.4
+    - live-bootstrap/bison:3.4.1-pass3
+    - live-bootstrap/coreutils:6.10
+    - live-bootstrap/gawk:3.0.4
+    - live-bootstrap/perl:5.6.2
+    - live-bootstrap/autoconf:2.69
+    - live-bootstrap/automake:1.15.1
+    - live-bootstrap/binutils:2.30
+  build:
+    unpack_dirname: musl-1.1.24
+    patch_dir: patches-pass3
+    prepare:
+      - LIBDIR=${PREFIX}/lib/i386-unknown-linux-musl
+      - cp ../../patches/avoid_set_thread_area.patch ../../patches-pass3
+      - cp ../../patches/avoid_sys_clone.patch ../../patches-pass3
+      - cp ../../patches/madvise_preserve_errno.patch ../../patches-pass3
+      - cp ../../patches/set_thread_area.patch ../../patches-pass3
+      - cp ../../patches/va_list.patch ../../patches-pass3
+      - default
+      - rm -rf src/complex
+    configure:
+      - CC=tcc
+      - ./configure --host=i386 --disable-shared --prefix="${PREFIX}" --libdir="${LIBDIR}" --includedir="${PREFIX}/include/"
+      - rm /dev/null
+    compile:
+      - make "${MAKEJOBS}" PREFIX="${PREFIX}" CROSS_COMPILE= CFLAGS="-DSYSCALL_NO_TLS" AS_CMD='as -o $@ $<'
+    install:
+      - make PREFIX="${PREFIX}" DESTDIR="${DESTDIR}" install
+  artefacts:
+    - external/repo/musl-1.1.24_2.tar.bz2
 1.1.24-pass2:
   source:
     musl-1.1.24:
