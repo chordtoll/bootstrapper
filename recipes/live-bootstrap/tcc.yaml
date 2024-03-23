@@ -1,3 +1,43 @@
+0.9.27-pass4:
+  source:
+    tcc-0.9.27:
+      noextract: /external/distfiles/tcc-0.9.27.tar.bz2
+    live-bootstrap:
+      extract: /
+      copy:
+        - /steps/helpers.sh
+        - /steps/SHA256SUMS.pkgs
+        - /steps/tcc-0.9.27
+  mkdirs:
+    - /external/repo
+    - /tmp
+  deps:
+    - stage0-posix/final:sha256sum
+    - live-bootstrap/patch:2.5.9
+    - live-bootstrap/tar:1.12
+    - live-bootstrap/bash:2.05b
+    - live-bootstrap/improvements:merged_usr
+    - live-bootstrap/tcc:0.9.27-pass2
+    - live-bootstrap/bzip2:1.0.8-pass1
+    - live-bootstrap/coreutils:6.10
+    - live-bootstrap/binutils:2.30
+    - live-bootstrap/musl:1.1.24-pass3
+  build:
+    unpack_dirname: tcc-0.9.27
+    patch_dir: patches
+    prepare:
+      - LIBDIR=${PREFIX}/lib/i386-unknown-linux-musl
+      - default
+      - touch config.h
+    compile:
+      - tcc-musl -v -static -o tcc-musl -D TCC_TARGET_I386=1 -D CONFIG_TCCDIR=\""${LIBDIR}/tcc"\" -D CONFIG_TCC_CRTPREFIX=\""${LIBDIR}"\" -D CONFIG_TCC_ELFINTERP=\"/musl/loader\" -D CONFIG_TCC_LIBPATHS=\""${LIBDIR}:${LIBDIR}/tcc"\" -D CONFIG_TCC_SYSINCLUDEPATHS=\""${PREFIX}/include"\" -D TCC_LIBGCC=\""${LIBDIR}/libc.a"\" -D CONFIG_TCC_STATIC=1 -D CONFIG_USE_LIBGCC=1 -D TCC_VERSION=\"0.9.27\" -D ONE_SOURCE=1 -I "${PREFIX}/include" tcc.c
+      - tcc-musl -c -D HAVE_CONFIG_H=1 lib/libtcc1.c
+      - ar cr libtcc1.a libtcc1.o
+    install:
+      - install -D tcc-musl "${DESTDIR}${PREFIX}/bin/tcc-musl"
+      - install -D -m 644 libtcc1.a "${DESTDIR}${LIBDIR}/libtcc1.a"
+  artefacts:
+    - external/repo/tcc-0.9.27_3.tar.bz2
 0.9.27-pass3:
   source:
     tcc-0.9.27:
