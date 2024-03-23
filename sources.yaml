@@ -49,6 +49,9 @@ automake-1.11.2:
 automake-1.15.1:
   url: https://mirrors.kernel.org/gnu/automake/automake-1.15.1.tar.xz
   sha: af6ba39142220687c500f79b4aa2f181d9b24e4f8d8ec497cea4ba26c64bedaf
+automake-1.16.3:
+  url: https://mirrors.kernel.org/gnu/automake/automake-1.16.3.tar.xz
+  sha: ff2bf7656c4d1c6fdda3b8bebb21f09153a736bcba169aaf65eab25fa113bf3a
 bash-2.05b:
   url: https://src.fedoraproject.org/repo/pkgs/bash/bash-2.05b.tar.bz2/f3e5428ed52a4f536f571a945d5de95d/bash-2.05b.tar.bz2
   sha: 1ce4e5b47a6354531389f0adefb54dee2823227bf6e1e59a31c0e9317a330822
@@ -82,6 +85,9 @@ flex-2.6.4:
 gawk-3.0.4:
   url: https://mirrors.kernel.org/gnu/gawk/gawk-3.0.4.tar.gz
   sha: 5cc35def1ff4375a8b9a98c2ff79e95e80987d24f0d42fdbb7b7039b3ddb3fb0
+gcc-4.0.4:
+  url: https://mirrors.kernel.org/gnu/gcc/gcc-4.0.4/gcc-core-4.0.4.tar.bz2
+  sha: e9bf58c761a4f988311aef6b41f12fd5c7e51d09477468fb73826aecc1be32e7
 grep-2.4:
   url: https://mirrors.kernel.org/gnu/grep/grep-2.4.tar.gz
   sha: a32032bab36208509466654df12f507600dfe0313feebbcd218c32a70bf72a16
