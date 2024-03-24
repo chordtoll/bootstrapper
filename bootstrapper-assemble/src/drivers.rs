@@ -2,6 +2,7 @@ use bootstrapper_common::recipe::NamedRecipeVersion;
 
 use crate::args::Args;
 
+pub mod buildkit;
 pub mod docker;
 
 pub trait BuildDriver {
