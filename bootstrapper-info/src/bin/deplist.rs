@@ -4,7 +4,7 @@ use petgraph::algo::toposort;
 fn main() {
     let g = gen_graph_all();
     let order: Vec<_> = toposort(&g, None)
-        .unwrap()
+        .unwrap_or_else(|x| panic!("Cycle detected: {}:{}",g[x.node_id()].name,g[x.node_id()].version))
         .iter()
         .map(|x| g.node_weight(*x).unwrap())
         .rev()
