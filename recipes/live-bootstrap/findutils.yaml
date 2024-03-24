@@ -1,0 +1,55 @@
+4.2.33:
+  source:
+    findutils-4.2.33:
+      noextract: /external/distfiles/findutils-4.2.33.tar.gz
+    gnulib-8e128e:
+      noextract: /external/distfiles/gnulib-8e128e.tar.gz
+    live-bootstrap:
+      extract: /
+      copy:
+        - /steps/helpers.sh
+        - /steps/SHA256SUMS.pkgs
+        - /steps/findutils-4.2.33
+  mkdirs:
+    - /external/repo
+    - /tmp
+  deps:
+    - stage0-posix/final:sha256sum
+    - live-bootstrap/make:3.82
+    - live-bootstrap/patch:2.5.9
+    - live-bootstrap/gzip:1.2.4
+    - live-bootstrap/tar:1.12
+    - live-bootstrap/bash:2.05b
+    - live-bootstrap/improvements:merged_usr
+    - live-bootstrap/tcc:0.9.27-pass2
+    - live-bootstrap/tcc:0.9.27-pass3
+    - live-bootstrap/sed:4.0.9-pass1
+    - live-bootstrap/bzip2:1.0.8-pass1
+    - live-bootstrap/m4:1.4.7
+    - live-bootstrap/coreutils:6.10
+    - live-bootstrap/diffutils:2.7
+    - live-bootstrap/gawk:3.0.4
+    - live-bootstrap/grep:2.4
+    - live-bootstrap/perl:5.6.2
+    - live-bootstrap/autoconf:2.61
+    - live-bootstrap/automake:1.9.6
+    - live-bootstrap/binutils:2.30
+    - live-bootstrap/musl:1.1.24-pass3
+    - live-bootstrap/gcc:4.0.4-pass1
+  build:
+    unpack_dirname: findutils-4.2.33
+    patch_dir: patches
+    prepare:
+      - LIBDIR=${PREFIX}/lib/i386-unknown-linux-musl
+      - bash -c '. ../../import-gnulib.sh'
+      - default
+      - bash -c 'AUTOMAKE=automake-1.9 ACLOCAL=aclocal-1.9 AUTOM4TE=autom4te-2.61 AUTOCONF=autoconf-2.61 autoreconf-2.61 -f'
+      - rm doc/find.info
+    configure:
+      - bash -c 'CC=tcc ./configure --prefix="${PREFIX}" --host=i386-unknown-linux-gnu CPPFLAGS="-D__UCLIBC__"'
+    compile:
+      - make "${MAKEJOBS}" MAKEINFO=true DESTDIR="${DESTDIR}"
+    install:
+      - make MAKEINFO=true DESTDIR="${DESTDIR}" install
+  artefacts:
+    - external/repo/findutils-4.2.33_0.tar.bz2
