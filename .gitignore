@@ -13,3 +13,8 @@ build-cache/
 recipes-old
 tx
 build.log
+*.tar
+*.tar.bz2
+*.log
+target
+diff.html
