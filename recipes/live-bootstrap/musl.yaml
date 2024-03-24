@@ -1,3 +1,41 @@
+1.2.4-pass1:
+  source:
+    musl-1.2.4:
+      noextract: /external/distfiles/musl-1.2.4.tar.gz
+    live-bootstrap:
+      extract: /
+      copy:
+        - /steps/helpers.sh
+        - /steps/SHA256SUMS.pkgs
+        - /steps/musl-1.2.4
+  mkdirs:
+    - /external/repo
+    - /tmp
+  deps:
+    - stage0-posix/final:sha256sum
+    - live-bootstrap/make:3.82
+    - live-bootstrap/patch:2.5.9
+    - live-bootstrap/gzip:1.2.4
+    - live-bootstrap/tar:1.12
+    - live-bootstrap/bash:2.05b
+    - live-bootstrap/improvements:merged_usr
+    - live-bootstrap/sed:4.0.9-pass1
+    - live-bootstrap/bzip2:1.0.8-pass1
+    - live-bootstrap/coreutils:6.10
+    - live-bootstrap/binutils:2.30
+    - live-bootstrap/musl:1.1.24-pass3
+    - live-bootstrap/gcc:4.0.4-pass1
+  build:
+    unpack_dirname: musl-1.2.4
+    patch_dir: patches
+    configure:
+      - LIBDIR=${PREFIX}/lib/i386-unknown-linux-musl
+      - CC=gcc
+      - ./configure --host=i386-unknown-linux-musl --disable-shared --prefix="${PREFIX}" --libdir="${LIBDIR}" --includedir="${PREFIX}/include/"
+    compile:
+      - make "${MAKEJOBS}" CROSS_COMPILE=
+  artefacts:
+    - external/repo/musl-1.2.4_0.tar.bz2
 1.1.24-pass3:
   source:
     musl-1.1.24:
