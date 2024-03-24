@@ -1,3 +1,93 @@
+4.0.4-pass2:
+  source:
+    gcc-4.0.4:
+      noextract: /external/distfiles/gcc-core-4.0.4.tar.bz2
+    automake-1.16.3:
+      noextract: /external/distfiles/automake-1.16.3.tar.xz
+    live-bootstrap:
+      extract: /
+      copy:
+        - /steps/helpers.sh
+        - /steps/SHA256SUMS.pkgs
+        - /steps/gcc-4.0.4
+  mkdirs:
+    - /external/repo
+    - /tmp
+  deps:
+    - stage0-posix/final:sha256sum
+    - stage0-posix/final:unxz
+    - live-bootstrap/make:3.82
+    - live-bootstrap/patch:2.5.9
+    - live-bootstrap/tar:1.12
+    - live-bootstrap/bash:2.05b
+    - live-bootstrap/improvements:merged_usr
+    - live-bootstrap/sed:4.0.9-pass1
+    - live-bootstrap/bzip2:1.0.8-pass1
+    - live-bootstrap/m4:1.4.7
+    - live-bootstrap/flex:2.6.4
+    - live-bootstrap/bison:3.4.1-pass3
+    - live-bootstrap/coreutils:6.10
+    - live-bootstrap/diffutils:2.7
+    - live-bootstrap/gawk:3.0.4
+    - live-bootstrap/grep:2.4
+    - live-bootstrap/perl:5.6.2
+    - live-bootstrap/autoconf:2.61
+    - live-bootstrap/automake:1.9.6
+    - live-bootstrap/automake:1.10.3
+    - live-bootstrap/libtool:2.2.4
+    - live-bootstrap/binutils:2.30
+    - live-bootstrap/gcc:4.0.4-pass1
+    - live-bootstrap/findutils:4.2.33
+    - live-bootstrap/musl:1.2.4-pass1
+    - live-bootstrap/linux-headers:4.9.10
+  build:
+    unpack_dirname: gcc-4.0.4
+    patch_dir: patches
+    prepare:
+      - LIBDIR=${PREFIX}/lib/i386-unknown-linux-musl
+      - sed -i 's/struct siginfo/siginfo_t/' gcc/config/i386/linux-unwind.h
+      - rm configure Makefile.in fixincludes/fixincl.x
+      - bash -c 'cd intl; rm aclocal.m4; AUTOM4TE=autom4te-2.61 aclocal-1.9 --acdir=../config'
+      - bash -c 'cd libcpp; rm aclocal.m4; AUTOM4TE=autom4te-2.61 aclocal-1.9 --acdir=../config'
+      - bash -c 'cd fixincludes; rm configure; autoconf-2.61'
+      - bash -c 'cd gcc; rm configure; autoconf-2.61'
+      - bash -c 'cd intl; rm configure; autoconf-2.61'
+      - bash -c 'cd libcpp; rm configure; autoconf-2.61'
+      - bash -c 'cd libiberty; rm configure; autoconf-2.61'
+      - ln -s /usr/bin/autoconf-2.61 /usr/bin/autoconf
+      - bash -c 'cd libmudflap; AUTOMAKE=automake-1.10 ACLOCAL=aclocal-1.10 AUTOM4TE=autom4te-2.61 autoreconf-2.61 -f'
+      - bash -c 'cd fixincludes; rm -f config.in; autoheader-2.61'
+      - bash -c 'cd intl; rm -f config.in; autoheader-2.61'
+      - bash -c 'cd libmudflap; rm -f config.in; autoheader-2.61'
+      - rm config.guess config.sub ltmain.sh
+      - libtoolize
+      - cp ../automake-1.16.3/lib/config.sub .
+      - sed -i 's/YYLEX/yylex()/' gcc/c-parse.y
+      - rm gcc/c-parse.c
+      - rm gcc/gengtype-yacc.c gcc/gengtype-yacc.h
+      - rm intl/plural.c
+      - rm gcc/gengtype-lex.c
+      - find . -name '*.gmo' -delete
+      - find . -name '*.info' -delete
+      - bash -c 'rm gcc/doc/*.1 gcc/doc/*.7'
+    configure:
+      - mkdir build
+      - cd build
+      - bash -c 'mkdir libiberty; cd libiberty; ../../libiberty/configure --prefix="${PREFIX}" --libdir="${LIBDIR}" --build=i386-unknown-linux-musl --target=i386-unknown-linux-musl --host=i386-unknown-linux-musl --disable-shared --program-transform-name='
+      - bash -c 'mkdir libcpp; cd libcpp; ../../libcpp/configure --prefix="${PREFIX}" --libdir="${LIBDIR}" --build=i386-unknown-linux-musl --target=i386-unknown-linux-musl --host=i386-unknown-linux-musl --disable-shared --program-transform-name='
+      - bash -c 'mkdir gcc; cd gcc; ../../gcc/configure --prefix="${PREFIX}" --libdir="${LIBDIR}" --build=i386-unknown-linux-musl --target=i386-unknown-linux-musl --host=i386-unknown-linux-musl --disable-shared --program-transform-name='
+      - cd ..
+    compile:
+      - ln -s . build/build-i386-unknown-linux-musl
+      - make "${MAKEJOBS}" -C build/libiberty LIBGCC2_INCLUDES=-I"${PREFIX}/include" STMP_FIXINC=
+      - make "${MAKEJOBS}" -C build/libcpp LIBGCC2_INCLUDES=-I"${PREFIX}/include" STMP_FIXINC=
+      - make "${MAKEJOBS}" -C build/gcc LIBGCC2_INCLUDES=-I"${PREFIX}/include" STMP_FIXINC=
+    install:
+      - mkdir -p "${DESTDIR}${LIBDIR}/gcc/i386-unknown-linux-musl/4.0.4/install-tools/include"
+      - make -C build/gcc install STMP_FIXINC= DESTDIR="${DESTDIR}"
+      - cp gcc/gsyslimits.h "${DESTDIR}${LIBDIR}/gcc/i386-unknown-linux-musl/4.0.4/include/syslimits.h"
+  artefacts:
+    - external/repo/gcc-4.0.4_1.tar.bz2
 4.0.4-pass1:
   source:
     gcc-4.0.4:
