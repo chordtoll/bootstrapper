@@ -34,6 +34,6 @@ bimap = "0.6.3"
 regex = "1.10.3"
 buildkit-llb = "0.2.0"
 buildkit-proto = "0.2.0"
-prost = { version = "0.6"}
+prost = { version = "0.12"}
 sha2 = "0.10.8"
 tempfile = "3.10.1"
