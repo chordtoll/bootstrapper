@@ -7,7 +7,7 @@ edition = "2021"
 
 [dependencies]
 glob = "0.3.1"
-indexmap = "2.1.0"
+indexmap = "2.2.6"
 lazy_static = "1.4.0"
 lockfree = "0.5.1"
 memoize = "0.4.2"
