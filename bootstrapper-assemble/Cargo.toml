@@ -31,7 +31,7 @@ bzip2 = "0.4.4"
 maplit = "1.0.2"
 path-clean = "1.0.1"
 bimap = "0.6.3"
-regex = "1.10.3"
+regex = "1.10.4"
 buildkit-llb = "0.2.0"
 buildkit-proto = "0.2.0"
 prost = { version = "0.6"}
